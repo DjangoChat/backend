@@ -4,3 +4,4 @@
 - [ ] add apps of authentication and authorization
 - [ ] add .flake8 file
 - [ ] add pyproject.toml file
+- [ ] check env variables working
