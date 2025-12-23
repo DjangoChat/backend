@@ -66,3 +66,7 @@ erDiagram
 
 The result
 ![Model Diagram](./docs/model_diagram.svg)
+
+## DO ON NEXT PROJECT
+
+- [ ] check types of Authorization Systems (time authentication, risk-based authentication, role-base authentication) also check zero-trust as code
