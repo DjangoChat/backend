@@ -70,3 +70,5 @@ The result
 ## DO ON NEXT PROJECT
 
 - [ ] check types of Authorization Systems (time authentication, risk-based authentication, role-base authentication) also check zero-trust as code
+
+- [ ] add packages for exception handling in django rest framework (link)[https://freedium-mirror.cfd/https://python.plainenglish.io/third-party-packages-for-exception-handling-in-django-rest-framework-137271243933].

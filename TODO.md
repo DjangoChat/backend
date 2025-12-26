@@ -5,3 +5,5 @@
 - [ ] add .flake8 file
 - [ ] add pyproject.toml file
 - [ ] check env variables working
+- [ ] add validators for models
+- [ ] run docker compose and see what happend

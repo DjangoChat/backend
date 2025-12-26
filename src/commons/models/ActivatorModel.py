@@ -3,6 +3,25 @@ from django.utils.translation import gettext_lazy as _
 from django.utils.timezone import now
 
 
+class ActivatorQuerySet(models.query.QuerySet):
+    def active(self):
+        return self.filter(status=ActivatorModel.ACTIVE_STATUS)
+
+    def inactive(self):
+        return self.filter(status=ActivatorModel.INACTIVE_STATUS)
+
+
+class ActivatorModelManager(models.Manager):
+    def get_queryset(self):
+        return ActivatorQuerySet(model=self.model, using=self._db)
+
+    def active(self):
+        return self.get_queryset().active()
+
+    def inactive(self):
+        return self.get_queryset().inactive()
+
+
 class ActivatorModel(models.Model):
     INACTIVE_STATUS = 0
     ACTIVE_STATUS = 1
@@ -27,6 +46,7 @@ class ActivatorModel(models.Model):
         null=True,
         help_text=_("keep empty for indefinite activation"),
     )
+    objects = ActivatorModelManager()
 
     class Meta:
         ordering = (
