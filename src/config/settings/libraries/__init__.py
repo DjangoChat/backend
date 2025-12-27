@@ -1,1 +1,1 @@
-from django_phonenumber_field import *
+from .django_phonenumber_field import *

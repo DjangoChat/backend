@@ -4,7 +4,7 @@ from django.db import models
 from django.contrib.auth.base_user import BaseUserManager
 from phonenumber_field.modelfields import PhoneNumberField
 
-from commons.models import ActivatorModel, CustomModel, ActivatorModelManager
+from apps.Common.models import ActivatorModel, CustomModel, ActivatorModelManager
 
 
 class CustomUserManager(BaseUserManager, ActivatorModelManager):
@@ -44,3 +44,6 @@ class CustomUser(CustomModel, AbstractBaseUser, ActivatorModel):
     EMAIL_FIELD = "email"
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
+
+    class Meta:
+        app_label = "Authentication"

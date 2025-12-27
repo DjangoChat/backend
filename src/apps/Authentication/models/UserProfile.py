@@ -2,7 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 
-from commons.models import CustomModel, ActivatorModel
+from apps.Common.models import CustomModel, ActivatorModel
 
 
 class UserProfile(CustomModel, ActivatorModel):
@@ -66,3 +66,10 @@ class UserProfile(CustomModel, ActivatorModel):
         choices=Role.choices,
         default=Role.BASIC,
     )
+
+    class Meta:
+        db_table = "AUTHENTICATION_PROFILE"
+        verbose_name = _("Profile")
+        verbose_name_plural = _("Profiles")
+        indexes = [models.Index(fields=["user", "department", "role"])]
+        app_label = "Authentication"

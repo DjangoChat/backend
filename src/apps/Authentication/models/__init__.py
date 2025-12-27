@@ -1,1 +1,2 @@
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+from apps.Authentication.models.CustomUser import CustomUser
+from apps.Authentication.models.UserProfile import UserProfile

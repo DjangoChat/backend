@@ -1,5 +1,4 @@
 Django==5.2.9
 djangorestframework==3.16.1
 psycopg2-binary==2.9.11
-django-phonenumber-field==7.1.0
-phonenumberslite==8.13.25
+django-phonenumber-field[phonenumberslite]==8.1.0

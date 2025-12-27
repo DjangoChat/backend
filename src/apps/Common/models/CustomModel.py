@@ -11,3 +11,7 @@ class CustomModel(models.Model):
         unique=True,
         editable=False,
     )
+
+    class Meta:
+        app_label = "Common"
+        abstract = True

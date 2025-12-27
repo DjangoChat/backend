@@ -54,6 +54,7 @@ class ActivatorModel(models.Model):
             "-activate_date",
         )
         abstract = True
+        app_label = "Common"
 
     def save(self, *args, **kwargs):
         if not self.activate_date:
