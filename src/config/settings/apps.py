@@ -10,6 +10,9 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     "rest_framework",
     "phonenumber_field",
+    "corsheaders",
+    "rest_framework_simplejwt",
+    "rest_framework_simplejwt.token_blacklist",
 ]
 
 PERSONAL_APPS = [

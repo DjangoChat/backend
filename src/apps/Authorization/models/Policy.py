@@ -34,6 +34,6 @@ class Policy(CustomModel, ActivatorModel):
         db_table = "AUTHORIZATION_POLICY"
         verbose_name = _("Policy")
         verbose_name_plural = _("Policies")
-        indexes = [models.Index(fields=["recource_type"])]
+        indexes = [models.Index(fields=["resource_type"])]
         ordering = ["-priority", "id"]
         app_label = "Authorization"

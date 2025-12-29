@@ -35,7 +35,7 @@ class CustomUser(CustomModel, AbstractBaseUser, ActivatorModel):
     )
     verified = models.BooleanField(
         _("verified"),
-        default=True,
+        default=False,
         help_text=_("Designates whether this user has activated its account or not. "),
     )
 

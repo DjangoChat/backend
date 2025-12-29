@@ -7,3 +7,5 @@
 - [ ] check env variables working
 - [ ] add validators for models
 - [ ] run docker compose and see what happend
+
+// https://github.com/PikoCanFly/JWT-HTTPCookies-Django-DRF-NEXT.JS/blob/main/backend/users/views.py
