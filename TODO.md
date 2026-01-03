@@ -7,5 +7,6 @@
 - [ ] check env variables working
 - [ ] add validators for models
 - [ ] add swagger
+- [ ] general formatter
 
 // https://github.com/PikoCanFly/JWT-HTTPCookies-Django-DRF-NEXT.JS/blob/main/backend/users/views.py

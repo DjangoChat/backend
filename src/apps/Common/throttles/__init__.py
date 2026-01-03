@@ -1,2 +1,3 @@
 from apps.Common.throttles.FailedLoginThrottle import FailedLoginThrottle
 from apps.Common.throttles.AuthRateThrottle import AuthRateThrottle
+from apps.Common.throttles.RefreshRateThrottle import RefreshRateThrottle

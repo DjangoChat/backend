@@ -1,13 +1,19 @@
 from django.contrib.auth import authenticate
+
 from rest_framework.decorators import api_view, permission_classes, throttle_classes
-from rest_framework.permissions import AllowAny
-from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import AuthenticationFailed, Throttled
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.exceptions import InvalidToken
 
 from apps.Authentication.api.v1.serializers import LoginSerializer, CustomUserSerializer
-from apps.Common.throttles import FailedLoginThrottle, AuthRateThrottle
+from apps.Common.throttles import (
+    FailedLoginThrottle,
+    AuthRateThrottle,
+    RefreshRateThrottle,
+)
 
 
 @api_view(["POST"])
@@ -51,3 +57,57 @@ def login(request):
         samesite="Lax",
     )
     return response
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+@throttle_classes([AuthRateThrottle])
+def logout(request):
+    refresh_token = request.COOKIES.get("refresh_token")
+
+    if refresh_token:
+        try:
+            refresh = RefreshToken(refresh_token)
+            refresh.blacklist()
+        except Exception as e:
+            return Response(
+                {"error": "Error invalidate token: " + str(e)},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+    response = Response(
+        {"message": "Succesfully logged out!"}, status=status.HTTP_200_OK
+    )
+    response.delete_cookie("access_token")
+    response.delete_cookie("refresh_token")
+
+    return response
+
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+@throttle_classes([RefreshRateThrottle])
+def refresh_token(request):
+    refresh_token = request.COOKIES.get("refresh_token")
+
+    if not refresh_token:
+        return Response(
+            {"error": "Refresh token not provided"}, status=status.HTTP_401_UNAUTHORIZED
+        )
+
+    try:
+        refresh = RefreshToken(refresh_token)
+        access_token = str(refresh.token)
+
+        response = Response(status=status.HTTP_200_OK)
+        response.set_cookie(
+            key="access_token",
+            value=access_token,
+            httponly=True,
+            secure=True,
+            samesite="Lax",
+        )
+
+        return response
+    except InvalidToken:
+        return Response({"error": "Invalid Token"}, status=status.HTTP_401_UNAUTHORIZED)
