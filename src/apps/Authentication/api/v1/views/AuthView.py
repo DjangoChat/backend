@@ -1,17 +1,17 @@
 from django.contrib.auth import authenticate
 
+from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes, throttle_classes
+from rest_framework.exceptions import AuthenticationFailed, Throttled
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from rest_framework import status
-from rest_framework.exceptions import AuthenticationFailed, Throttled
-from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.exceptions import InvalidToken
+from rest_framework_simplejwt.tokens import RefreshToken
 
-from apps.Authentication.api.v1.serializers import LoginSerializer, CustomUserSerializer
+from apps.Authentication.api.v1.serializers import CustomUserSerializer, LoginSerializer
 from apps.Common.throttles import (
-    FailedLoginThrottle,
     AuthRateThrottle,
+    FailedLoginThrottle,
     RefreshRateThrottle,
 )
 

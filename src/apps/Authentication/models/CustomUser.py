@@ -1,10 +1,11 @@
-from django.contrib.auth.models import AbstractBaseUser
-from django.utils.translation import gettext_lazy as _
-from django.db import models
 from django.contrib.auth.base_user import BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser
+from django.db import models
+from django.utils.translation import gettext_lazy as _
+
 from phonenumber_field.modelfields import PhoneNumberField
 
-from apps.Common.models import ActivatorModel, CustomModel, ActivatorModelManager
+from apps.Common.models import ActivatorModel, ActivatorModelManager, CustomModel
 
 
 class CustomUserManager(BaseUserManager, ActivatorModelManager):

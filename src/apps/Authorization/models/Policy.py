@@ -1,8 +1,8 @@
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from django.contrib.contenttypes.models import ContentType
 
-from apps.Common.models import CustomModel, ActivatorModel
+from apps.Common.models import ActivatorModel, CustomModel
 
 
 class Policy(CustomModel, ActivatorModel):

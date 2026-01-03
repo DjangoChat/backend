@@ -1,0 +1,133 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "platoform-backend"
+version = "0.1.0"
+description = "Backend service for Platoform application"
+readme = "README.md"
+requires-python = ">=3.8"
+authors = [
+    { name = "Joao Urrunaga", email = "jurrunagaf@gmail.com" }
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Framework :: Django",
+    "Framework :: Django :: 5.2",
+]
+
+dependencies = [
+    "Django==5.2.9",
+    "djangorestframework==3.16.1",
+    "psycopg2-binary==2.9.11",
+    "django-phonenumber-field[phonenumberslite]==8.1.0",
+    "django-cors-headers==4.9.0",
+    "djangorestframework-simplejwt[crypto]==5.5.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "black==25.12.0",
+    "flake8==7.3.0",
+    "flake8-pyproject==1.2.4",
+    "isort==7.0.0",
+]
+test = [
+    "pytest",
+    "pytest-django",
+    "pytest-cov",
+]
+
+[project.urls]
+Homepage = "https://github.com/DjangoChat/backend"
+Repository = "https://github.com/DjangoChat/backend"
+
+# Black configuration
+[tool.black]
+line-length = 88
+target-version = ['py38', 'py39', 'py310', 'py311', 'py312']
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+  | migrations
+)/
+'''
+
+# isort configuration
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+src_paths = ["src"]
+skip_glob = ["**/migrations/*.py"]
+known_django = "django"
+known_first_party = ["apps", "config"]
+sections = ["FUTURE", "STDLIB", "DJANGO", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
+
+# Flake8 configuration
+[tool.flake8]
+max-line-length = 88
+exclude = [
+    ".git",
+    "__pycache__",
+    "*/migrations/*",
+    "*/venv/*",
+    "*/env/*",
+    ".venv",
+    ".env",
+    "build",
+    "dist",
+]
+extend-ignore = [
+    "E203",  # whitespace before ':'
+    "E501",  # line too long (handled by black)
+    "W503",  # line break before binary operator
+    "W504",  # line break after binary operator
+]
+per-file-ignores = [
+    "__init__.py:F401",  # imported but unused
+    "settings/*.py:F401,F403",  # star imports in settings
+]
+
+# Coverage configuration
+[tool.coverage.run]
+source = ["src"]
+omit = [
+    "*/migrations/*",
+    "*/venv/*",
+    "*/env/*",
+    "manage.py",
+    "*/settings/*",
+    "*/tests/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+]

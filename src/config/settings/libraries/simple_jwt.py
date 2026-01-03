@@ -1,5 +1,6 @@
-from ..base import SECRET_KEY
 from datetime import timedelta
+
+from ..base import SECRET_KEY
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),

@@ -1,9 +1,10 @@
 from datetime import datetime
 from typing import Any, Dict
+
 from django.contrib.contenttypes.models import ContentType
 
-from apps.Authorization.models import Policy
 from apps.Authentication.models import UserProfile
+from apps.Authorization.models import Policy
 
 
 class Engine:
