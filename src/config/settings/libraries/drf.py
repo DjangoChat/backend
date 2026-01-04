@@ -15,4 +15,6 @@ REST_FRAMEWORK = {
         "auth": "50/day",
         "refresh": "12/hour",
     },
+    # SCHEMA
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
