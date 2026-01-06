@@ -7,6 +7,12 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.exceptions import InvalidToken
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework import serializers
+
+from drf_spectacular.utils import (
+    OpenApiResponse,
+    extend_schema,
+)
 
 from apps.Authentication.api.v1.serializers import CustomUserSerializer, LoginSerializer
 from apps.Common.throttles import (
@@ -16,6 +22,34 @@ from apps.Common.throttles import (
 )
 
 
+class MessageSerializer(serializers.Serializer):
+    message = serializers.CharField()
+
+
+class ErrorSerializer(serializers.Serializer):
+    error = serializers.CharField()
+
+
+class LoginResponseSerializer(serializers.Serializer):
+    user = CustomUserSerializer()
+
+
+@extend_schema(
+    tags=["Authentication"],
+    summary="User login",
+    description=(
+        "Authenticates a user with email and password. On success, sets JWT "
+        "`access_token` and `refresh_token` cookies and returns the authenticated user."
+    ),
+    request=LoginSerializer,
+    responses={
+        200: LoginResponseSerializer,
+        401: OpenApiResponse(
+            response=ErrorSerializer, description="Invalid credentials"
+        ),
+        429: OpenApiResponse(description="Too many failed login attempts"),
+    },
+)
 @api_view(["POST"])
 @permission_classes([AllowAny])
 @throttle_classes([AuthRateThrottle])
@@ -59,6 +93,23 @@ def login(request):
     return response
 
 
+@extend_schema(
+    tags=["Authentication"],
+    summary="Logout",
+    description=(
+        "Invalidates the refresh token and clears authentication cookies. "
+        "Requires authentication."
+    ),
+    request=None,
+    responses={
+        200: OpenApiResponse(
+            response=MessageSerializer, description="Successfully logged out"
+        ),
+        400: OpenApiResponse(
+            response=ErrorSerializer, description="Error invalidating token"
+        ),
+    },
+)
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 @throttle_classes([AuthRateThrottle])
@@ -84,6 +135,21 @@ def logout(request):
     return response
 
 
+@extend_schema(
+    tags=["Authentication"],
+    summary="Refresh access token",
+    description=(
+        "Issues a new `access_token` cookie using the `refresh_token` cookie. "
+        "Returns 200 with cookies set, or 401 if missing/invalid."
+    ),
+    request=None,
+    responses={
+        200: OpenApiResponse(description="New access token cookie set"),
+        401: OpenApiResponse(
+            response=ErrorSerializer, description="Missing or invalid refresh token"
+        ),
+    },
+)
 @api_view(["POST"])
 @permission_classes([AllowAny])
 @throttle_classes([RefreshRateThrottle])
