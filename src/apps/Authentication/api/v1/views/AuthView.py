@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate
+from django.views.decorators.csrf import csrf_exempt
 
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes, throttle_classes
@@ -113,6 +114,7 @@ def login(request):
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 @throttle_classes([AuthRateThrottle])
+@csrf_exempt
 def logout(request):
     refresh_token = request.COOKIES.get("refresh_token")
 
@@ -177,3 +179,47 @@ def refresh_token(request):
         return response
     except InvalidToken:
         return Response({"error": "Invalid Token"}, status=status.HTTP_401_UNAUTHORIZED)
+
+
+@extend_schema(
+    tags=["Authentication"],
+    summary="User registration",
+    description=(
+        "Registers a new user and returns the created user. "
+        "Validates input and responds with 201 on success."
+    ),
+    request=CustomUserSerializer,
+    responses={
+        201: CustomUserSerializer,
+        400: OpenApiResponse(response=ErrorSerializer, description="Validation error"),
+    },
+)
+@api_view(["POST"])
+@permission_classes([AllowAny])
+@throttle_classes([AuthRateThrottle])
+def register(request):
+    serializer = CustomUserSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+@extend_schema(
+    tags=["Authentication"],
+    summary="Hello (authenticated ping)",
+    description=(
+        "Simple authenticated health-check style endpoint that returns a greeting."
+    ),
+    request=None,
+    responses={
+        200: OpenApiResponse(
+            response=MessageSerializer, description="Greeting message"
+        ),
+    },
+)
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+@throttle_classes([AuthRateThrottle])
+@csrf_exempt
+def hello(request):
+    return Response({"message": "Hola mundo!"}, status=status.HTTP_200_OK)

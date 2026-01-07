@@ -16,7 +16,7 @@ class FailedLoginThrottle(BaseThrottle):
         ident = self.get_ident(request)
         return f"failed_login_{ident}"
 
-    def allowed_request(self, request, view):
+    def allow_request(self, request, view):
         key = self.get_cache_key(request)
         attempts = cache.get(key, 0)
 
