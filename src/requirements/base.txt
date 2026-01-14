@@ -5,3 +5,4 @@ django-phonenumber-field[phonenumberslite]==8.1.0
 django-cors-headers==4.9.0
 djangorestframework-simplejwt[crypto]==5.5.1
 drf-spectacular==0.29.0
+drf-standardized-errors[openapi]==0.15.0

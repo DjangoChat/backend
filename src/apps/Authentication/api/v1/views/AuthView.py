@@ -3,7 +3,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes, throttle_classes
-from rest_framework.exceptions import AuthenticationFailed, Throttled
+from rest_framework.exceptions import AuthenticationFailed, Throttled, NotAuthenticated
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.exceptions import InvalidToken
@@ -26,15 +26,6 @@ from apps.Common.throttles import (
 class MessageSerializer(serializers.Serializer):
     message = serializers.CharField()
 
-
-class ErrorSerializer(serializers.Serializer):
-    error = serializers.CharField()
-
-
-class LoginResponseSerializer(serializers.Serializer):
-    user = CustomUserSerializer()
-
-
 @extend_schema(
     tags=["Authentication"],
     summary="User login",
@@ -43,13 +34,6 @@ class LoginResponseSerializer(serializers.Serializer):
         "`access_token` and `refresh_token` cookies and returns the authenticated user."
     ),
     request=LoginSerializer,
-    responses={
-        200: LoginResponseSerializer,
-        401: OpenApiResponse(
-            response=ErrorSerializer, description="Invalid credentials"
-        ),
-        429: OpenApiResponse(description="Too many failed login attempts"),
-    },
 )
 @api_view(["POST"])
 @permission_classes([AllowAny])
@@ -74,9 +58,7 @@ def login(request):
     refresh = RefreshToken.for_user(user=user)  # type: ignore
     access_token = str(refresh.access_token)
 
-    response = Response(
-        {"user": CustomUserSerializer(user).data}, status=status.HTTP_200_OK
-    )
+    response = Response(status=status.HTTP_200_OK)
     response.set_cookie(
         key="access_token",
         value=access_token,
@@ -105,10 +87,7 @@ def login(request):
     responses={
         200: OpenApiResponse(
             response=MessageSerializer, description="Successfully logged out"
-        ),
-        400: OpenApiResponse(
-            response=ErrorSerializer, description="Error invalidating token"
-        ),
+        )
     },
 )
 @api_view(["POST"])
@@ -128,9 +107,7 @@ def logout(request):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-    response = Response(
-        {"message": "Succesfully logged out!"}, status=status.HTTP_200_OK
-    )
+    response = Response(status=status.HTTP_200_OK)
     response.delete_cookie("access_token")
     response.delete_cookie("refresh_token")
 
@@ -147,9 +124,6 @@ def logout(request):
     request=None,
     responses={
         200: OpenApiResponse(description="New access token cookie set"),
-        401: OpenApiResponse(
-            response=ErrorSerializer, description="Missing or invalid refresh token"
-        ),
     },
 )
 @api_view(["POST"])
@@ -159,9 +133,7 @@ def refresh_token(request):
     refresh_token = request.COOKIES.get("refresh_token")
 
     if not refresh_token:
-        return Response(
-            {"error": "Refresh token not provided"}, status=status.HTTP_401_UNAUTHORIZED
-        )
+        raise NotAuthenticated()
 
     try:
         refresh = RefreshToken(refresh_token)
@@ -177,8 +149,8 @@ def refresh_token(request):
         )
 
         return response
-    except InvalidToken:
-        return Response({"error": "Invalid Token"}, status=status.HTTP_401_UNAUTHORIZED)
+    except InvalidToken as e:
+        raise e
 
 
 @extend_schema(
@@ -191,7 +163,6 @@ def refresh_token(request):
     request=CustomUserSerializer,
     responses={
         201: CustomUserSerializer,
-        400: OpenApiResponse(response=ErrorSerializer, description="Validation error"),
     },
 )
 @api_view(["POST"])

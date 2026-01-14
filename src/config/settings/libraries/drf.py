@@ -16,5 +16,7 @@ REST_FRAMEWORK = {
         "refresh": "12/hour",
     },
     # SCHEMA
-    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_SCHEMA_CLASS": "drf_standardized_errors.openapi.AutoSchema",
+    # EXCEPTION
+    "EXCEPTION_HANDLER": "drf_standardized_errors.handler.exception_handler",
 }
