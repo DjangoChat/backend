@@ -34,6 +34,14 @@ class MessageSerializer(serializers.Serializer):
         "`access_token` and `refresh_token` cookies and returns the authenticated user."
     ),
     request=LoginSerializer,
+    responses={
+        200: OpenApiResponse(
+            description=(
+                "Login successful. JWT cookies set via `access_token` and "
+                "`refresh_token` cookies."
+            )
+        ),
+    },
 )
 @api_view(["POST"])
 @permission_classes([AllowAny])

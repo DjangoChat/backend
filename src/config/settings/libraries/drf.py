@@ -18,5 +18,5 @@ REST_FRAMEWORK = {
     # SCHEMA
     "DEFAULT_SCHEMA_CLASS": "drf_standardized_errors.openapi.AutoSchema",
     # EXCEPTION
-    "EXCEPTION_HANDLER": "drf_standardized_errors.handler.exception_handler",
+    "EXCEPTION_HANDLER": "drf_standardized_errors.handler.exception_handler"
 }

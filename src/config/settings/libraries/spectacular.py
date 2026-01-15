@@ -89,9 +89,7 @@ SPECTACULAR_SETTINGS = {
     "ENUM_GENERATE_CHOICE_DESCRIPTION": True,
     "ENUM_SUFFIX": "Enum",
     # Ensure standardized error enums/components are properly processed
-    "POSTPROCESSING_HOOKS": [
-        "drf_standardized_errors.openapi_hooks.postprocess_schema_enums",
-    ],
+    "POSTPROCESSING_HOOKS": ["drf_standardized_errors.openapi_hooks.postprocess_schema_enums"],
     # Renderers / Parsers exposure (leave None to show all)
     "PARSER_WHITELIST": None,
     "RENDERER_WHITELIST": None,
