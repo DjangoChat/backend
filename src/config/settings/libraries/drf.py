@@ -15,8 +15,12 @@ REST_FRAMEWORK = {
         "auth": "50/day",
         "refresh": "12/hour",
     },
+    # AUTHENTICATION
+    # "DEFAULT_AUTHENTICATION_CLASSES": [
+    #     "apps.Authentication.authentication.CookieJwtAuth",
+    # ],
     # SCHEMA
     "DEFAULT_SCHEMA_CLASS": "drf_standardized_errors.openapi.AutoSchema",
     # EXCEPTION
-    "EXCEPTION_HANDLER": "drf_standardized_errors.handler.exception_handler"
+    "EXCEPTION_HANDLER": "drf_standardized_errors.handler.exception_handler",
 }

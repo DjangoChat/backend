@@ -1,21 +1,20 @@
 from django.contrib.auth import authenticate
 from django.views.decorators.csrf import csrf_exempt
 
-from rest_framework import status
-from rest_framework.decorators import api_view, permission_classes, throttle_classes
-from rest_framework.exceptions import AuthenticationFailed, Throttled, NotAuthenticated
-from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework.response import Response
-from rest_framework_simplejwt.exceptions import InvalidToken
-from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework import serializers
-
 from drf_spectacular.utils import (
     OpenApiResponse,
     extend_schema,
 )
+from rest_framework import serializers, status
+from rest_framework.decorators import api_view, permission_classes, throttle_classes
+from rest_framework.exceptions import AuthenticationFailed, NotAuthenticated, Throttled
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
+from rest_framework_simplejwt.exceptions import InvalidToken
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from apps.Authentication.api.v1.serializers import CustomUserSerializer, LoginSerializer
+from apps.Authentication.authentication import CookieJwtAuth
 from apps.Common.throttles import (
     AuthRateThrottle,
     FailedLoginThrottle,
@@ -25,6 +24,7 @@ from apps.Common.throttles import (
 
 class MessageSerializer(serializers.Serializer):
     message = serializers.CharField()
+
 
 @extend_schema(
     tags=["Authentication"],
@@ -55,15 +55,17 @@ def login(request):
     serializer = LoginSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
 
-    user = serializer.validated_data
-    customuser = authenticate(user)  # type: ignore
+    email = serializer.validated_data["email"]  # type: ignore
+    password = serializer.validated_data["password"]  # type: ignore
 
-    if customuser is None:
+    user = authenticate(request=request, email=email, password=password)
+
+    if user is None:
         throttle.throttle_failure(request)
         raise AuthenticationFailed()
 
     throttle.reset(request)
-    refresh = RefreshToken.for_user(user=user)  # type: ignore
+    refresh = RefreshToken.for_user(user=user)
     access_token = str(refresh.access_token)
 
     response = Response(status=status.HTTP_200_OK)
@@ -169,9 +171,6 @@ def refresh_token(request):
         "Validates input and responds with 201 on success."
     ),
     request=CustomUserSerializer,
-    responses={
-        201: CustomUserSerializer,
-    },
 )
 @api_view(["POST"])
 @permission_classes([AllowAny])
@@ -180,7 +179,7 @@ def register(request):
     serializer = CustomUserSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
     serializer.save()
-    return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(status=status.HTTP_201_CREATED)
 
 
 @extend_schema(
@@ -197,7 +196,7 @@ def register(request):
     },
 )
 @api_view(["GET"])
-@permission_classes([IsAuthenticated])
+@permission_classes([CookieJwtAuth])
 @throttle_classes([AuthRateThrottle])
 @csrf_exempt
 def hello(request):

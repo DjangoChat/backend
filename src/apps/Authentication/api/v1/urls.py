@@ -1,5 +1,6 @@
 from django.urls import path
-from .views import login, logout, refresh_token, register, hello
+
+from .views import hello, login, logout, refresh_token, register
 
 urlpatterns = [
     path("login/", login, name="authentication"),
