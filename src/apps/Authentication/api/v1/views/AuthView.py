@@ -112,10 +112,7 @@ def logout(request):
             refresh = RefreshToken(refresh_token)
             refresh.blacklist()
         except Exception as e:
-            return Response(
-                {"error": "Error invalidate token: " + str(e)},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+            raise e
 
     response = Response(status=status.HTTP_200_OK)
     response.delete_cookie("access_token")
@@ -147,7 +144,7 @@ def refresh_token(request):
 
     try:
         refresh = RefreshToken(refresh_token)
-        access_token = str(refresh.token)
+        access_token = str(refresh.access_token)
 
         response = Response(status=status.HTTP_200_OK)
         response.set_cookie(
@@ -196,7 +193,7 @@ def register(request):
     },
 )
 @api_view(["GET"])
-@permission_classes([CookieJwtAuth])
+@permission_classes([IsAuthenticated])
 @throttle_classes([AuthRateThrottle])
 @csrf_exempt
 def hello(request):

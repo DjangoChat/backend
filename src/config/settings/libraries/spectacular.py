@@ -51,7 +51,6 @@ SPECTACULAR_SETTINGS = {
     ],
     # Optional global security (applied to all operations)
     "SECURITY": [
-        {"BearerAuth": []},
         {"CookieAuth": []},
     ],
     # Manually append components (e.g., custom auth schemes)
@@ -61,12 +60,6 @@ SPECTACULAR_SETTINGS = {
                 "type": "http",
                 "scheme": "bearer",
                 "bearerFormat": "JWT",
-            },
-            "CookieAuth": {
-                "type": "apiKey",
-                "in": "cookie",
-                "name": "access_token",
-                "description": "JWT stored in HTTP-only cookie",
             },
         }
     },

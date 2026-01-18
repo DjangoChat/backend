@@ -16,9 +16,9 @@ REST_FRAMEWORK = {
         "refresh": "12/hour",
     },
     # AUTHENTICATION
-    # "DEFAULT_AUTHENTICATION_CLASSES": [
-    #     "apps.Authentication.authentication.CookieJwtAuth",
-    # ],
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "apps.Authentication.authentication.CookieJwtAuth",
+    ],
     # SCHEMA
     "DEFAULT_SCHEMA_CLASS": "drf_standardized_errors.openapi.AutoSchema",
     # EXCEPTION
