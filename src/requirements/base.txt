@@ -1,8 +1,15 @@
+# BASE
 Django==5.2.9
 djangorestframework==3.16.1
-psycopg2-binary==2.9.11
 django-phonenumber-field[phonenumberslite]==8.1.0
+drf-standardized-errors[openapi]==0.15.0
+
+# DATABASE
+psycopg2-binary==2.9.11
+
+# SECURITY
 django-cors-headers==4.9.0
+
+# UTILS
 djangorestframework-simplejwt[crypto]==5.5.1
 drf-spectacular==0.29.0
-drf-standardized-errors[openapi]==0.15.0

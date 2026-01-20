@@ -1,12 +1,5 @@
 -r base.txt
 
-# STYLING
-black==25.12.0
-flake8==7.3.0
-isort==7.0.0
-Flake8-pyproject==1.2.4
-
-# TESTING
 pytest==8.4.2
 pytest-django==4.11.1
 coverage==7.10.7
