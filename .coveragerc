@@ -3,6 +3,11 @@ source = src/apps
 branch = True
 omit =
     */migrations/*
+    */migrations/*.py
+    apps/*/migrations/*
+    apps/*/migrations/*.py
+    **/migrations/*
+    **/migrations/*.py
     */venv/*
     */env/*
     */.venv/*
@@ -11,6 +16,9 @@ omit =
     */tests/*
     */__pycache__/*
     */test/*
+    */conftest.py
+    **/test_*.py
+    **/*_test.py
 
 [report]
 exclude_lines =

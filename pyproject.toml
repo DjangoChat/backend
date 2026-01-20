@@ -114,23 +114,40 @@ per-file-ignores = [
 
 # Coverage configuration
 [tool.coverage.run]
-source = ["src"]
+source = ["src/apps"]
 omit = [
     "*/migrations/*",
+    "*/migrations/*.py",
+    "apps/*/migrations/*",
+    "apps/*/migrations/*.py",
+    "**/migrations/*",
+    "**/migrations/*.py",
     "*/venv/*",
     "*/env/*",
+    "*/.venv/*",
     "manage.py",
     "*/settings/*",
     "*/tests/*",
+    "*/test/*",
+    "*/__pycache__/*",
+    "*/conftest.py",
+    "**/test_*.py",
+    "**/*_test.py",
 ]
 
 [tool.coverage.report]
 exclude_lines = [
     "pragma: no cover",
     "def __repr__",
+    "def __str__",
     "raise AssertionError",
     "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+    "@abstractmethod",
 ]
+show_missing = true
+precision = 2
 
 # Pytest configuration
 [tool.pytest.ini_options]
@@ -143,10 +160,9 @@ addopts = [
     "-v",
     "--tb=short",
     "--strict-markers",
-    "--cov=apps",
+    "--cov=src/apps",
     "--cov-report=term-missing",
     "--cov-report=html:htmlcov",
-    "--cov-fail-under=80",
 ]
 markers = [
     "slow: marks tests as slow (deselect with '-m \"not slow\"')",

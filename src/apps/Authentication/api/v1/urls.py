@@ -2,10 +2,12 @@ from django.urls import path
 
 from .views import hello, login, logout, refresh_token, register
 
+app_name = "Authentication"
+
 urlpatterns = [
-    path("login/", login, name="authentication"),
-    path("logout/", logout, name="authentication"),
-    path("register/", register, name="authentication"),
-    path("refresh-token/", refresh_token, name="authentication"),
-    path("hello/", hello, name="authentication"),
+    path("login/", login, name="login"),
+    path("logout/", logout, name="logout"),
+    path("register/", register, name="register"),
+    path("refresh-token/", refresh_token, name="refresh_token"),
+    path("hello/", hello, name="hello"),
 ]
