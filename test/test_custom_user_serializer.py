@@ -1,8 +1,12 @@
 import pytest
 from rest_framework.exceptions import ValidationError
-from apps.Authentication.api.v1.serializers.CustomUserSerializer import CustomUserSerializer
+
+from apps.Authentication.api.v1.serializers.CustomUserSerializer import (
+    CustomUserSerializer,
+)
 
 pytestmark = pytest.mark.django_db
+
 
 def test_validate_email_invalid_format():
     """

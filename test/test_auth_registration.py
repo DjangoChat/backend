@@ -2,6 +2,8 @@
 Tests for the user registration endpoint.
 """
 
+from unittest.mock import patch
+
 from django.urls import reverse
 
 import pytest
@@ -10,7 +12,15 @@ from rest_framework import status
 pytestmark = pytest.mark.django_db
 
 
-@pytest.mark.django_db
+@pytest.fixture(autouse=True)
+def disable_throttling_globally():
+    with patch(
+        "apps.Authentication.api.v1.views.AuthView.AuthRateThrottle.allow_request",
+        return_value=True,
+    ):
+        yield
+
+
 def test_registration_success(api_client):
     """
     Test successful user registration.
@@ -138,7 +148,10 @@ def test_registration_existing_phone(api_client):
     succesful_response = api_client.post(url, succesful_payload, format="json")
     error_response = api_client.post(url, error_payload, format="json")
 
-    assert succesful_response.status_code == status.HTTP_201_CREATED and error_response.status_code == status.HTTP_400_BAD_REQUEST
+    assert (
+        succesful_response.status_code == status.HTTP_201_CREATED
+        and error_response.status_code == status.HTTP_400_BAD_REQUEST
+    )
 
 
 def test_registration_existing_email(api_client):
@@ -164,5 +177,7 @@ def test_registration_existing_email(api_client):
     succesful_response = api_client.post(url, succesful_payload, format="json")
     error_response = api_client.post(url, error_payload, format="json")
 
-    assert succesful_response.status_code == status.HTTP_201_CREATED and error_response.status_code == status.HTTP_400_BAD_REQUEST
-
+    assert (
+        succesful_response.status_code == status.HTTP_201_CREATED
+        and error_response.status_code == status.HTTP_400_BAD_REQUEST
+    )

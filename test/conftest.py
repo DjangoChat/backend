@@ -35,9 +35,7 @@ def api_client():
 def authenticated_client(api_client, django_user_model):
     """Return an authenticated API client."""
     user = django_user_model.objects.create_user(
-        username="testuser",
-        email="test@example.com",
-        password="testpassword123",
+        email="test@example.com", password="Testpassword123$"
     )
     api_client.force_authenticate(user=user)
     return api_client
