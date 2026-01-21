@@ -16,8 +16,16 @@ def has_uppercase(s):
 
 
 def has_special_character(s):
-    if not bool(re.compile(r"^(?=.*[^a-zA-Z0-9\s])\S+$")):
+    if not bool(re.search(r"[^a-zA-Z0-9]", s)):
         raise ValidationError(
             "A special character must be provided.",
             code="must_contain_special_character",
+        )
+
+
+def has_lowercase(s):
+    if not bool(re.search(r"[a-z]", s)):
+        raise ValidationError(
+            "A lowercase character must be provided.",
+            code="must_contain_lowercase",
         )

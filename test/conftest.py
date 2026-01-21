@@ -2,8 +2,9 @@
 Pytest configuration and fixtures for Platoform Backend tests.
 """
 
-import pytest
 from django.conf import settings
+
+import pytest
 
 
 @pytest.fixture(scope="session")
@@ -13,6 +14,13 @@ def django_db_setup():
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": ":memory:",
     }
+
+    # Ensure ATOMIC_REQUESTS is set for the test environment
+    if not hasattr(settings, "DATABASES"):
+        settings.DATABASES = {}
+
+    for db_name in settings.DATABASES:
+        settings.DATABASES[db_name]["ATOMIC_REQUESTS"] = True
 
 
 @pytest.fixture

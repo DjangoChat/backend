@@ -12,7 +12,7 @@ REST_FRAMEWORK = {
     "DEFAULT_THROTTLE_RATES": {
         "anon": "50/day",
         "user": "1000/day",
-        "auth": "50/day",
+        "auth": "5/min",
         "refresh": "12/hour",
     },
     # AUTHENTICATION

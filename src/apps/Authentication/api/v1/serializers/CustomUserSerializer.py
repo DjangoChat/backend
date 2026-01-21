@@ -1,10 +1,17 @@
 from django.contrib.auth import get_user_model
+from django.core.validators import validate_email as django_validate_email
+from django.core.exceptions import ValidationError as DjangoValidationError
 
 from phonenumber_field.serializerfields import PhoneNumberField
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-from apps.Common.validators import has_number, has_special_character, has_uppercase
+from apps.Common.validators import (
+    has_lowercase,
+    has_number,
+    has_special_character,
+    has_uppercase,
+)
 
 
 class CustomUserSerializer(serializers.Serializer):
@@ -13,22 +20,28 @@ class CustomUserSerializer(serializers.Serializer):
     password1 = serializers.CharField(
         write_only=True,
         min_length=10,
-        max_length=15,
-        validators=[has_uppercase, has_number, has_special_character],
+        max_length=25,
+        validators=[
+            has_uppercase,
+            has_number,
+            has_special_character,
+            has_lowercase,
+        ],
     )
     password2 = serializers.CharField(
         write_only=True,
         min_length=10,
-        max_length=15,
+        max_length=25,
     )
 
     def validate_email(self, email):
         try:
-            email_name, domain_part = email.strip().rsplit("@", 1)
-        except ValueError:
-            pass
-        else:
-            email = email_name + "@" + domain_part.lower()
+            django_validate_email(email)
+        except DjangoValidationError as e:
+            raise ValidationError(str(e), code="invalid_email_format")
+
+        email_name, domain_part = email.strip().rsplit("@", 1)
+        email = email_name + "@" + domain_part.lower()
 
         if get_user_model()._default_manager.filter(email=email).exists():
             raise ValidationError(
