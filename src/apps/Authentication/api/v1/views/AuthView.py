@@ -61,7 +61,7 @@ def login(request):
     user = authenticate(request=request, email=email, password=password)
 
     if user is None:
-        throttle.throttle_failure(request)
+        throttle.record_failed_attempt(request)
         raise AuthenticationFailed()
 
     throttle.reset(request)
@@ -177,24 +177,3 @@ def register(request):
     serializer.is_valid(raise_exception=True)
     serializer.save()
     return Response(status=status.HTTP_201_CREATED)
-
-
-@extend_schema(
-    tags=["Authentication"],
-    summary="Hello (authenticated ping)",
-    description=(
-        "Simple authenticated health-check style endpoint that returns a greeting."
-    ),
-    request=None,
-    responses={
-        200: OpenApiResponse(
-            response=MessageSerializer, description="Greeting message"
-        ),
-    },
-)
-@api_view(["GET"])
-@permission_classes([IsAuthenticated])
-@throttle_classes([AuthRateThrottle])
-@csrf_exempt
-def hello(request):
-    return Response({"message": "Hola mundo!"}, status=status.HTTP_200_OK)
