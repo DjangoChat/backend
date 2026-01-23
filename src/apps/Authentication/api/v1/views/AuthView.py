@@ -10,11 +10,10 @@ from rest_framework.decorators import api_view, permission_classes, throttle_cla
 from rest_framework.exceptions import AuthenticationFailed, NotAuthenticated, Throttled
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from rest_framework_simplejwt.exceptions import InvalidToken
+from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from apps.Authentication.api.v1.serializers import CustomUserSerializer, LoginSerializer
-from apps.Authentication.authentication import CookieJwtAuth
 from apps.Common.throttles import (
     AuthRateThrottle,
     FailedLoginThrottle,
@@ -107,17 +106,15 @@ def login(request):
 def logout(request):
     refresh_token = request.COOKIES.get("refresh_token")
 
-    if refresh_token:
-        try:
-            refresh = RefreshToken(refresh_token)
-            refresh.blacklist()
-        except Exception as e:
-            raise e
+    if not refresh_token:
+        raise NotAuthenticated()
+
+    refresh = RefreshToken(refresh_token)
+    refresh.blacklist()
 
     response = Response(status=status.HTTP_200_OK)
     response.delete_cookie("access_token")
     response.delete_cookie("refresh_token")
-
     return response
 
 
@@ -144,20 +141,21 @@ def refresh_token(request):
 
     try:
         refresh = RefreshToken(refresh_token)
-        access_token = str(refresh.access_token)
+    except TokenError:
+        raise NotAuthenticated()
 
-        response = Response(status=status.HTTP_200_OK)
-        response.set_cookie(
-            key="access_token",
-            value=access_token,
-            httponly=True,
-            secure=True,
-            samesite="Lax",
-        )
+    access_token = str(refresh.access_token)
 
-        return response
-    except InvalidToken as e:
-        raise e
+    response = Response(status=status.HTTP_200_OK)
+    response.set_cookie(
+        key="access_token",
+        value=access_token,
+        httponly=True,
+        secure=True,
+        samesite="Lax",
+    )
+
+    return response
 
 
 @extend_schema(
