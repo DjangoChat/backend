@@ -1,2 +1,3 @@
-from .AuthSerializers import LoginSerializer
+from .AuthSerializers import LoginResponseSerializer, LoginSerializer
 from .CustomUserSerializer import CustomUserSerializer
+from .UserProfileSerializer import UserProfileSerializer

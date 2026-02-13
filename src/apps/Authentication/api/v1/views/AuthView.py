@@ -13,7 +13,11 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from apps.Authentication.api.v1.serializers import CustomUserSerializer, LoginSerializer
+from apps.Authentication.api.v1.serializers import (
+    CustomUserSerializer,
+    LoginResponseSerializer,
+    LoginSerializer,
+)
 from apps.Common.throttles import (
     AuthRateThrottle,
     FailedLoginThrottle,
@@ -35,10 +39,11 @@ class MessageSerializer(serializers.Serializer):
     request=LoginSerializer,
     responses={
         200: OpenApiResponse(
+            response=LoginResponseSerializer,
             description=(
                 "Login successful. JWT cookies set via `access_token` and "
                 "`refresh_token` cookies."
-            )
+            ),
         ),
     },
 )
@@ -67,7 +72,9 @@ def login(request):
     refresh = RefreshToken.for_user(user=user)
     access_token = str(refresh.access_token)
 
-    response = Response(status=status.HTTP_200_OK)
+    data = LoginResponseSerializer.create_login_response_data(user)
+
+    response = Response(data=data, status=status.HTTP_200_OK)
     response.set_cookie(
         key="access_token",
         value=access_token,

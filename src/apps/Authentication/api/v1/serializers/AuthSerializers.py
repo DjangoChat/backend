@@ -8,3 +8,17 @@ class LoginSerializer(serializers.Serializer):
     password = serializers.CharField(
         write_only=True,
     )
+
+
+class LoginResponseSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    profile = serializers.BooleanField()
+
+    @staticmethod
+    def create_login_response_data(user):
+        from apps.Authentication.models import UserProfile
+
+        return {
+            "email": user.email,
+            "profile": UserProfile.objects.filter(user=user).exists(),
+        }

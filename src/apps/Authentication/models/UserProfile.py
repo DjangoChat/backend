@@ -2,10 +2,12 @@ from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from apps.Common.models import ActivatorModel, CustomModel
+from apps.Common.models import ActivatorModel, CustomModel, ActivatorModelManager
 
 
 class UserProfile(CustomModel, ActivatorModel):
+    objects: ActivatorModelManager = ActivatorModelManager()
+
     class Gender(models.TextChoices):
         FEMALE = "FEMALE", _("Female")
         MALE = "MALE", _("Male")
