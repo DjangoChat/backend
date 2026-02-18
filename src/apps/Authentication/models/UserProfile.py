@@ -2,29 +2,31 @@ from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from apps.Common.models import ActivatorModel, CustomModel, ActivatorModelManager
+from apps.Common.models import ActivatorModel, ActivatorModelManager, CustomModel
+
+
+class Gender(models.TextChoices):
+    FEMALE = "FEMALE", _("Female")
+    MALE = "MALE", _("Male")
+    CUSTOM = "CUSTOM", _("Custom")
+    NONE = "NONE", _("Prefer not to say")
+
+
+class Clearance(models.TextChoices):
+    LOW = "LOW", _("Low")
+    MEDIUM = "MEDIUM", _("Medium")
+    HIGH = "HIGH", _("High")
+
+
+class Role(models.TextChoices):
+    BASIC = "BASIC", _("Basic")
+    CONTROL = "CONTROL", _("Control")
+    ANALYTIC = "ANALYTIC", _("Analytic")
+    ADMIN = "ADMIN", _("Admin")
 
 
 class UserProfile(CustomModel, ActivatorModel):
     objects: ActivatorModelManager = ActivatorModelManager()
-
-    class Gender(models.TextChoices):
-        FEMALE = "FEMALE", _("Female")
-        MALE = "MALE", _("Male")
-        CUSTOM = "CUSTOM", _("Custom")
-        NONE = "NONE", _("Prefer not to say")
-
-    class Clearance(models.TextChoices):
-        LOW = "LOW", _("Low")
-        MEDIUM = "MEDIUM", _("Medium")
-        HIGH = "HIGH", _("High")
-
-    class Role(models.TextChoices):
-        BASIC = "BASIC", _("Basic")
-        CONTROL = "CONTROL", _("Control")
-        ANALYTIC = "ANALYTIC", _("Analytic")
-        ADMIN = "ADMIN", _("Admin")
-
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,

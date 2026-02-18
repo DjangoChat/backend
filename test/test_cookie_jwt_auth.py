@@ -16,7 +16,10 @@ from rest_framework.exceptions import AuthenticationFailed
 from rest_framework_simplejwt.exceptions import (
     AuthenticationFailed as JWTAuthenticationFailed,
 )
-from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
+from rest_framework_simplejwt.exceptions import (
+    InvalidToken,
+    TokenError,
+)
 from rest_framework_simplejwt.tokens import AccessToken
 
 from apps.Authentication.authentication.CookieJwtAuth import CookieJwtAuth

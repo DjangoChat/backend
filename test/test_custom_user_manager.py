@@ -9,9 +9,10 @@ This module tests the CustomUserManager functionality including:
 - Extra fields handling
 """
 
-import pytest
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
+
+import pytest
 
 pytestmark = pytest.mark.django_db
 
@@ -37,9 +38,7 @@ class TestCreateUser:
         password = "SecurePassword123!"
         phone = "+12125551234"
 
-        user = User.objects.create_user(
-            email=email, password=password, phone=phone
-        )
+        user = User.objects.create_user(email=email, password=password, phone=phone)
 
         assert user is not None
         assert user.email == email
@@ -378,9 +377,7 @@ class TestCustomUserManagerIntegration:
         Verifies that duplicate emails are not allowed.
         """
         email = "unique@example.com"
-        User.objects.create_user(
-            email=email, password="password", phone="+12125553010"
-        )
+        User.objects.create_user(email=email, password="password", phone="+12125553010")
 
         with pytest.raises(Exception):  # IntegrityError
             User.objects.create_user(

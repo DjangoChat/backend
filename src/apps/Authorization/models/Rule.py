@@ -6,26 +6,26 @@ from apps.Common.models import ActivatorModel, CustomModel
 from .Policy import Policy
 
 
+class RuleType(models.TextChoices):
+    USER_ATTR = "user_attr", _("User Attribute")
+    RESOURCE_ATTR = "resource_attr", _("Resource Attribute")
+    ENVIRONMENT = "environment", _("Environment")
+    RELATIONSHIP = "relationship", _("Relationship")
+    AMOUNT = "amount", _("Quantity")
+
+
+class Operator(models.TextChoices):
+    EQUALS = "equals", _("Equals")
+    NOT_EQUALS = "not_equals", _("Not Equals")
+    CONTAINS = "contains", _("Contains")
+    IN = "in", _("In")
+    GREATER_THAN = "gt", _("Greater Than")
+    LESS_THAN = "lt", _("Less Than")
+    GREATER_THAN_OR_EQUAL = "gte", _("Greater Than or Equal")
+    LESS_THAN_OR_EQUAL = "lte", _("Less Than or Equal")
+
+
 class Rule(CustomModel, ActivatorModel):
-
-    RULE_TYPES = [
-        ("user_attr", "User Attribute"),
-        ("resource_attr", "Resource Attribute"),
-        ("environment", "Environment"),
-        ("relationship", "Relationship"),
-    ]
-
-    OPERATORS = [
-        ("equals", "Equals"),
-        ("not_equals", "Not Equals"),
-        ("contains", "Contains"),
-        ("in", "In"),
-        ("gt", "Greater Than"),
-        ("lt", "Less Than"),
-        ("gte", "Greater Than or Equal"),
-        ("lte", "Less Than or Equal"),
-    ]
-
     policy = models.ForeignKey(
         Policy,
         on_delete=models.CASCADE,
@@ -34,7 +34,7 @@ class Rule(CustomModel, ActivatorModel):
     rule_type = models.CharField(
         _("rule type"),
         max_length=20,
-        choices=RULE_TYPES,
+        choices=RuleType.choices,
     )
     attribute_name = models.CharField(
         _("attribute name"),
@@ -43,7 +43,7 @@ class Rule(CustomModel, ActivatorModel):
     operator = models.CharField(
         _("operator"),
         max_length=20,
-        choices=OPERATORS,
+        choices=Operator.choices,
     )
     value = models.CharField(
         _("value"),

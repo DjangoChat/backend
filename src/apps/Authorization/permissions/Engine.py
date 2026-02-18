@@ -66,7 +66,7 @@ class Engine:
         if attribute_value is None:
             return False
 
-        operator_func = self.operators.get(rule)
+        operator_func = self.operators.get(rule.operator)
 
         if not operator_func:
             return False
@@ -115,7 +115,7 @@ class Engine:
     def _get_relationship_attribute(self, user, resource, attribute_name):
         """Get relationship between user and resource"""
         if attribute_name == "is_owner":
-            return str(getattr(resource, "owner_id", None) == user.id)
+            return str(getattr(resource, "user", None) == user.id)
         elif attribute_name == "same_department":
             try:
                 resource_dept = getattr(resource, "department", None)
