@@ -6,6 +6,7 @@ from phonenumber_field.serializerfields import PhoneNumberField
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
+from apps.Common.models import CustomGroups
 from apps.Common.validators import (
     has_lowercase,
     has_number,
@@ -79,6 +80,7 @@ class CustomUserSerializer(serializers.Serializer):
             email=validated_data["email"],  # type: ignore
             password=validated_data["password1"],  # type: ignore
             phone=validated_data["phone"],  # type: ignore
+            groups=[CustomGroups.MEMBER],
         )
 
         self.instance = user

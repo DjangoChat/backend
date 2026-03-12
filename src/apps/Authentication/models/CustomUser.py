@@ -1,5 +1,5 @@
 from django.contrib.auth.base_user import BaseUserManager
-from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -32,7 +32,7 @@ class CustomUserManager(BaseUserManager, ActivatorModelManager):
         return self.create_user(email, password, **extra_fields)
 
 
-class CustomUser(CustomModel, AbstractBaseUser, ActivatorModel):
+class CustomUser(CustomModel, AbstractBaseUser, ActivatorModel, PermissionsMixin):
     email = models.EmailField(
         _("email address"),
         unique=True,
@@ -50,13 +50,6 @@ class CustomUser(CustomModel, AbstractBaseUser, ActivatorModel):
         default=False,
         help_text=_("Designates whether the user can log into this admin site."),
     )
-    is_superuser = models.BooleanField(
-        _("superuser status"),
-        default=False,
-        help_text=_(
-            "Designates that this user has all permissions without explicitly assigning them."
-        ),
-    )
 
     objects = CustomUserManager()
 
@@ -65,4 +58,7 @@ class CustomUser(CustomModel, AbstractBaseUser, ActivatorModel):
     REQUIRED_FIELDS = []
 
     class Meta:
+        db_table = "AUTHENTICATION_CUSTOM_USER"
+        verbose_name = _("Custom user")
+        verbose_name_plural = _("Custom users")
         app_label = "Authentication"

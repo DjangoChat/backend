@@ -18,13 +18,6 @@ class Clearance(models.TextChoices):
     HIGH = "HIGH", _("High")
 
 
-class Role(models.TextChoices):
-    BASIC = "BASIC", _("Basic")
-    CONTROL = "CONTROL", _("Control")
-    ANALYTIC = "ANALYTIC", _("Analytic")
-    ADMIN = "ADMIN", _("Admin")
-
-
 class UserProfile(CustomModel, ActivatorModel):
     objects: ActivatorModelManager = ActivatorModelManager()
     user = models.OneToOneField(
@@ -64,16 +57,10 @@ class UserProfile(CustomModel, ActivatorModel):
         max_length=20,
         choices=Clearance.choices,
     )
-    role = models.CharField(
-        _("role"),
-        max_length=20,
-        choices=Role.choices,
-        default=Role.BASIC,
-    )
 
     class Meta:
         db_table = "AUTHENTICATION_PROFILE"
         verbose_name = _("Profile")
         verbose_name_plural = _("Profiles")
-        indexes = [models.Index(fields=["user", "department", "role"])]
+        indexes = [models.Index(fields=["user", "department"])]
         app_label = "Authentication"
