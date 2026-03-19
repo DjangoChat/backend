@@ -11,7 +11,7 @@ if APPS_DIRS not in sys.path:
     sys.path.insert(0, APPS_DIRS)
 
 ENVIRONMENT = os.environ.get("ENV_TYPE", "development")
-SECRET_KEY = os.environ.get("SECRET_KEY")
+SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key")
 DEBUG = os.environ.get("DEBUG", "True") == "True"
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "*").split(",")
 

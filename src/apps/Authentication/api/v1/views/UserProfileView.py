@@ -11,4 +11,4 @@ class UserProfileView(viewsets.ModelViewSet):
     serializer_class = UserProfileSerializer
     permission_classes = [CustomDjangoModelPermission]
     throttle_classes = [UserRateThrottle]
-    filterset_fields = ["user", "department"]
+    filterset_fields = ["user"]

@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.core.validators import validate_email as django_validate_email
 
@@ -80,8 +81,9 @@ class CustomUserSerializer(serializers.Serializer):
             email=validated_data["email"],  # type: ignore
             password=validated_data["password1"],  # type: ignore
             phone=validated_data["phone"],  # type: ignore
-            groups=[CustomGroups.MEMBER],
         )
 
-        self.instance = user
+        group = Group.objects.get(name=CustomGroups.MEMBER)
+        self.instance = user.groups.add(group)
+
         return self.instance

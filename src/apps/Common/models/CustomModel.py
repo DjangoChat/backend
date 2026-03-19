@@ -3,8 +3,9 @@ import uuid
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from .ActivatorModel import ActivatorModel
 
-class CustomModel(models.Model):
+class CustomModel(ActivatorModel):
     id = models.UUIDField(
         _("id"),
         primary_key=True,

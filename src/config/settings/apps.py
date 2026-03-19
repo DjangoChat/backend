@@ -22,6 +22,7 @@ PERSONAL_APPS = [
     "Authorization.apps.AuthorizationConfig",
     "Chat.apps.ChatConfig",
     "Common.apps.CommonConfig",
+    "Billing.apps.BillingConfig",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + PERSONAL_APPS

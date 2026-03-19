@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 from phonenumber_field.modelfields import PhoneNumberField
 
-from apps.Common.models import ActivatorModel, ActivatorModelManager, CustomModel
+from apps.Common.models import ActivatorModelManager, CustomModel, Plan
 
 
 class CustomUserManager(BaseUserManager, ActivatorModelManager):
@@ -32,12 +32,13 @@ class CustomUserManager(BaseUserManager, ActivatorModelManager):
         return self.create_user(email, password, **extra_fields)
 
 
-class CustomUser(CustomModel, AbstractBaseUser, ActivatorModel, PermissionsMixin):
+class CustomUser(CustomModel, AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(
         _("email address"),
         unique=True,
     )
     phone = PhoneNumberField(
+        _("phone"),
         unique=True,
     )
     verified = models.BooleanField(
