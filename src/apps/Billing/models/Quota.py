@@ -10,6 +10,10 @@ class Quota(CustomModel):
         Plan,
         on_delete=models.CASCADE,
     )
+    code = models.CharField(
+        _("Code of limiter"),
+        max_length=100,
+    )
     limit = models.PositiveIntegerField(
         _("Limit of quota"),
     )

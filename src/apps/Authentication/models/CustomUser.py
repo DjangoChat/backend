@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 from phonenumber_field.modelfields import PhoneNumberField
 
-from apps.Common.models import ActivatorModelManager, CustomModel, Plan
+from apps.Common.models import ActivatorModelManager, CustomModel
 
 
 class CustomUserManager(BaseUserManager, ActivatorModelManager):
