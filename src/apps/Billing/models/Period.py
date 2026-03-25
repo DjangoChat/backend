@@ -13,12 +13,9 @@ class Period(CustomModel):
     interval_count = models.PositiveIntegerField(
         _("Number of months"),
     )
-    interval_unit = models.CharField(
-        _("The name of the period"),
-        max_length=100,
-    )
 
     class Meta:
         db_table = "BILLING_PERIOD"
         verbose_name = _("Period")
         verbose_name_plural = _("Periods")
+        app_label = "Billing"

@@ -33,6 +33,9 @@ class CustomUserManager(BaseUserManager, ActivatorModelManager):
 
 
 class CustomUser(CustomModel, AbstractBaseUser, PermissionsMixin):
+    strip_customer_id = models.CharField(
+        _("Stripe customer"),
+    )
     email = models.EmailField(
         _("email address"),
         unique=True,

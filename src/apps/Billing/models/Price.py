@@ -2,9 +2,10 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from apps.Common.models import CustomModel, PlanOption
-from .Plan import Plan
-from .Period import Period
+
 from .Currency import Currency
+from .Period import Period
+from .Plan import Plan
 
 
 class Price(CustomModel):
@@ -23,8 +24,14 @@ class Price(CustomModel):
     amount = models.PositiveBigIntegerField(
         _("Amount on cents"),
     )
+    stripe_price_id = models.CharField(
+        _("Stripe price"),
+        null=True,
+        unique=True,
+    )
 
     class Meta:
         db_table = "BILLING_PRICE"
         verbose_name = _("Price")
         verbose_name_plural = _("Prices")
+        app_label = "Billing"

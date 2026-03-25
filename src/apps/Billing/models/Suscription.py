@@ -54,3 +54,4 @@ class Suscription(CustomModel):
         db_table = "BILLING_SUSCRIPTION"
         verbose_name = _("Suscription")
         verbose_name_plural = _("Suscriptions")
+        app_label = "Billing"

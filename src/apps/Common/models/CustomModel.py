@@ -5,6 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 from .ActivatorModel import ActivatorModel
 
+
 class CustomModel(ActivatorModel):
     id = models.UUIDField(
         _("id"),

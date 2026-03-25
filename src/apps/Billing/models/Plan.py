@@ -16,10 +16,12 @@ class Plan(CustomModel):
     )
     stripe_product_id = models.CharField(
         _("Stripe product"),
+        null=True,
+        unique=True,
     )
 
     class Meta:
         db_table = "BILLING_PLAN"
-        unique_together = [["name", "frequency"]]
         verbose_name = _("Plan")
         verbose_name_plural = _("Plans")
+        app_label = "Billing"

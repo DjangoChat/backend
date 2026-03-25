@@ -11,6 +11,10 @@ class UserProfile(CustomModel):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
     )
+    nickname = models.CharField(
+        _("Nickname"),
+        max_length=150,
+    )
     first_name = models.CharField(
         _("first name"),
         max_length=150,

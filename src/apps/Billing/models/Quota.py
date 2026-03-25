@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from apps.Common.models import CustomModel
+
 from .Plan import Plan
 
 
@@ -22,3 +23,4 @@ class Quota(CustomModel):
         db_table = "BILLING_QUOTA"
         verbose_name = _("Quota")
         verbose_name_plural = _("Quotas")
+        app_label = "Billing"

@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from apps.Common.models import CustomModel
+
 from .Quota import Quota
 from .Suscription import Suscription
 
@@ -24,3 +25,4 @@ class Usage(CustomModel):
         unique_together = [["quota", "suscription"]]
         verbose_name = _("Usage")
         verbose_name_plural = _("Usages")
+        app_label = "Billing"

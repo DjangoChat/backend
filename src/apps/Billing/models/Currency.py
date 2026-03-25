@@ -20,3 +20,4 @@ class Currency(models.Model):
         db_table = "BILLING_CURRENCY"
         verbose_name = _("Currency")
         verbose_name_plural = _("Currencies")
+        app_label = "Billing"
