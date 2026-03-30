@@ -3,14 +3,22 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from apps.Common.models import CustomModel, StatusSuscription
+from apps.Billing.models import Price
 
 
 class Suscription(CustomModel):
     strip_sucription_id = models.CharField(
         _("Stripe suscription id"),
+        null=True,
+        unique=True,
     )
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+    )
+
+    price = models.ForeignKey(
+        Price,
         on_delete=models.CASCADE,
     )
     start_date = models.DateTimeField(
@@ -45,8 +53,8 @@ class Suscription(CustomModel):
         _("Plan name"),
         max_length=100,
     )
-    plan_interval_unit = models.CharField(
-        _("The name of the period"),
+    period_name = models.CharField(
+        _("Period name"),
         max_length=100,
     )
 
@@ -54,4 +62,5 @@ class Suscription(CustomModel):
         db_table = "BILLING_SUSCRIPTION"
         verbose_name = _("Suscription")
         verbose_name_plural = _("Suscriptions")
+        ordering = ["start_date"]
         app_label = "Billing"

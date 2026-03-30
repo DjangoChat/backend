@@ -11,9 +11,9 @@ from apps.Common.models import Frequency, PlanOption
 stripe.api_key = settings.STRIPE_API_KEY
 
 PRICE = {
-    PlanOption.FREE: 0,
-    PlanOption.PRO: 700,
-    PlanOption.PREMIUM: 1200,
+    PlanOption.MEMBER: 700,
+    PlanOption.PRO: 1200,
+    PlanOption.PREMIUM: 1700,
 }
 
 DISCOUNT = {
@@ -60,7 +60,7 @@ class Command(BaseCommand):
                     ),
                 )
 
-                if not created:
+                if created:
                     self.create_stripe_price(
                         new_price,
                         current_plan.stripe_product_id,
