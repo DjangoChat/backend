@@ -2,8 +2,8 @@ from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from apps.Common.models import CustomModel, StatusSuscription
 from apps.Billing.models import Price
+from apps.Common.models import CustomModel, StatusSuscription
 
 
 class Suscription(CustomModel):
