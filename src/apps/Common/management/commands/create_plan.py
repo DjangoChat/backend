@@ -23,10 +23,13 @@ class Command(BaseCommand):
         product.save()
 
     def handle(self, *args: Any, **options: Any) -> str | None:
+
+        self.stdout.write("CREATING PLAN COMMAND RUNNING")
+
         for option in PlanOption:
             new_plane, created = Plan.objects.get_or_create(
                 name=option,
                 description=f"{option.capitalize()} Plan",
             )
-            if not created:
+            if created:
                 self.create_stripe_product(new_plane)

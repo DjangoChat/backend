@@ -11,6 +11,9 @@ class Command(BaseCommand):
     help = "Command for creating all the periods"
 
     def handle(self, *args: Any, **options: Any) -> str | None:
+
+        self.stdout.write("CREATING PERIOD COMMAND RUNNING")
+
         Period.objects.get_or_create(
             name=Frequency.MONTHLY,
             interval_count=1,

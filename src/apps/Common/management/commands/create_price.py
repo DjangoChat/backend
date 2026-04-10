@@ -17,7 +17,7 @@ PRICE = {
 }
 
 DISCOUNT = {
-    Frequency.MONTHLY: 1,
+    Frequency.MONTHLY: 0,
     Frequency.TRIMESTER: 5,
     Frequency.ANNUAL: 7,
 }
@@ -41,6 +41,8 @@ class Command(BaseCommand):
             price.save()
 
     def handle(self, *args: Any, **options: Any) -> str | None:
+
+        self.stdout.write("CREATING PRICES COMMAND RUNNING")
         actual_currency = Currency.objects.get(code="usd")
 
         for opt in PlanOption:
@@ -56,7 +58,8 @@ class Command(BaseCommand):
                     amount=(
                         PRICE[opt]
                         * current_period.interval_count
-                        * (DISCOUNT[freq] / 100)
+                        * (100 - DISCOUNT[freq])
+                        // 100
                     ),
                 )
 

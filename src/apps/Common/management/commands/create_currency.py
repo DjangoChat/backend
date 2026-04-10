@@ -10,6 +10,9 @@ class Command(BaseCommand):
     help = "Command for creating all the currencies"
 
     def handle(self, *args: Any, **options: Any) -> str | None:
+
+        self.stdout.write("CREATING CURRENCY COMMAND RUNNING")
+
         Currency.objects.get_or_create(
             code="pen",
             name="Sol peruano",

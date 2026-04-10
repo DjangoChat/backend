@@ -37,6 +37,8 @@ class Command(BaseCommand):
 
     def handle(self, *args: Any, **options: Any) -> str | None:
 
+        self.stdout.write("CREATING GROUPS COMMAND RUNNING")
+
         for group_name in GROUPS_PERMISSIONS:
             group, created = Group.objects.get_or_create(name=group_name)
 
