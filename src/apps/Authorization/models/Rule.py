@@ -1,28 +1,9 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from apps.Common.models import ActivatorModel, CustomModel
+from apps.Common.models import ActivatorModel, CustomModel, RuleType, Operator
 
 from .Policy import Policy
-
-
-class RuleType(models.TextChoices):
-    USER_ATTR = "user_attr", _("User Attribute")
-    RESOURCE_ATTR = "resource_attr", _("Resource Attribute")
-    ENVIRONMENT = "environment", _("Environment")
-    RELATIONSHIP = "relationship", _("Relationship")
-    AMOUNT = "amount", _("Quantity")
-
-
-class Operator(models.TextChoices):
-    EQUALS = "equals", _("Equals")
-    NOT_EQUALS = "not_equals", _("Not Equals")
-    CONTAINS = "contains", _("Contains")
-    IN = "in", _("In")
-    GREATER_THAN = "gt", _("Greater Than")
-    LESS_THAN = "lt", _("Less Than")
-    GREATER_THAN_OR_EQUAL = "gte", _("Greater Than or Equal")
-    LESS_THAN_OR_EQUAL = "lte", _("Less Than or Equal")
 
 
 class Rule(CustomModel, ActivatorModel):
@@ -48,9 +29,6 @@ class Rule(CustomModel, ActivatorModel):
     value = models.CharField(
         _("value"),
         max_length=200,
-    )
-    effect = models.BooleanField(
-        default=True,
     )
 
     class Meta:

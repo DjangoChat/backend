@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate
 from django.views.decorators.csrf import csrf_exempt
+from django.utils.timezone import now
 
 from drf_spectacular.utils import (
     OpenApiResponse,
@@ -18,11 +19,14 @@ from apps.Authentication.api.v1.serializers import (
     LoginResponseSerializer,
     LoginSerializer,
 )
+from apps.Authentication.models import UserProfile
+from apps.Billing.models import Suscription
 from apps.Common.throttles import (
     AuthRateThrottle,
     FailedLoginThrottle,
     RefreshRateThrottle,
 )
+from apps.Common.models import StatusSuscription
 
 
 class MessageSerializer(serializers.Serializer):
@@ -182,3 +186,71 @@ def register(request):
     serializer.is_valid(raise_exception=True)
     serializer.save()
     return Response(status=status.HTTP_201_CREATED)
+
+
+@extend_schema(
+    tags=["Authentication"],
+    summary="Get current user info",
+    description=(
+        "Returns the authenticated user's profile information, subscription status, "
+        "and access permissions. Requires authentication."
+    ),
+    request=None,
+    responses={
+        200: OpenApiResponse(
+            description=(
+                "User information retrieved successfully. Includes user profile, "
+                "subscription details, and access status."
+            )
+        )
+    },
+)
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+@throttle_classes([AuthRateThrottle])
+def me(request):
+    user = request.user
+
+    try:
+        profile = user.userprofile
+        groups = list(user.groups.values_list("name", flat=True))
+        group_name = groups[0] if groups else None
+
+        user_data = {
+            "first_name": profile.first_name,
+            "last_name": profile.last_name,
+            "nickname": profile.nickname,
+            "group": group_name,
+        }
+    except UserProfile.DoesNotExist:
+        user_data = None
+
+    subscription = Suscription.objects.filter(user=user).first()
+
+    suscription_data = None
+    has_access = False
+
+    if subscription:
+        suscription_data = {
+            "plan": subscription.plan_name,
+            "status": subscription.status,
+            "current_period_end": subscription.current_period_end,
+        }
+
+        if subscription.status is StatusSuscription.ACTIVE:
+            has_access = True
+        elif (
+            subscription.status is StatusSuscription.CANCELED
+            and subscription.current_period_end
+            and subscription.current_period_end > now()
+        ):
+            has_access = True
+
+    return Response(
+        {
+            "user": user_data,
+            "subscription": suscription_data,
+            "has_access": has_access,
+        },
+        status=status.HTTP_200_OK,
+    )

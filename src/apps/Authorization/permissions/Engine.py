@@ -49,14 +49,14 @@ class Engine:
     def _evaluate_policy(self, user, resource, policy, context):
         rules = policy.rules.all()
 
-        if not rules.exist():
+        if not rules.exists():
             return None
 
         for rule in rules:
             if not self._evaluate_rule(user, resource, rule, context):
                 return None
 
-        return rules.first().effect
+        return policy.effect
 
     def _evaluate_rule(self, user, resource, rule, context):
         attribute_value = self._get_attribute_value(
@@ -116,12 +116,5 @@ class Engine:
         """Get relationship between user and resource"""
         if attribute_name == "is_owner":
             return str(getattr(resource, "user", None) == user.id)
-        elif attribute_name == "same_department":
-            try:
-                resource_dept = getattr(resource, "department", None)
-                user_dept = user.userprofile.department
-                return str(resource_dept == user_dept)
-            except (AttributeError, UserProfile.DoesNotExist):
-                return "False"
 
         return None

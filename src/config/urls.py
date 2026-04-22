@@ -11,6 +11,7 @@ from drf_spectacular.views import (
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/v1/", include("Authentication.api.v1.urls")),
+    path("api/v1/", include("Billing.api.v1.urls")),
 ]
 
 if settings.DEBUG:

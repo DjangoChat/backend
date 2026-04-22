@@ -1,1 +1,1 @@
-from .PlanSerializer import PlanSerializer
+from .PriceSerializer import PriceSerializer

@@ -3,7 +3,7 @@ from rest_framework import serializers
 from apps.Billing.models import Price
 
 
-class PlanSerializer(serializers.ModelSerializer):
+class PriceSerializer(serializers.ModelSerializer):
     plan = serializers.SerializerMethodField()
     period = serializers.SerializerMethodField()
     currency = serializers.SerializerMethodField()
@@ -19,5 +19,19 @@ class PlanSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Price
-        fields = "__all__"
-        read_only_fields = fields
+        fields = [
+            "id",
+            "plan",
+            "period",
+            "currency",
+            "amount",
+            "stripe_price_id",
+        ]
+        read_only_fields = [
+            "id",
+            "plan",
+            "period",
+            "currency",
+            "amount",
+            "stripe_price_id",
+        ]

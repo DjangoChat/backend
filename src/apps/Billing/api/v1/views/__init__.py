@@ -1,1 +1,1 @@
-from .PlanViews import PlanListView
+from .PriceView import PriceListView
