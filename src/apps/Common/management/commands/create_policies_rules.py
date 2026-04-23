@@ -35,8 +35,23 @@ class Command(BaseCommand):
         )
 
         self.stdout.write("CREATING RULES")
-        rule_profile_retrieve = Rule.objects.create(
+
+        Rule.objects.create(
             policy=profile_retrieve,
+            rule_type=RuleType.RELATIONSHIP,
+            attribute_name="is_owner",
+            operator=Operator.EQUALS,
+            value="True",
+        )
+        Rule.objects.create(
+            policy=profile_update,
+            rule_type=RuleType.RELATIONSHIP,
+            attribute_name="is_owner",
+            operator=Operator.EQUALS,
+            value="True",
+        )
+        Rule.objects.create(
+            policy=profile_delete,
             rule_type=RuleType.RELATIONSHIP,
             attribute_name="is_owner",
             operator=Operator.EQUALS,

@@ -1,6 +1,5 @@
 from django.contrib.auth import authenticate
 from django.views.decorators.csrf import csrf_exempt
-from django.utils.timezone import now
 
 from drf_spectacular.utils import (
     OpenApiResponse,
@@ -16,17 +15,14 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from apps.Authentication.api.v1.serializers import (
     CustomUserSerializer,
-    LoginResponseSerializer,
     LoginSerializer,
+    MeResponseSerializer,
 )
-from apps.Authentication.models import UserProfile
-from apps.Billing.models import Suscription
 from apps.Common.throttles import (
     AuthRateThrottle,
     FailedLoginThrottle,
     RefreshRateThrottle,
 )
-from apps.Common.models import StatusSuscription
 
 
 class MessageSerializer(serializers.Serializer):
@@ -43,7 +39,7 @@ class MessageSerializer(serializers.Serializer):
     request=LoginSerializer,
     responses={
         200: OpenApiResponse(
-            response=LoginResponseSerializer,
+            response=MeResponseSerializer,
             description=(
                 "Login successful. JWT cookies set via `access_token` and "
                 "`refresh_token` cookies."
@@ -76,7 +72,7 @@ def login(request):
     refresh = RefreshToken.for_user(user=user)
     access_token = str(refresh.access_token)
 
-    data = LoginResponseSerializer.create_login_response_data(user)
+    data = MeResponseSerializer.create_me_response_data(user)
 
     response = Response(data=data, status=status.HTTP_200_OK)
     response.set_cookie(
@@ -198,10 +194,11 @@ def register(request):
     request=None,
     responses={
         200: OpenApiResponse(
+            response=MeResponseSerializer,
             description=(
                 "User information retrieved successfully. Includes user profile, "
                 "subscription details, and access status."
-            )
+            ),
         )
     },
 )
@@ -210,47 +207,6 @@ def register(request):
 @throttle_classes([AuthRateThrottle])
 def me(request):
     user = request.user
+    data = MeResponseSerializer.create_me_response_data(user)
 
-    try:
-        profile = user.userprofile
-        groups = list(user.groups.values_list("name", flat=True))
-        group_name = groups[0] if groups else None
-
-        user_data = {
-            "first_name": profile.first_name,
-            "last_name": profile.last_name,
-            "nickname": profile.nickname,
-            "group": group_name,
-        }
-    except UserProfile.DoesNotExist:
-        user_data = None
-
-    subscription = Suscription.objects.filter(user=user).first()
-
-    suscription_data = None
-    has_access = False
-
-    if subscription:
-        suscription_data = {
-            "plan": subscription.plan_name,
-            "status": subscription.status,
-            "current_period_end": subscription.current_period_end,
-        }
-
-        if subscription.status is StatusSuscription.ACTIVE:
-            has_access = True
-        elif (
-            subscription.status is StatusSuscription.CANCELED
-            and subscription.current_period_end
-            and subscription.current_period_end > now()
-        ):
-            has_access = True
-
-    return Response(
-        {
-            "user": user_data,
-            "subscription": suscription_data,
-            "has_access": has_access,
-        },
-        status=status.HTTP_200_OK,
-    )
+    return Response(data, status=status.HTTP_200_OK)
