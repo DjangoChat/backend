@@ -1,1 +1,2 @@
 from .PriceSerializer import PriceSerializer
+from .CheckoutSessionSerializer import CheckoutSessionSerializer

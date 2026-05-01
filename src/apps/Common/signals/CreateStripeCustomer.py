@@ -1,12 +1,8 @@
-from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-
-import stripe
+from apps.Common.utils import create_stripe_customuser
 
 from apps.Authentication.models import CustomUser, UserProfile
-
-stripe.api_key = settings.STRIPE_API_KEY
 
 
 @receiver(post_save, sender=UserProfile)
@@ -14,7 +10,7 @@ def create_stripe_customer(sender, instance, created, **kwargs):
     if created:
         custom_user = CustomUser.objects.get(id=instance.user)
 
-        stripe_custom_user = stripe.Customer.create(
+        stripe_custom_user = create_stripe_customuser(
             name=f"{instance.first_name} {instance.last_name}",
             email=custom_user.email,
             phone=custom_user.phone,

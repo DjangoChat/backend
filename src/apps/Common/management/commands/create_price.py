@@ -1,14 +1,12 @@
 from typing import Any
 
-from django.conf import settings
 from django.core.management.base import BaseCommand
 
-import stripe
 
 from apps.Billing.models import Currency, Period, Plan, Price
 from apps.Common.models import Frequency, PlanOption
+from apps.Common.utils import create_stripe_price
 
-stripe.api_key = settings.STRIPE_API_KEY
 
 PRICE = {
     PlanOption.MEMBER: 700,
@@ -31,11 +29,11 @@ class Command(BaseCommand):
         self, price: Price, produc_id: str | None, currency_code: str, months: int
     ) -> None:
         if produc_id is not None:
-            new_price = stripe.Price.create(
+            new_price = create_stripe_price(
                 currency=currency_code,
                 unit_amount=price.amount,
-                recurring={"interval": "month", "interval_count": months},
-                product=produc_id,
+                months=months,
+                product_id=produc_id,
             )
             price.stripe_price_id = new_price.id
             price.save()

@@ -3,4 +3,5 @@ from apps.Authentication.api.v1.views.AuthView import (
     logout,
     refresh_token,
     register,
+    me,
 )

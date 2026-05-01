@@ -1,14 +1,11 @@
 from typing import Any
 
-from django.conf import settings
 from django.core.management.base import BaseCommand
 
-import stripe
 
 from apps.Billing.models import Plan
 from apps.Common.models import PlanOption
-
-stripe.api_key = settings.STRIPE_API_KEY
+from apps.Common.utils import create_stripe_product
 
 
 class Command(BaseCommand):
@@ -16,7 +13,7 @@ class Command(BaseCommand):
     help = "Command for creating all the plans"
 
     def create_stripe_product(self, product: Plan) -> None:
-        new_product = stripe.Product.create(
+        new_product = create_stripe_product(
             name=product.name,
         )
         product.stripe_product_id = new_product.id
