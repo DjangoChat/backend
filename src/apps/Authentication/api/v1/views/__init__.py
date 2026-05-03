@@ -5,3 +5,4 @@ from apps.Authentication.api.v1.views.AuthView import (
     register,
     me,
 )
+from apps.Authentication.api.v1.views.UserProfileView import UserProfileView

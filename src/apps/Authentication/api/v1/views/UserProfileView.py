@@ -22,3 +22,6 @@ class UserProfileView(viewsets.ModelViewSet):
             return UserProfile.objects.none()
 
         return UserProfile.objects.all()
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)

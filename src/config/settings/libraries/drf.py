@@ -15,6 +15,9 @@ REST_FRAMEWORK = {
         "auth": "5/min",
         "refresh": "12/hour",
     },
+    # PAGINATION
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
+    "PAGE_SIZE": 50,
     # AUTHENTICATION
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "apps.Authentication.authentication.CookieJwtAuth",
