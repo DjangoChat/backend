@@ -9,7 +9,7 @@ from apps.Common.utils import create_stripe_checkout_session
 
 
 class CheckOutSession(APIView):
-    authentication_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def post(self, request, format=None):
         serializer = CheckoutSessionSerializer(data=request.data)
@@ -25,7 +25,7 @@ class CheckOutSession(APIView):
         )
         return Response(
             data={
-                "checkout_session_id": checkout_session.id,
+                "stripe_session_url": checkout_session.url,
             },
             status=status.HTTP_200_OK,
         )
