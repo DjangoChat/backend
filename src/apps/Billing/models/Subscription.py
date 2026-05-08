@@ -6,8 +6,8 @@ from apps.Billing.models import Price
 from apps.Common.models import CustomModel, StatusSuscription
 
 
-class Suscription(CustomModel):
-    strip_sucription_id = models.CharField(
+class Subscription(CustomModel):
+    stripe_subscription_id = models.CharField(
         _("Stripe suscription id"),
         null=True,
         unique=True,
@@ -23,7 +23,6 @@ class Suscription(CustomModel):
     )
     start_date = models.DateTimeField(
         _("Start date"),
-        auto_now_add=True,
     )
     end_date = models.DateField(
         _("Final date"),
@@ -59,8 +58,8 @@ class Suscription(CustomModel):
     )
 
     class Meta:
-        db_table = "BILLING_SUSCRIPTION"
-        verbose_name = _("Suscription")
-        verbose_name_plural = _("Suscriptions")
+        db_table = "BILLING_SUBSCRIPTION"
+        verbose_name = _("Subscription")
+        verbose_name_plural = _("Subscriptions")
         ordering = ["start_date"]
         app_label = "Billing"

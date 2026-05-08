@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from apps.Billing.models import Suscription
+from apps.Billing.models import Subscription
 from apps.Authentication.models import UserProfile
 from apps.Common.models import StatusSuscription
 from django.utils.timezone import now
@@ -68,7 +68,7 @@ class MeResponseSerializer(serializers.Serializer):
         except UserProfile.DoesNotExist:
             user_data = None
 
-        subscription = Suscription.objects.filter(user=user).first()
+        subscription = Subscription.objects.filter(user=user).first()
 
         suscription_data = None
         has_access = None
@@ -83,7 +83,7 @@ class MeResponseSerializer(serializers.Serializer):
             if subscription.status is StatusSuscription.ACTIVE:
                 has_access = {
                     "has_access": True,
-                    "last_day": Suscription.current_period_end,
+                    "last_day": Subscription.current_period_end,
                 }
             elif (
                 subscription.status is StatusSuscription.CANCELED
@@ -92,7 +92,7 @@ class MeResponseSerializer(serializers.Serializer):
             ):
                 has_access = {
                     "has_access": True,
-                    "last_day": Suscription.current_period_end,
+                    "last_day": Subscription.current_period_end,
                 }
 
         return {

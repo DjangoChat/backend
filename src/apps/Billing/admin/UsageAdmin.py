@@ -7,6 +7,6 @@ class UsageAdmin(admin.ModelAdmin):
     list_display = [
         "id",
         "quota",
-        "suscription",
+        "subscription",
         "count",
     ]
