@@ -33,6 +33,7 @@ class UserDataSerializer(serializers.Serializer):
     last_name = serializers.CharField()
     nickname = serializers.CharField()
     group = serializers.CharField(allow_null=True)
+    avatar = serializers.ImageField(allow_null=True)
 
 
 class SubscriptionDataSerializer(serializers.Serializer):
@@ -64,6 +65,11 @@ class MeResponseSerializer(serializers.Serializer):
                 "last_name": profile.last_name,
                 "nickname": profile.nickname,
                 "group": group_name,
+                "avatar": (
+                    profile.avatar.url
+                    if profile.avatar and profile.avatar.name
+                    else None
+                ),
             }
         except UserProfile.DoesNotExist:
             user_data = None
@@ -80,19 +86,19 @@ class MeResponseSerializer(serializers.Serializer):
                 "current_period_end": subscription.current_period_end,
             }
 
-            if subscription.status is StatusSuscription.ACTIVE:
+            if subscription.status == StatusSuscription.ACTIVE:
                 has_access = {
                     "has_access": True,
-                    "last_day": Subscription.current_period_end,
+                    "last_day": subscription.current_period_end,
                 }
             elif (
-                subscription.status is StatusSuscription.CANCELED
+                subscription.status == StatusSuscription.CANCELED
                 and subscription.current_period_end
                 and subscription.current_period_end > now()
             ):
                 has_access = {
                     "has_access": True,
-                    "last_day": Subscription.current_period_end,
+                    "last_day": subscription.current_period_end,
                 }
 
         return {
