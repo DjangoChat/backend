@@ -55,3 +55,21 @@ class Operator(models.TextChoices):
     LESS_THAN = "lt", _("Less Than")
     GREATER_THAN_OR_EQUAL = "gte", _("Greater Than or Equal")
     LESS_THAN_OR_EQUAL = "lte", _("Less Than or Equal")
+
+
+class ParticipantType(models.TextChoices):
+    USER = "USER", _("User")
+    AGENT = "AGENT", _("AGENT")
+
+
+class MessageType(models.TextChoices):
+    TEXT = "TEXT", _("Text")
+    VIDEO = "VIDEO", _("Video")
+    FILE = "FILE", _("File")
+    IMAGE = "IMAGE", _("Image")
+
+
+class MessageStatusType(models.TextChoices):
+    NOT_DELIVER = "NOT_DELIVER", _("Not yet deliver")
+    DELIVER = "DELIVER", _("Delivar")
+    READ = "READ", _("Read")
