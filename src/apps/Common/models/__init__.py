@@ -12,4 +12,7 @@ from apps.Common.models.Utils import (
     ParticipantType,
     MessageType,
     MessageStatusType,
+    NatureType,
+    AgentName,
+    AgentType,
 )

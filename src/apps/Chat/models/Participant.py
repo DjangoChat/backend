@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from django.db.models import Q
 
 from apps.Common.models import CustomModel, ParticipantType
-from apps.Authentication.models import Agent
+from .Agent import Agent
 
 from django.core.exceptions import ValidationError
 
