@@ -6,8 +6,8 @@ from ..models import Chat
 class ChatAdmin(admin.ModelAdmin):
     list_display = [
         "id",
-        "name",
+        "last_message",
         "created_at",
-        "updated_at",
+        "id_conversation_chatpgt",
     ]
     ordering = ["-created_at"]

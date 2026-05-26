@@ -2,10 +2,12 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.utils.timezone import now
 
 from phonenumber_field.modelfields import PhoneNumberField
 
-from apps.Common.models import ActivatorModelManager, CustomModel
+from apps.Billing.models import Subscription
+from apps.Common.models import ActivatorModelManager, CustomModel, StatusSuscription
 
 
 class CustomUserManager(BaseUserManager, ActivatorModelManager):
@@ -66,3 +68,17 @@ class CustomUser(CustomModel, AbstractBaseUser, PermissionsMixin):
         verbose_name = _("Custom user")
         verbose_name_plural = _("Custom users")
         app_label = "Authentication"
+
+    def has_active_plan(self):
+        obj = Subscription.objects.filter(user=self).first()
+
+        if obj is None:
+            return False
+
+        if obj.status == StatusSuscription.ACTIVE:
+            return obj.current_period_end > now()
+
+        if obj.status == StatusSuscription.CANCELED:
+            return obj.current_period_end > now()
+
+        return False

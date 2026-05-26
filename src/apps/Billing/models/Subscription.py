@@ -63,3 +63,21 @@ class Subscription(CustomModel):
         verbose_name_plural = _("Subscriptions")
         ordering = ["start_date"]
         app_label = "Billing"
+
+    def has_feature(self):
+        return None
+
+    def get_quota_limit(self):
+        return None
+
+    def get_quota_usage(self):
+        return None
+
+    def get_quota_remaining(self):
+        return None
+
+    def can_consume(self):
+        return None
+
+    def consume(self):
+        return None

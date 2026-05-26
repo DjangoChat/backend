@@ -1,4 +1,5 @@
 from rest_framework.generics import ListAPIView
+from rest_framework.throttling import AnonRateThrottle
 
 from apps.Billing.api.v1.serializers import PriceSerializer
 from apps.Billing.models import Price
@@ -11,3 +12,4 @@ class PriceListView(ListAPIView):
     serializer_class = PriceSerializer
     pagination_class = None
     permission_classes = [AllowAny]
+    throttle_classes = [AnonRateThrottle]

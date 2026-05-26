@@ -9,6 +9,6 @@ class MessageAdmin(admin.ModelAdmin):
         "chat",
         "sender",
         "content",
-        "created_at",
+        "sent_at",
     ]
-    ordering = ["-created_at"]
+    ordering = ["-sent_at"]

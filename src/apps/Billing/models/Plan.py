@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from apps.Common.models import CustomModel, PlanOption
+from apps.Billing.models import Feature
 
 
 class Plan(CustomModel):
@@ -19,6 +20,7 @@ class Plan(CustomModel):
         null=True,
         unique=True,
     )
+    features = models.ManyToManyField(Feature)
 
     class Meta:
         db_table = "BILLING_PLAN"

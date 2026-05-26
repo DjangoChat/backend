@@ -8,6 +8,9 @@ class AgentAdmin(admin.ModelAdmin):
         "id",
         "name",
         "description",
-        "created_at",
+        "agent_type",
+        "get_natures",
     ]
-    ordering = ["-created_at"]
+
+    def get_natures(self, obj):
+        return [nature.name for nature in obj.natures.all()]

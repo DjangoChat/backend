@@ -5,3 +5,4 @@ from apps.Billing.models.Price import Price
 from apps.Billing.models.Quota import Quota
 from apps.Billing.models.Subscription import Subscription
 from apps.Billing.models.Usage import Usage
+from apps.Billing.models.Feature import Feature

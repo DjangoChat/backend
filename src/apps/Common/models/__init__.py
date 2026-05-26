@@ -15,4 +15,6 @@ from apps.Common.models.Utils import (
     NatureType,
     AgentName,
     AgentType,
+    FeatureCode,
+    QuotaCode,
 )

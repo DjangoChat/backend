@@ -1,15 +1,14 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from apps.Common.models import CustomModel, QuotaCode
+from apps.Common.models import CustomModel, FeatureCode
 
 
-class Quota(CustomModel):
+class Feature(CustomModel):
     code = models.CharField(
-        _("Code of limiter"),
+        _("Code to identify the feature"),
         unique=True,
-        max_length=100,
-        choices=QuotaCode,
+        choices=FeatureCode,
     )
     name = models.CharField(
         _("Name of the feature"),
@@ -21,7 +20,7 @@ class Quota(CustomModel):
     )
 
     class Meta:
-        db_table = "BILLING_QUOTA"
-        verbose_name = _("Quota")
-        verbose_name_plural = _("Quotas")
+        db_table = "BILLING_FEATURE"
+        verbose_name = _("Feature")
+        verbose_name_plural = _("Features")
         app_label = "Billing"

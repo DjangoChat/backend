@@ -10,7 +10,7 @@ from django.core.exceptions import ValidationError
 
 
 class Participant(CustomModel):
-    type = models.CharField(
+    participaty_type = models.CharField(
         _("Type of entity which is talking"),
         max_length=20,
         choices=ParticipantType,

@@ -1,1 +1,2 @@
 from .CustomPermission import CustomPermission
+from .SubscriptionPermission import SubscriptionPermission

@@ -134,4 +134,20 @@ class AgentName(models.TextChoices):
 class AgentType(models.TextChoices):
     BASIC = "basic", _("Basic")
     MEDIUM = "medium", _("Medium")
-    ADVANCED = "advanced", _("advanced")
+    ADVANCE = "advance", _("advance")
+
+
+class FeatureCode(models.TextChoices):
+    BASIC_AGENT = "basic.agent.access", _("Access to the agent type basic")
+    MEDIUM_AGENT = "medium.agent.access", _("Acces to the agent type medium")
+    ADVANCED_AGENT = "advanced.agent.access", _("Access to the agent type advance")
+
+
+class QuotaCode(models.TextChoices):
+    AGENT_CHAT_COUNT = "agent.chat.count", _("The amount of chats with agents")
+    BASIC_CHAT_COUNT = "basic.chat.count", _("The amount of chats with users")
+    GROUP_CHAT_COUNT = "group.chat.count", _("The amount of groups")
+    TOKEN_SPEND_MONTHLY = "tokens.spend.monthly", _("The money spend in tokens")
+    MAX_PREDICTIONS_MONTHLY = "max.predictions.monthly", _(
+        "Max amount of users suggested"
+    )

@@ -26,4 +26,6 @@ REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_standardized_errors.openapi.AutoSchema",
     # EXCEPTION
     "EXCEPTION_HANDLER": "drf_standardized_errors.handler.exception_handler",
+    # FILTERING
+    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
 }

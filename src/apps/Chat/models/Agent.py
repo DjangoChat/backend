@@ -11,6 +11,9 @@ class Agent(CustomModel):
         choices=AgentName,
         max_length=50,
     )
+    description = models.CharField(
+        _("Descripcion of the agent"),
+    )
     promp_type = models.TextField(
         _("Description of the agent conduct"),
     )
