@@ -46,11 +46,11 @@ class Command(BaseCommand):
         existing_count = 0
 
         for nature_type in NatureType:
-            nature_label = nature_type.label
+            nature_value = nature_type.value
             description = self.NATURES_DESCRIPTIONS.get(nature_type, "")
 
             nature, created = Nature.objects.get_or_create(
-                name=nature_label,
+                name=nature_value,
                 defaults={"description": description},
             )
 

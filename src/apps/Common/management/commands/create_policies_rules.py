@@ -1,6 +1,7 @@
 from typing import Any
 
 from django.core.management.base import BaseCommand
+from django.contrib.contenttypes.models import ContentType
 
 from apps.Authorization.models import Policy, Rule
 from apps.Authentication.models import UserProfile
@@ -15,22 +16,24 @@ class Command(BaseCommand):
 
         self.stdout.write("CREATING POLICIES")
 
+        profile_content_type = ContentType.objects.get_for_model(UserProfile)
+
         profile_retrieve = Policy.objects.create(
             name="Profile policy retrieve",
             description="The profile policy of object retrieve",
-            resource_type=UserProfile,
+            resource_type=profile_content_type,
             action=EndpointOption.VIEW,
         )
         profile_update = Policy.objects.create(
             name="Profile policy update",
             description="The profile policy of object update",
-            resource_type=UserProfile,
+            resource_type=profile_content_type,
             action=EndpointOption.EDIT,
         )
         profile_delete = Policy.objects.create(
             name="Profile policy delete",
             description="The profile policy of object delete",
-            resource_type=UserProfile,
+            resource_type=profile_content_type,
             action=EndpointOption.DELETE,
         )
 

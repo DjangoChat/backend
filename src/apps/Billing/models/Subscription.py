@@ -2,7 +2,7 @@ from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from apps.Billing.models import Price
+from apps.Billing.models import Price, Plan
 from apps.Common.models import CustomModel, StatusSuscription
 
 
@@ -64,8 +64,16 @@ class Subscription(CustomModel):
         ordering = ["start_date"]
         app_label = "Billing"
 
-    def has_feature(self):
-        return None
+    def has_feature(self, feature):
+        current_plan = Plan.objects.filter(name=self.plan_name).first()
+
+        if not current_plan:
+            return False
+
+        if current_plan.features.filter(code=feature).exists():
+            return True
+
+        return False
 
     def get_quota_limit(self):
         return None

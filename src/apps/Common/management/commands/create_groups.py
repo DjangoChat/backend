@@ -5,7 +5,7 @@ from django.core.management.base import BaseCommand
 
 from apps.Authentication.models import UserProfile
 from apps.Common.models import CustomGroups
-from apps.Chat.models import Agent
+from apps.Chat.models import Agent, Nature
 
 READ_PERMISSIONS = [
     "view",
@@ -20,6 +20,7 @@ GROUPS_PERMISSIONS = {
     CustomGroups.MEMBER: {
         UserProfile: FULL_PERMISSIONS,
         Agent: READ_PERMISSIONS,
+        Nature: READ_PERMISSIONS,
     },
     CustomGroups.MAINTAINER: {
         UserProfile: FULL_PERMISSIONS,

@@ -1,19 +1,18 @@
 from rest_framework import serializers
+
 from apps.Chat.models import Agent, Nature
-from apps.Common.models import PlanOption
+from apps.Common.models import FeatureCode, AgentType
+from .NatureSerializer import ChipNatureSerializer
 
-
-class NatureSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Nature
-        fields = [
-            "name",
-        ]
+PERMISSION = {
+    AgentType.BASIC: FeatureCode.BASIC_AGENT,
+    AgentType.MEDIUM: FeatureCode.MEDIUM_AGENT,
+    AgentType.ADVANCE: FeatureCode.ADVANCED_AGENT,
+}
 
 
 class AgentSerializer(serializers.ModelSerializer):
-    natures = NatureSerializer(read_only=True, many=True)
+    natures = ChipNatureSerializer(Nature.objects.all())
     has_permission = serializers.SerializerMethodField()
 
     class Meta:
@@ -29,5 +28,10 @@ class AgentSerializer(serializers.ModelSerializer):
         ]
 
     def get_has_permission(self, obj):
-        # if PlanOption.PREMIUM in self.context["request"].user.get_active_subscription()
-        pass
+        if (
+            self.context["request"]
+            .user.get_last_valid_subscription()
+            .has_feature(PERMISSION[obj.agent_type])
+        ):
+            return True
+        return False

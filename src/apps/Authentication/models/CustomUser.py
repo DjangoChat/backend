@@ -69,16 +69,17 @@ class CustomUser(CustomModel, AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = _("Custom users")
         app_label = "Authentication"
 
-    def has_active_plan(self):
+    def has_active_plan(self) -> bool:
+        if self.get_last_valid_subscription() is None:
+            return False
+        return True
+
+    def get_last_valid_subscription(self):
         obj = Subscription.objects.filter(user=self).first()
 
         if obj is None:
-            return False
+            return None
 
-        if obj.status == StatusSuscription.ACTIVE:
-            return obj.current_period_end > now()
-
-        if obj.status == StatusSuscription.CANCELED:
-            return obj.current_period_end > now()
-
-        return False
+        if obj.current_period_end > now():
+            return obj
+        return None

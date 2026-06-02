@@ -75,8 +75,6 @@ class Command(BaseCommand):
 
     def handle(self, *args: Any, **options: Any) -> str | None:
 
-        self.stdout.write("CREATING AGENTS COMMAND RUNNING")
-
         # Distribution: 5 basic (3 natures), 10 medium (5 natures), 10 advanced (10 natures)
         distribution = {
             AgentType.BASIC: 5,
@@ -103,38 +101,61 @@ class Command(BaseCommand):
                 if agent_index >= len(agent_names):
                     break
 
-                agent_name = agent_names[agent_index]
-                num_natures = natures_per_type[agent_type]
+                try:
+                    agent_name = agent_names[agent_index]
+                    num_natures = natures_per_type[agent_type]
 
-                # Randomly select natures for this agent
-                selected_nature_types = random.sample(nature_types, num_natures)
+                    # Randomly select natures for this agent
+                    selected_nature_types = random.sample(nature_types, num_natures)
 
-                # Get or create Nature objects
-                selected_natures = []
-                for nature_type in selected_nature_types:
-                    nature = Nature.objects.get(name=nature_type)
-                    selected_natures.append(nature)
+                    # Get or create Nature objects
+                    selected_natures = []
+                    for nature_type in selected_nature_types:
+                        try:
+                            nature = Nature.objects.get(name=nature_type.value)
+                            selected_natures.append(nature)
+                        except Nature.DoesNotExist:
+                            continue
 
-                # Build the prompt
-                prompt = self.build_prompt(selected_natures)
+                    # Skip agent creation if natures are missing
+                    if len(selected_natures) < num_natures:
+                        agent_index += 1
+                        continue
 
-                # Generate description based on agent name and natures
-                description = self.generate_description(agent_name, selected_natures)
+                    # Build the prompt
+                    prompt = self.build_prompt(selected_natures)
 
-                # Create or get the agent
-                agent, created = Agent.objects.get_or_create(
-                    name=agent_name,
-                    defaults={
-                        "promp_type": prompt,
-                        "agent_type": agent_type,
-                        "description": description,
-                    },
-                )
+                    # Generate description based on agent name and natures
+                    description = self.generate_description(
+                        agent_name, selected_natures
+                    )
 
-                if created:
-                    # Add natures to the agent
-                    agent.natures.set(selected_natures)
-                    created_count += 1
-                else:
-                    existing_count += 1
+                    # Create or get the agent
+                    agent, created = Agent.objects.get_or_create(
+                        name=agent_name,
+                        defaults={
+                            "promp_type": prompt,
+                            "agent_type": agent_type,
+                            "description": description,
+                        },
+                    )
+
+                    if created:
+                        # Add natures to the agent
+                        agent.natures.set(selected_natures)
+                        created_count += 1
+                    else:
+                        existing_count += 1
+                except Exception:
+                    agent_index += 1
+                    continue
+
                 agent_index += 1
+
+        self.stdout.write(
+            self.style.SUCCESS(
+                f"\n✓ Agents creation completed!"
+                f"\n  Created: {created_count}"
+                f"\n  Already existed: {existing_count}"
+            )
+        )

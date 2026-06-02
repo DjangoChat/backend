@@ -1,9 +1,9 @@
 from django.contrib import admin
-from ..models import Quota
+from ..models import Feature
 
 
-@admin.register(Quota)
-class QuotaAdmin(admin.ModelAdmin):
+@admin.register(Feature)
+class FeatureAdmin(admin.ModelAdmin):
     list_display = [
         "id",
         "code",
