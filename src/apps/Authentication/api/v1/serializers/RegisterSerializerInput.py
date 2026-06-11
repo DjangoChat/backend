@@ -1,5 +1,4 @@
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import Group
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.core.validators import validate_email as django_validate_email
 
@@ -7,7 +6,6 @@ from phonenumber_field.serializerfields import PhoneNumberField
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-from apps.Common.models import CustomGroups
 from apps.Common.validators import (
     has_lowercase,
     has_number,
@@ -16,7 +14,7 @@ from apps.Common.validators import (
 )
 
 
-class CustomUserSerializer(serializers.Serializer):
+class RegisterSerializerInput(serializers.Serializer):
     email = serializers.EmailField()
     phone = PhoneNumberField()
     password1 = serializers.CharField(
@@ -72,18 +70,3 @@ class CustomUserSerializer(serializers.Serializer):
                 code="different_passwords",
             )
         return data
-
-    def save(self, **kwargs):
-        user_model = get_user_model()
-        validated_data = self.validated_data
-
-        user = user_model._default_manager.create_user(  # type: ignore
-            email=validated_data["email"],  # type: ignore
-            password=validated_data["password1"],  # type: ignore
-            phone=validated_data["phone"],  # type: ignore
-        )
-
-        group = Group.objects.get(name=CustomGroups.MEMBER)
-        self.instance = user.groups.add(group)
-
-        return self.instance

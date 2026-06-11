@@ -1,8 +1,11 @@
+from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from apps.Common.utils import create_stripe_customuser
 
 from apps.Authentication.models import UserProfile
+from apps.Chat.models import Participant
+from apps.Common.models import ParticipantType
 
 
 @receiver(post_save, sender=UserProfile)
@@ -17,3 +20,14 @@ def create_stripe_customer(sender, instance, created, **kwargs):
         )
         custom_user.strip_customer_id = stripe_custom_user.id
         custom_user.save()
+
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_user_participant(sender, instance, created, **kwargs):
+    if created:
+        custom_user = instance
+
+        Participant.objects.get_or_create(
+            participaty_type=ParticipantType.USER,
+            user=custom_user,
+        )

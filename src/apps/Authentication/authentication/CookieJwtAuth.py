@@ -1,7 +1,6 @@
 from rest_framework.request import Request
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.exceptions import AuthenticationFailed
-from rest_framework_simplejwt.tokens import Token
 
 
 class CookieJwtAuth(JWTAuthentication):

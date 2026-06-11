@@ -58,10 +58,10 @@ class FailedLoginThrottle(SimpleRateThrottle):
         self.now = time.time()
 
         # Remove expired timestamps (older than duration)
-        while self.history and self.history[-1] <= self.now - self.duration:
+        while self.history and self.history[-1] <= self.now - self.duration:  # type: ignore
             self.history.pop()
 
-        if len(self.history) >= self.num_requests:
+        if len(self.history) >= self.num_requests:  # type: ignore
             return self.throttle_failure()
         return True
 
@@ -79,7 +79,7 @@ class FailedLoginThrottle(SimpleRateThrottle):
         history = cache.get(key, [])
 
         # Clean up expired entries
-        while history and history[-1] <= now - self.duration:
+        while history and history[-1] <= now - self.duration:  # type: ignore
             history.pop()
 
         # Add current timestamp at the beginning

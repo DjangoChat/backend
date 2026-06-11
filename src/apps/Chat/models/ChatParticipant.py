@@ -22,10 +22,18 @@ class ChatParticipant(CustomModel):
         _("Check if the user muted the chat"),
         default=False,
     )
+    is_admin = models.BooleanField(
+        _("Check if the user is admin of a gruop"),
+        default=False,
+    )
+    is_typing = models.BooleanField(
+        _("Check if the user is writing"),
+        default=False,
+    )
 
     class Meta:
         db_table = "CHAT_CHAT_PARTICIPANT"
         verbose_name = _("Chat Participant")
         verbose_name_plural = _("Chat Participants")
-        unique_together = ("chat", "participant")
         app_label = "Chat"
+        unique_together = ("chat", "participant")

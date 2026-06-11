@@ -1,2 +1,3 @@
-from .AgentView import AgentView
 from .NatureView import NatureDropDownView
+from .ChatView import ChatView
+from .MessageView import MessageView

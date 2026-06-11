@@ -5,6 +5,7 @@ django-filter==25.2
 django-phonenumber-field[phonenumberslite]==8.1.0
 drf-standardized-errors[openapi]==0.15.0
 pillow==12.1.1
+requests==2.34.2
 
 # DATABASE
 psycopg2-binary==2.9.11
@@ -18,3 +19,7 @@ drf-spectacular==0.29.0
 
 # PAYMENT
 stripe==14.4.1
+
+# WEBSOCKET
+channels[daphne]
+channels[types]

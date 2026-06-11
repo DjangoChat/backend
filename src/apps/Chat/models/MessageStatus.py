@@ -18,6 +18,7 @@ class MessageStatus(CustomModel):
         _("Status of the message"),
         max_length=20,
         choices=MessageStatusType,
+        default=MessageStatusType.DELIVER,
     )
     upload_at = models.DateTimeField(
         _("Last update"),

@@ -10,5 +10,6 @@ class ChatParticipantAdmin(admin.ModelAdmin):
         "participant",
         "joined_at",
         "is_muted",
+        "is_admin",
     ]
     ordering = ["-joined_at"]

@@ -47,62 +47,65 @@ class AccessDataSerializer(serializers.Serializer):
     last_day = serializers.DateTimeField()
 
 
-class MeResponseSerializer(serializers.Serializer):
+class MeSerializerOutput(serializers.Serializer):
     user = UserDataSerializer(allow_null=True)
     subscription = SubscriptionDataSerializer(allow_null=True)
-    has_access = AccessDataSerializer(allow_null=True)
+    has_access = AccessDataSerializer()
 
-    @staticmethod
-    def create_me_response_data(user):
-
+    def get_user(self, user):
         try:
             profile = user.userprofile
-            groups = list(user.groups.values_list("name", flat=True))
-            group_name = groups[0] if groups else None
+        except UserProfile.DoesNotExist:
+            return None
 
-            user_data = {
+        groups = list(user.groups.values_list("name", flat=True))
+
+        return UserDataSerializer(
+            {
                 "first_name": profile.first_name,
                 "last_name": profile.last_name,
                 "nickname": profile.nickname,
-                "group": group_name,
-                "avatar": (
-                    profile.avatar.url
-                    if profile.avatar and profile.avatar.name
-                    else None
-                ),
+                "group": groups[0] if groups else None,
+                "avatar": profile.avatar.url if profile.avatar else None,
             }
-        except UserProfile.DoesNotExist:
-            user_data = None
+        ).data
 
+    def get_subscription(self, user):
         subscription = Subscription.objects.filter(user=user).first()
 
-        suscription_data = None
-        has_access = None
+        if not subscription:
+            return None
 
-        if subscription:
-            suscription_data = {
+        return SubscriptionDataSerializer(
+            {
                 "plan": subscription.plan_name,
                 "status": subscription.status,
                 "current_period_end": subscription.current_period_end,
             }
+        ).data
 
-            if subscription.status == StatusSuscription.ACTIVE:
-                has_access = {
+    def get_has_access(self, user):
+        subscription = Subscription.objects.filter(user=user).first()
+
+        if not subscription:
+            return {
+                "has_access": False,
+                "last_day": None,
+            }
+
+        if subscription.status == StatusSuscription.ACTIVE or (
+            subscription.status == StatusSuscription.CANCELED
+            and subscription.current_period_end
+            and subscription.current_period_end > now()
+        ):
+            return AccessDataSerializer(
+                {
                     "has_access": True,
                     "last_day": subscription.current_period_end,
                 }
-            elif (
-                subscription.status == StatusSuscription.CANCELED
-                and subscription.current_period_end
-                and subscription.current_period_end > now()
-            ):
-                has_access = {
-                    "has_access": True,
-                    "last_day": subscription.current_period_end,
-                }
+            ).data
 
         return {
-            "user": user_data,
-            "subscription": suscription_data,
-            "has_access": has_access,
+            "has_access": False,
+            "last_day": None,
         }

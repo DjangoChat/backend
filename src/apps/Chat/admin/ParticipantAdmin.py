@@ -9,4 +9,9 @@ class ParticipantAdmin(admin.ModelAdmin):
         "participaty_type",
         "user",
         "agent",
+        "first_name",
+        "last_name",
+        "nickname",
+        "avatar",
+        "status",
     ]

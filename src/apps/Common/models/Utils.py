@@ -62,6 +62,13 @@ class ParticipantType(models.TextChoices):
     AGENT = "AGENT", _("AGENT")
 
 
+class ParticipantStatus(models.TextChoices):
+    EN_LINEA = "EN LINEA", _("En linea")
+    AUSENTE = "AUSENTE", _("Ausente")
+    NO_MOLESTAR = "NO MOLESTAR", _("No molestar")
+    INVISIBLE = "INVISIBLE", _("Invisible")
+
+
 class MessageType(models.TextChoices):
     TEXT = "TEXT", _("Text")
     VIDEO = "VIDEO", _("Video")
@@ -150,4 +157,17 @@ class QuotaCode(models.TextChoices):
     TOKEN_SPEND_MONTHLY = "tokens.spend.monthly", _("The money spend in tokens")
     MAX_PREDICTIONS_MONTHLY = "max.predictions.monthly", _(
         "Max amount of users suggested"
+    )
+
+
+class ConversationConsumerType(models.TextChoices):
+    LIST_MESSAGE = "list_message", _("The user has listed the messages")
+    CREATE_MESSAGE = "create_message", _("The user has send a message")
+    DELETE_MESSAGE = "delete_message", _("The user has deleted a message")
+    UPDATE_MESSAGE = "update_message", _("The user has modified a message")
+    PATH_MESSAGE_STATUS_STATUS = "patch_message_status_status", _(
+        "The user see a message"
+    )
+    PATCH_CHAT_PARTICIPANT_IS_TYPING = "patch_chat_participant_is_typing", _(
+        "The user is typing"
     )

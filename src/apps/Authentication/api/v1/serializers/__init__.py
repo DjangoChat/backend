@@ -1,7 +1,10 @@
 from .AuthSerializers import (
     LoginResponseSerializer,
     LoginSerializer,
-    MeResponseSerializer,
+    MeSerializerOutput,
 )
-from .CustomUserSerializer import CustomUserSerializer
-from .UserProfileSerializer import UserProfileSerializer
+from .CustomUserSerializer import RegisterSerializerInput
+from .OnboardingSerializer import (
+    OnboardingMemberSerializerInput,
+    OnboardingMemberSerializerOutput,
+)

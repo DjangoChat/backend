@@ -3,10 +3,9 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.Common.models import CustomModel, MessageType
 from apps.Chat.models import Chat, Participant
+from apps.Common.models import MessageStatusType
 
 from django.core.exceptions import ValidationError
-
-# add validator for the image/file/files
 
 
 class Message(CustomModel):
@@ -14,7 +13,7 @@ class Message(CustomModel):
         Chat,
         on_delete=models.CASCADE,
     )
-    sender = models.ForeignKey(
+    participant = models.ForeignKey(
         Participant,
         on_delete=models.CASCADE,
     )
@@ -52,8 +51,11 @@ class Message(CustomModel):
         db_table = "CHAT_MESSAGE"
         verbose_name = _("Message")
         verbose_name_plural = _("Messages")
-        ordering = ["-sent_at"]
         app_label = "Chat"
+        ordering = ["-sent_at"]
+        indexes = [
+            models.Index(fields=["message_type"]),
+        ]
 
     def clean(self) -> None:
         super().clean()
@@ -70,3 +72,8 @@ class Message(CustomModel):
     def save(self, *args, **kwargs):
         self.full_clean()
         return super().save(*args, **kwargs)
+
+    def has_been_seen_by_all(self) -> bool:
+        return not self.messagestatus_set.exclude(  # type: ignore
+            status=MessageStatusType.READ
+        ).exists()

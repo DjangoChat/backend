@@ -1,11 +1,17 @@
 from django.urls import path
-
-from apps.Billing.api.v1.views import PriceListView, CheckOutSession, stripe_webhook
+from .views import PriceView, StripeView
 
 urlpatterns = [
-    path("prices/", PriceListView.as_view(), name="prices-list"),
     path(
-        "stripe/check-out-session/", CheckOutSession.as_view(), name="check-out-session"
+        "prices/",
+        PriceView.as_view({"get": "list"}),
     ),
-    path("stripe/webhook/", stripe_webhook, name="stripe-webhook"),
+    path(
+        "stripe/create-session/",
+        StripeView.as_view({"post": "create_session"}),
+    ),
+    path(
+        "stripe/webhook/",
+        StripeView.as_view({"post": "webhook"}),
+    ),
 ]

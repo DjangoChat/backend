@@ -1,8 +1,2 @@
-from apps.Authentication.api.v1.views.AuthView import (
-    login,
-    logout,
-    refresh_token,
-    register,
-    me,
-)
-from apps.Authentication.api.v1.views.UserProfileView import UserProfileView
+from apps.Authentication.api.v1.views.AuthenticationView import AuthenticationView
+from apps.Authentication.api.v1.views.OnboardingView import OnboardingView

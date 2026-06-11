@@ -1,20 +1,7 @@
-from apps.Common.models.ActivatorModel import ActivatorModel, ActivatorModelManager
-from apps.Common.models.CustomModel import CustomModel
-from apps.Common.models.Utils import (
-    CustomGroups,
-    Frequency,
-    Gender,
-    PlanOption,
-    StatusSuscription,
-    EndpointOption,
-    RuleType,
-    Operator,
-    ParticipantType,
-    MessageType,
-    MessageStatusType,
-    NatureType,
-    AgentName,
-    AgentType,
-    FeatureCode,
-    QuotaCode,
+from apps.Common.models.ActivatorModel import (
+    ActivatorModel,
+    ActivatorModelManager,
+    ActivatorQuerySet,
 )
+from apps.Common.models.CustomModel import CustomModel
+from apps.Common.models.Utils import *

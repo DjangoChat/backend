@@ -6,10 +6,9 @@ from ..models import Agent
 class AgentAdmin(admin.ModelAdmin):
     list_display = [
         "id",
-        "name",
-        "description",
         "agent_type",
         "get_natures",
+        "promp_type",
     ]
 
     def get_natures(self, obj):

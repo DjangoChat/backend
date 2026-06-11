@@ -1,52 +1,52 @@
-from rest_framework.views import APIView
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+
+from rest_framework.decorators import action
+from rest_framework import status, viewsets
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
-from rest_framework import status, serializers
-from drf_spectacular.utils import extend_schema, OpenApiResponse
+from rest_framework import status
+
 from typing import Any
 
-from ..serializers import CheckoutSessionSerializer
-from apps.Common.utils import create_stripe_checkout_session
+from ..serializers import (
+    CheckoutSessionSerializerInput,
+    CheckoutSessionSerializerOutput,
+)
+from apps.Billing.api.v1.docs import create_stripe_session_docs, webhook_stripe_docs
+from apps.Billing.service import CreateSessionService, StripeWebHookService
 
 
-class CheckoutSessionResponseSerializer(serializers.Serializer):
-    stripe_session_url = serializers.URLField()
+class StripeView(viewsets.ViewSet):
 
-
-class CheckOutSession(APIView):
-    permission_classes = [IsAuthenticated]
-
-    @extend_schema(
-        tags=["Billing"],
-        summary="Create Stripe checkout session",
-        description=(
-            "Creates a Stripe checkout session for subscription payment. "
-            "Requires authentication with valid success_url, cancel_url, and stripe_price_id."
-        ),
-        request=CheckoutSessionSerializer,
-        responses={
-            200: OpenApiResponse(
-                response=CheckoutSessionResponseSerializer,
-                description="Checkout session created successfully",
-            ),
-            400: OpenApiResponse(description="Invalid request data"),
-        },
+    @create_stripe_session_docs
+    @action(
+        detail=False,
+        methods=["post"],
     )
-    def post(self, request, format=None):
-        serializer = CheckoutSessionSerializer(data=request.data)
-        if not serializer.is_valid(raise_exception=True):
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def create_session(self, request):
+        serializer = CheckoutSessionSerializerInput(data=request.data)
+        serializer.is_valid(raise_exception=True)
 
         validated_data: Any = serializer.validated_data
-        checkout_session = create_stripe_checkout_session(
+        checkout_session = CreateSessionService().execute(
             success_url=validated_data["success_url"],
             cancel_url=validated_data["cancel_url"],
             stripe_price_id=validated_data["stripe_price_id"],
             customuser_stripe_id=request.user.strip_customer_id,
         )
-        return Response(
-            data={
-                "stripe_session_url": checkout_session.url,
-            },
-            status=status.HTTP_200_OK,
+        response = CheckoutSessionSerializerOutput(
+            data={"stripe_session_url": checkout_session.url}
         )
+        return Response(response, status=status.HTTP_200_OK)
+
+    @webhook_stripe_docs
+    @action(
+        detail=False,
+        methods=["post"],
+    )
+    @method_decorator(csrf_exempt)
+    def webhook(self, request):
+        payload = request.body
+        sig_header = request.META.get("HTTP_STRIPE_SIGNATURE")
+        response_status = StripeWebHookService().execute(payload, sig_header)
+        return Response(status=response_status)

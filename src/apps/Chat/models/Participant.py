@@ -3,29 +3,51 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.db.models import Q
 
-from apps.Common.models import CustomModel, ParticipantType
+from apps.Common.models import CustomModel, ParticipantType, ParticipantStatus
 from .Agent import Agent
 
 from django.core.exceptions import ValidationError
 
 
 class Participant(CustomModel):
-    participaty_type = models.CharField(
+    participant_type = models.CharField(
         _("Type of entity which is talking"),
         max_length=20,
         choices=ParticipantType,
     )
-    user = models.ForeignKey(
+    user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         blank=True,
         null=True,
     )
-    agent = models.ForeignKey(
+    agent = models.OneToOneField(
         Agent,
         on_delete=models.CASCADE,
         blank=True,
         null=True,
+    )
+    first_name = models.CharField(
+        _("first name"),
+        max_length=150,
+    )
+    last_name = models.CharField(
+        _("last name"),
+        max_length=150,
+    )
+    nickname = models.CharField(
+        _("Nickname"),
+        max_length=150,
+    )
+    avatar = models.ImageField(
+        upload_to="avatar_images/",
+        blank=True,
+        null=True,
+    )
+    status = models.CharField(
+        _("Status of the participant"),
+        choices=ParticipantStatus,
+        default=ParticipantStatus.EN_LINEA,
     )
 
     class Meta:

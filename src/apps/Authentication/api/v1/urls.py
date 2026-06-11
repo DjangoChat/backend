@@ -1,35 +1,32 @@
 from django.urls import path
 
-from .views import login, logout, refresh_token, register, me, UserProfileView
+from .views import OnboardingView, AuthenticationView
 
 app_name = "Authentication"
 
 urlpatterns = [
-    path("login/", login, name="login"),
-    path("logout/", logout, name="logout"),
-    path("register/", register, name="register"),
-    path("refresh-token/", refresh_token, name="refresh_token"),
-    path("me/", me, name="me"),
     path(
-        "profiles/",
-        UserProfileView.as_view(
-            {
-                "get": "list",
-                "post": "create",
-            }
-        ),
-        name="profiles",
+        "auth/login/",
+        AuthenticationView.as_view({"post": "login"}),
     ),
     path(
-        "profiles/<uuid:pk>/",
-        UserProfileView.as_view(
-            {
-                "get": "retrieve",
-                "put": "update",
-                "patch": "partial_update",
-                "delete": "destroy",
-            }
-        ),
-        name="profile",
+        "auth/logut/",
+        AuthenticationView.as_view({"post": "logout"}),
+    ),
+    path(
+        "auth/refresh-token/",
+        AuthenticationView.as_view({"post": "refresh_token"}),
+    ),
+    path(
+        "auth/register/",
+        AuthenticationView.as_view({"post": "register"}),
+    ),
+    path(
+        "auth/me/",
+        AuthenticationView.as_view({"post": "me"}),
+    ),
+    path(
+        "onboardin/profile/",
+        OnboardingView.as_view({"post": "create_profile_participant"}),
     ),
 ]

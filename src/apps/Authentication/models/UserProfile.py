@@ -11,18 +11,6 @@ class UserProfile(CustomModel):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
     )
-    nickname = models.CharField(
-        _("Nickname"),
-        max_length=150,
-    )
-    first_name = models.CharField(
-        _("first name"),
-        max_length=150,
-    )
-    last_name = models.CharField(
-        _("last name"),
-        max_length=150,
-    )
     gender = models.CharField(
         _("gender"),
         max_length=20,
@@ -36,11 +24,6 @@ class UserProfile(CustomModel):
     )
     birth_date = models.DateTimeField(
         _("birth date"),
-    )
-    avatar = models.ImageField(
-        upload_to="avatar_images/",
-        blank=True,
-        null=True,
     )
 
     class Meta:

@@ -8,6 +8,5 @@ class ChatAdmin(admin.ModelAdmin):
         "id",
         "last_message",
         "created_at",
-        "id_conversation_chatpgt",
     ]
     ordering = ["-created_at"]
