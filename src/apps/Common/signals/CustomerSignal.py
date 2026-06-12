@@ -1,10 +1,10 @@
 from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from apps.Common.utils import create_stripe_customuser
 
 from apps.Authentication.models import UserProfile
 from apps.Chat.models import Participant
+from apps.Billing.service import CreateCustomerService
 from apps.Common.models import ParticipantType
 
 
@@ -13,7 +13,7 @@ def create_stripe_customer(sender, instance, created, **kwargs):
     if created:
         custom_user = instance.user
 
-        stripe_custom_user = create_stripe_customuser(
+        stripe_custom_user = CreateCustomerService().execute(
             name=f"{instance.first_name} {instance.last_name}",
             email=custom_user.email,
             phone=custom_user.phone,

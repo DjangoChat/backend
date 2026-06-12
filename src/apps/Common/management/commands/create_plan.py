@@ -5,7 +5,7 @@ from django.core.management.base import BaseCommand
 
 from apps.Billing.models import Plan
 from apps.Common.models import PlanOption
-from apps.Common.utils import create_stripe_product
+from apps.Billing.service import CreateProductService
 
 
 class Command(BaseCommand):
@@ -13,7 +13,7 @@ class Command(BaseCommand):
     help = "Command for creating all the plans"
 
     def create_stripe_product(self, product: Plan) -> None:
-        new_product = create_stripe_product(
+        new_product = CreateProductService().execute(
             name=product.name,
         )
         product.stripe_product_id = new_product.id

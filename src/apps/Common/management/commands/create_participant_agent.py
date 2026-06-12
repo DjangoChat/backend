@@ -3,13 +3,13 @@ import random
 
 from django.core.management.base import BaseCommand
 
-from apps.Chat.models import Agent, Nature
-from apps.Common.models import AgentName, AgentType, NatureType
+from apps.Chat.models import Agent, Nature, Participant
+from apps.Common.models import AgentName, AgentType, NatureType, ParticipantType
 
 
 class Command(BaseCommand):
 
-    help = "Command for creating all the agents"
+    help = "Command for creating all participant agents"
 
     BASE_PROMPT = """You are a user engaging in a chat application with another user. 
                     CONTEXT OF THE CONVERSATION:
@@ -130,19 +130,31 @@ class Command(BaseCommand):
                         agent_name, selected_natures
                     )
 
-                    # Create or get the agent
-                    agent, created = Agent.objects.get_or_create(
-                        name=agent_name,
-                        defaults={
-                            "promp_type": prompt,
-                            "agent_type": agent_type,
-                            "description": description,
-                        },
+                    # Create or get the participant
+                    participant, created_participant = (
+                        Participant.objects.get_or_create(
+                            nickname=agent_name,
+                            defaults={
+                                "first_name": agent_name,
+                                "last_name": "Skynet",
+                                "participant_type": ParticipantType.AGENT,
+                            },
+                        )
                     )
 
-                    if created:
-                        # Add natures to the agent
-                        agent.natures.set(selected_natures)
+                    if created_participant:
+                        agent, created_agent = Agent.objects.get_or_create(
+                            name=agent_name,
+                            defaults={
+                                "promp_type": prompt,
+                                "agent_type": agent_type,
+                                "description": description,
+                            },
+                        )
+
+                        if created_agent:
+                            agent.natures.set(selected_natures)
+                            participant.agent = agent
                         created_count += 1
                     else:
                         existing_count += 1

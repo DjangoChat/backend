@@ -20,7 +20,7 @@ from apps.Authentication.service import (
     RegisterService,
     CreateTokenService,
 )
-from apps.Authentication.docs import (
+from apps.Authentication.api.v1.docs import (
     login_doc,
     logout_doc,
     me_doc,
@@ -86,7 +86,7 @@ class AuthenticationView(viewsets.ViewSet):
         methods=["post"],
     )
     @method_decorator(csrf_exempt)
-    def loguot(self, request):
+    def logout(self, request):
         BlacklistService().execute(request.COOKIES.get("refresh_token"))
         response = Response(status=status.HTTP_200_OK)
         response.delete_cookie("access_token")

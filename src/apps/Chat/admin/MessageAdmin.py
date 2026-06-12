@@ -7,7 +7,7 @@ class MessageAdmin(admin.ModelAdmin):
     list_display = [
         "id",
         "chat",
-        "sender",
+        "participant",
         "content",
         "sent_at",
     ]

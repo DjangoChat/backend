@@ -6,7 +6,7 @@ from ..models import Participant
 class ParticipantAdmin(admin.ModelAdmin):
     list_display = [
         "id",
-        "participaty_type",
+        "participant_type",
         "user",
         "agent",
         "first_name",

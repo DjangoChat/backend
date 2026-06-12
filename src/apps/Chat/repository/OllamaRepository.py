@@ -1,4 +1,4 @@
-import request
+import requests
 import logging
 from rest_framework.exceptions import ValidationError
 
@@ -12,7 +12,7 @@ class OllamaRepository:
 
     def chat(self, messages):
         try:
-            response = request.post(
+            response = requests.post(
                 url=f"{self.endpoint}/api/chat",
                 data={
                     "model": self.model,
@@ -26,7 +26,7 @@ class OllamaRepository:
 
     def generate(self, prompt):
         try:
-            response = request.post(
+            response = requests.post(
                 url=f"{self.endpoint}/api/generate",
                 data={
                     "model": self.model,

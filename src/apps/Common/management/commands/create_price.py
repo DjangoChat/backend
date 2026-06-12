@@ -5,7 +5,7 @@ from django.core.management.base import BaseCommand
 
 from apps.Billing.models import Currency, Period, Plan, Price
 from apps.Common.models import Frequency, PlanOption
-from apps.Common.utils import create_stripe_price
+from apps.Billing.service import CreatePriceService
 
 
 PRICE = {
@@ -29,7 +29,7 @@ class Command(BaseCommand):
         self, price: Price, produc_id: str | None, currency_code: str, months: int
     ) -> None:
         if produc_id is not None:
-            new_price = create_stripe_price(
+            new_price = CreatePriceService().execute(
                 currency=currency_code,
                 unit_amount=price.amount,
                 months=months,

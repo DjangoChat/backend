@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from .views import PriceView, StripeView
 
 urlpatterns = [
@@ -7,11 +7,18 @@ urlpatterns = [
         PriceView.as_view({"get": "list"}),
     ),
     path(
-        "stripe/create-session/",
-        StripeView.as_view({"post": "create_session"}),
-    ),
-    path(
-        "stripe/webhook/",
-        StripeView.as_view({"post": "webhook"}),
+        "stripe/",
+        include(
+            [
+                path(
+                    "create-session/",
+                    StripeView.as_view({"post": "create_session"}),
+                ),
+                path(
+                    "webhook/",
+                    StripeView.as_view({"post": "webhook"}),
+                ),
+            ]
+        ),
     ),
 ]

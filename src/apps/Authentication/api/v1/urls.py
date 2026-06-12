@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 
 from .views import OnboardingView, AuthenticationView
 
@@ -6,24 +6,31 @@ app_name = "Authentication"
 
 urlpatterns = [
     path(
-        "auth/login/",
-        AuthenticationView.as_view({"post": "login"}),
-    ),
-    path(
-        "auth/logut/",
-        AuthenticationView.as_view({"post": "logout"}),
-    ),
-    path(
-        "auth/refresh-token/",
-        AuthenticationView.as_view({"post": "refresh_token"}),
-    ),
-    path(
-        "auth/register/",
-        AuthenticationView.as_view({"post": "register"}),
-    ),
-    path(
-        "auth/me/",
-        AuthenticationView.as_view({"post": "me"}),
+        "auth/",
+        include(
+            [
+                path(
+                    "login/",
+                    AuthenticationView.as_view({"post": "login"}),
+                ),
+                path(
+                    "logout/",
+                    AuthenticationView.as_view({"post": "logout"}),
+                ),
+                path(
+                    "refresh-token/",
+                    AuthenticationView.as_view({"post": "refresh_token"}),
+                ),
+                path(
+                    "register/",
+                    AuthenticationView.as_view({"post": "register"}),
+                ),
+                path(
+                    "me/",
+                    AuthenticationView.as_view({"post": "me"}),
+                ),
+            ]
+        ),
     ),
     path(
         "onboardin/profile/",

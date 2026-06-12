@@ -7,6 +7,7 @@ from apps.Chat.api.v1.serializers import (
     StartChatSerializerInput,
     StartChatSerializerResponseOutput,
     DropdownNatureSerializer,
+    MessageSerializer,
 )
 
 start_chat_doc = extend_schema(
@@ -34,6 +35,22 @@ list_natures_doc = extend_schema(
         200: OpenApiResponse(
             response=DropdownNatureSerializer(many=True),
             description="List of nature options retrieved successfully",
+        )
+    },
+)
+
+list_messages_doc = extend_schema(
+    tags=["Message"],
+    summary="List messages",
+    description=(
+        "Retrieves a list of 50 messages"
+        "Requires chat id and cursor as parameter"
+        "Cursos pagination"
+    ),
+    responses={
+        200: OpenApiResponse(
+            response=MessageSerializer(many=True),
+            description="List of messages retrieved successfully",
         )
     },
 )
