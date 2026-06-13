@@ -1,8 +1,10 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from apps.Chat.models import Message, Participant
 from apps.Common.models import CustomModel, MessageStatusType
+
+from .Message import Message
+from .Participant import Participant
 
 
 class MessageStatus(CustomModel):

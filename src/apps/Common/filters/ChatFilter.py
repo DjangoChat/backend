@@ -1,5 +1,3 @@
-from django.core.exceptions import ValidationError
-
 import django_filters
 
 from apps.Chat.models import Chat
@@ -10,7 +8,6 @@ class ChatFilter(django_filters.FilterSet):
     chat_type = django_filters.ChoiceFilter(
         choices=ChatType.choices,
         method="filter_chat_type",
-        required=True,
     )
 
     class Meta:
@@ -32,13 +29,4 @@ class ChatFilter(django_filters.FilterSet):
         if value == ChatType.MIXED_GROUP:
             return queryset.groups_with_agents(current_user)
 
-        return []
-
-    @property
-    def qs(self):
-        if "chat_type" not in self.data:  # type: ignore
-            raise ValidationError(
-                {"chat_type": ["This query parameter is required."]},
-            )
-
-        return super().qs
+        return queryset

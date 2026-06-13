@@ -16,11 +16,13 @@ from apps.Common.pagination import ChatPagination
 
 
 class ChatView(viewsets.GenericViewSet, mixins.ListModelMixin):
-    queryset = Chat.objects.active()
     serializer_class = SimpleChatSerializer
     permission_classes = [SubscriptionPermission, CustomPermission]
     filterset_class = ChatFilter
     pagination_class = ChatPagination
+
+    def get_queryset(self):
+        return Chat.objects.all_user_chats(self.request.user)
 
     @list_chats_doc
     def list(self, request, *args, **kwargs):
