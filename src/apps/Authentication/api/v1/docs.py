@@ -1,13 +1,11 @@
-from drf_spectacular.utils import (
-    OpenApiResponse,
-    extend_schema,
-)
+from drf_spectacular.utils import OpenApiResponse, extend_schema
+
 from apps.Authentication.api.v1.serializers import (
-    RegisterSerializerInput,
-    MeSerializerOutput,
     LoginSerializer,
-    OnboardingMemberSerializerOutput,
+    MeSerializerOutput,
     OnboardingMemberSerializerInput,
+    OnboardingMemberSerializerOutput,
+    RegisterSerializerInput,
 )
 
 login_doc = extend_schema(

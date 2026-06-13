@@ -3,8 +3,8 @@ from .AuthSerializers import (
     LoginSerializer,
     MeSerializerOutput,
 )
-from .RegisterSerializerInput import RegisterSerializerInput
 from .OnboardingSerializer import (
     OnboardingMemberSerializerInput,
     OnboardingMemberSerializerOutput,
 )
+from .RegisterSerializerInput import RegisterSerializerInput

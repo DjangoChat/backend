@@ -1,10 +1,10 @@
 from rest_framework import mixins, viewsets
 
-from apps.Chat.models import Message
-from apps.Chat.api.v1.serializers import MessageSerializer
 from apps.Authorization.permissions import CustomPermission, SubscriptionPermission
-from apps.Common.pagination import MessagePagination
 from apps.Chat.api.v1.docs import list_messages_doc
+from apps.Chat.api.v1.serializers import MessageSerializer
+from apps.Chat.models import Message
+from apps.Common.pagination import MessagePagination
 
 
 class MessageView(viewsets.GenericViewSet, mixins.ListModelMixin):

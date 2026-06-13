@@ -1,7 +1,7 @@
-from .BaseOllamaService import BaseOllamaService
-
 from apps.Chat.models import Message
 from apps.Common.models import ParticipantType
+
+from .BaseOllamaService import BaseOllamaService
 
 
 class OllamaChatService(BaseOllamaService):

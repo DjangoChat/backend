@@ -1,8 +1,9 @@
 from typing import Any
 
 from django.core.management.base import BaseCommand
-from apps.Common.models import QuotaCode
+
 from apps.Billing.models import Quota
+from apps.Common.models import QuotaCode
 
 QUOTAS = {
     QuotaCode.AGENT_CHAT_COUNT: {

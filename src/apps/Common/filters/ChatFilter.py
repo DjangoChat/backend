@@ -1,5 +1,6 @@
-import django_filters
 from django.core.exceptions import ValidationError
+
+import django_filters
 
 from apps.Chat.models import Chat
 from apps.Common.models import ChatType

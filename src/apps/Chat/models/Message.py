@@ -1,11 +1,9 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from apps.Common.models import CustomModel, MessageType
 from apps.Chat.models import Chat, Participant
-from apps.Common.models import MessageStatusType
-
-from django.core.exceptions import ValidationError
+from apps.Common.models import CustomModel, MessageStatusType, MessageType
 
 
 class Message(CustomModel):

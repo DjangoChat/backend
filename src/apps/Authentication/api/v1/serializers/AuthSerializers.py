@@ -1,8 +1,10 @@
-from rest_framework import serializers
-from apps.Billing.models import Subscription
-from apps.Authentication.models import UserProfile
-from apps.Common.models import StatusSuscription
 from django.utils.timezone import now
+
+from rest_framework import serializers
+
+from apps.Authentication.models import UserProfile
+from apps.Billing.models import Subscription
+from apps.Common.models import StatusSuscription
 
 
 class LoginSerializer(serializers.Serializer):

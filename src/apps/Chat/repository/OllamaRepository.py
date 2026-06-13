@@ -1,5 +1,6 @@
-import requests
 import logging
+
+import requests
 from rest_framework.exceptions import ValidationError
 
 

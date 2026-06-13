@@ -1,3 +1,3 @@
-from .ConversationConsumer import ConversationConsumer
 from .ChatListConsumer import ChatListConsumer
+from .ConversationConsumer import ConversationConsumer
 from .NotificationConsumer import NotificationConsumer

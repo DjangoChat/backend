@@ -1,14 +1,11 @@
-from drf_spectacular.utils import (
-    OpenApiResponse,
-    extend_schema,
-)
+from drf_spectacular.utils import OpenApiResponse, extend_schema
 
 from apps.Chat.api.v1.serializers import (
-    StartChatSerializerInput,
-    StartChatSerializerResponseOutput,
     DropdownNatureSerializer,
     MessageSerializer,
     SimpleChatSerializer,
+    StartChatSerializerInput,
+    StartChatSerializerResponseOutput,
 )
 
 list_chats_doc = extend_schema(

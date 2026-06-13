@@ -2,12 +2,12 @@ from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
+from apps.Authentication.api.v1.docs import onboard_first_step_doc
 from apps.Authentication.api.v1.serializers import (
-    OnboardingMemberSerializerOutput,
     OnboardingMemberSerializerInput,
+    OnboardingMemberSerializerOutput,
 )
 from apps.Authentication.service import MetadataUserService
-from apps.Authentication.api.v1.docs import onboard_first_step_doc
 
 
 class OnboardingView(viewsets.ViewSet):

@@ -1,6 +1,8 @@
 import logging
-import stripe
+
 from django.conf import settings
+
+import stripe
 from stripe._error import APIConnectionError, APIError
 
 stripe.api_key = settings.STRIPE_API_KEY

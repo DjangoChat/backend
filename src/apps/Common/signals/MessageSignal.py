@@ -1,7 +1,7 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from apps.Chat.models import Message, ChatParticipant, MessageStatus
+from apps.Chat.models import ChatParticipant, Message, MessageStatus
 from apps.Chat.service import OllamaChatService
 from apps.Common.models import MessageType
 

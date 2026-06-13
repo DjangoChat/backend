@@ -1,6 +1,6 @@
-from django.urls import path, include
+from django.urls import include, path
 
-from apps.Chat.api.v1.views import NatureDropDownView, ChatView, MessageView
+from apps.Chat.api.v1.views import ChatView, MessageView, NatureDropDownView
 
 urlpatterns = [
     path(

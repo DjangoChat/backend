@@ -2,11 +2,9 @@ from typing import Any
 
 from django.core.management.base import BaseCommand
 
-
 from apps.Billing.models import Currency, Period, Plan, Price
-from apps.Common.models import Frequency, PlanOption
 from apps.Billing.service import CreatePriceService
-
+from apps.Common.models import Frequency, PlanOption
 
 PRICE = {
     PlanOption.MEMBER: 700,

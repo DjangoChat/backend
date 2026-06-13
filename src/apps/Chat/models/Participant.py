@@ -1,12 +1,12 @@
 from django.conf import settings
-from django.db import models
-from django.utils.translation import gettext_lazy as _
-from django.db.models import Q
-
-from apps.Common.models import CustomModel, ParticipantType, ParticipantStatus
-from .Agent import Agent
-
 from django.core.exceptions import ValidationError
+from django.db import models
+from django.db.models import Q
+from django.utils.translation import gettext_lazy as _
+
+from apps.Common.models import CustomModel, ParticipantStatus, ParticipantType
+
+from .Agent import Agent
 
 
 class Participant(CustomModel):

@@ -1,2 +1,2 @@
-from .MessagePagination import *
 from .ChatPagination import *
+from .MessagePagination import *

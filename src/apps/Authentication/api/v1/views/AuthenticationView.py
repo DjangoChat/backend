@@ -4,29 +4,29 @@ from django.views.decorators.csrf import csrf_exempt
 
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
-from rest_framework.response import Response
-from rest_framework.permissions import AllowAny
 from rest_framework.exceptions import AuthenticationFailed, Throttled
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
 
-from apps.Authentication.api.v1.serializers import (
-    RegisterSerializerInput,
-    MeSerializerOutput,
-    LoginSerializer,
-)
-from apps.Common.throttles import FailedLoginThrottle
-from apps.Authentication.service import (
-    BlacklistService,
-    RefreshService,
-    RegisterService,
-    CreateTokenService,
-)
 from apps.Authentication.api.v1.docs import (
     login_doc,
     logout_doc,
     me_doc,
-    register_doc,
     refresh_token_doc,
+    register_doc,
 )
+from apps.Authentication.api.v1.serializers import (
+    LoginSerializer,
+    MeSerializerOutput,
+    RegisterSerializerInput,
+)
+from apps.Authentication.service import (
+    BlacklistService,
+    CreateTokenService,
+    RefreshService,
+    RegisterService,
+)
+from apps.Common.throttles import FailedLoginThrottle
 
 
 class AuthenticationView(viewsets.ViewSet):

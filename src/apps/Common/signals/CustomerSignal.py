@@ -3,8 +3,8 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from apps.Authentication.models import UserProfile
-from apps.Chat.models import Participant
 from apps.Billing.service import CreateCustomerService
+from apps.Chat.models import Participant
 from apps.Common.models import ParticipantType
 
 

@@ -4,8 +4,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework.exceptions import PermissionDenied
 
 from apps.Chat.models import Chat, ChatParticipant, Participant
-from apps.Common.models import FeatureCode, AgentType
-
+from apps.Common.models import AgentType, FeatureCode
 
 PERMISSION = {
     AgentType.BASIC: FeatureCode.BASIC_AGENT,

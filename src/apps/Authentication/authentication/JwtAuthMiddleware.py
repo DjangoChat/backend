@@ -1,9 +1,9 @@
 from urllib.parse import parse_qs
 
-from channels.db import database_sync_to_async
-from channels.middleware import BaseMiddleware
 from django.contrib.auth.models import AnonymousUser
 
+from channels.db import database_sync_to_async
+from channels.middleware import BaseMiddleware
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.exceptions import AuthenticationFailed
 

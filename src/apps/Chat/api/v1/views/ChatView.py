@@ -1,17 +1,16 @@
+from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework import status
-from rest_framework import mixins, viewsets
 
-from apps.Authorization.permissions import SubscriptionPermission, CustomPermission
-from apps.Chat.models import Chat
-from apps.Chat.service import CreateChatService
+from apps.Authorization.permissions import CustomPermission, SubscriptionPermission
+from apps.Chat.api.v1.docs import list_chats_doc, start_chat_doc
 from apps.Chat.api.v1.serializers import (
+    SimpleChatSerializer,
     StartChatSerializerInput,
     StartChatSerializerResponseOutput,
-    SimpleChatSerializer,
 )
-from apps.Chat.api.v1.docs import start_chat_doc, list_chats_doc
+from apps.Chat.models import Chat
+from apps.Chat.service import CreateChatService
 from apps.Common.filters import ChatFilter
 from apps.Common.pagination import ChatPagination
 

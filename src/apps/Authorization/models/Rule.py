@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from apps.Common.models import ActivatorModel, CustomModel, RuleType, Operator
+from apps.Common.models import ActivatorModel, CustomModel, Operator, RuleType
 
 from .Policy import Policy
 

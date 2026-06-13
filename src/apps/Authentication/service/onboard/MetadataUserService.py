@@ -1,8 +1,8 @@
-from apps.Chat.models import Participant
-from apps.Authentication.models import UserProfile
-from apps.Common.models import ParticipantType
-
 from typing import Tuple
+
+from apps.Authentication.models import UserProfile
+from apps.Chat.models import Participant
+from apps.Common.models import ParticipantType
 
 
 class MetadataUserService:

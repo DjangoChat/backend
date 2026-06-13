@@ -1,9 +1,9 @@
 from rest_framework import mixins, viewsets
 
-from apps.Chat.models import Nature
-from apps.Chat.api.v1.serializers import DropdownNatureSerializer
 from apps.Authorization.permissions import CustomPermission, SubscriptionPermission
 from apps.Chat.api.v1.docs import list_natures_doc
+from apps.Chat.api.v1.serializers import DropdownNatureSerializer
+from apps.Chat.models import Nature
 
 
 class NatureDropDownView(viewsets.GenericViewSet, mixins.ListModelMixin):

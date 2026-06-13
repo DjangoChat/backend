@@ -4,17 +4,17 @@ from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 from rest_framework.exceptions import NotFound, PermissionDenied, ValidationError
 
-from apps.Chat.models import Chat, Message
-from apps.Chat.api.v1.serializers import MessageSerializer
-from apps.Common.models import MessageType, ConversationConsumerType
 from apps.Chat.api.v1.serializers import (
+    BaseEventSerializer,
+    DeleteMessageSerializer,
+    MessageSerializer,
+    ReactMessageSerializer,
+    SeenSerializer,
     SendMessageSerializer,
     TypingSerializer,
-    SeenSerializer,
-    DeleteMessageSerializer,
-    ReactMessageSerializer,
-    BaseEventSerializer,
 )
+from apps.Chat.models import Chat, Message
+from apps.Common.models import ConversationConsumerType, MessageType
 
 EVENT_SERIALIZERS = {
     "send_message": SendMessageSerializer,

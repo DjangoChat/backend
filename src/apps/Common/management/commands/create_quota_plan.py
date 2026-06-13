@@ -1,9 +1,9 @@
 from typing import Any
 
-from django.core.management.base import BaseCommand
-from django.core.management.base import CommandError
-from apps.Common.models import QuotaCode, PlanOption
-from apps.Billing.models import Quota, Plan, QuotaPlan
+from django.core.management.base import BaseCommand, CommandError
+
+from apps.Billing.models import Plan, Quota, QuotaPlan
+from apps.Common.models import PlanOption, QuotaCode
 
 QUOTAS = [
     (QuotaCode.AGENT_CHAT_COUNT, PlanOption.MEMBER, 5),

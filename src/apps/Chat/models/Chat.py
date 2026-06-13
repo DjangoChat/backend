@@ -3,10 +3,10 @@ from django.db.models import Count, Q
 from django.utils.translation import gettext_lazy as _
 
 from apps.Common.models import (
-    CustomModel,
-    ActivatorQuerySet,
-    ParticipantType,
     ActivatorModelManager,
+    ActivatorQuerySet,
+    CustomModel,
+    ParticipantType,
 )
 
 

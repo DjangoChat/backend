@@ -1,6 +1,6 @@
-from django.urls import path, include
+from django.urls import include, path
 
-from .views import OnboardingView, AuthenticationView
+from .views import AuthenticationView, OnboardingView
 
 app_name = "Authentication"
 

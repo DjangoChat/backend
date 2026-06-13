@@ -1,11 +1,11 @@
 from typing import Any
 
-from django.core.management.base import BaseCommand
 from django.contrib.contenttypes.models import ContentType
+from django.core.management.base import BaseCommand
 
-from apps.Authorization.models import Policy, Rule
 from apps.Authentication.models import UserProfile
-from apps.Common.models import EndpointOption, RuleType, Operator
+from apps.Authorization.models import Policy, Rule
+from apps.Common.models import EndpointOption, Operator, RuleType
 
 
 class Command(BaseCommand):

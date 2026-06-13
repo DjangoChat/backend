@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from apps.Common.models import CustomModel
+
 from .Plan import Plan
 from .Quota import Quota
 

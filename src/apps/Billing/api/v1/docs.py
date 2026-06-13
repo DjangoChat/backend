@@ -1,12 +1,9 @@
-from drf_spectacular.utils import (
-    OpenApiResponse,
-    extend_schema,
-)
+from drf_spectacular.utils import OpenApiResponse, extend_schema
 
 from apps.Billing.api.v1.serializers import (
-    PriceSerializer,
     CheckoutSessionSerializerInput,
     CheckoutSessionSerializerOutput,
+    PriceSerializer,
 )
 
 list_price_docs = extend_schema(
