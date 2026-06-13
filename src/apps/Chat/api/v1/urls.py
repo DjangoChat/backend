@@ -11,6 +11,7 @@ urlpatterns = [
         "chats/",
         include(
             [
+                path("", ChatView.as_view({"get": "list"})),
                 path(
                     "start/",
                     ChatView.as_view({"post": "start_chat"}),

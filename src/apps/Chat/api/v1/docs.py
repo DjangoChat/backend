@@ -8,6 +8,19 @@ from apps.Chat.api.v1.serializers import (
     StartChatSerializerResponseOutput,
     DropdownNatureSerializer,
     MessageSerializer,
+    SimpleChatSerializer,
+)
+
+list_chats_doc = extend_schema(
+    tags=["Chat"],
+    summary="List all the chats of the participant",
+    description="List all chat chats of a participant base on its user id",
+    responses={
+        200: OpenApiResponse(
+            response=SimpleChatSerializer(many=True),
+            description="List all the chats succesfully",
+        ),
+    },
 )
 
 start_chat_doc = extend_schema(

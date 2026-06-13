@@ -1,18 +1,31 @@
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework import viewsets
+from rest_framework import mixins, viewsets
 
-from apps.Authorization.permissions import SubscriptionPermission
+from apps.Authorization.permissions import SubscriptionPermission, CustomPermission
+from apps.Chat.models import Chat
 from apps.Chat.service import CreateChatService
 from apps.Chat.api.v1.serializers import (
     StartChatSerializerInput,
     StartChatSerializerResponseOutput,
+    SimpleChatSerializer,
 )
-from apps.Chat.api.v1.docs import start_chat_doc
+from apps.Chat.api.v1.docs import start_chat_doc, list_chats_doc
+from apps.Common.filters import ChatFilter
+from apps.Common.pagination import ChatPagination
 
 
-class ChatView(viewsets.GenericViewSet):
+class ChatView(viewsets.GenericViewSet, mixins.ListModelMixin):
+    queryset = Chat.objects.active()
+    serializer_class = SimpleChatSerializer
+    permission_classes = [SubscriptionPermission, CustomPermission]
+    filterset_class = ChatFilter
+    pagination_class = ChatPagination
+
+    @list_chats_doc
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
     @start_chat_doc
     @action(

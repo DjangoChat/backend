@@ -1,3 +1,3 @@
-from .NatureView import NatureDropDownView
-from .ChatView import ChatView
-from .MessageView import MessageView
+from .NatureView import *
+from .ChatView import *
+from .MessageView import *

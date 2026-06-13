@@ -150,6 +150,13 @@ class FeatureCode(models.TextChoices):
     ADVANCED_AGENT = "advanced.agent.access", _("Access to the agent type advance")
 
 
+class ChatType(models.TextChoices):
+    AGENT_CHAT = "agent_chat", _("The agent's type")
+    USER_CHAT = "user_chat", _("The user's chats")
+    USER_GROUP = "user_group", _("The gruops full of user's")
+    MIXED_GROUP = "mixed_group", _("The mixed gruop")
+
+
 class QuotaCode(models.TextChoices):
     AGENT_CHAT_COUNT = "agent.chat.count", _("The amount of chats with agents")
     BASIC_CHAT_COUNT = "basic.chat.count", _("The amount of chats with users")

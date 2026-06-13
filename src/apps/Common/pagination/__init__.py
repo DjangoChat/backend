@@ -1,1 +1,2 @@
-from apps.Common.pagination.MessagePagination import MessagePagination
+from .MessagePagination import *
+from .ChatPagination import *
