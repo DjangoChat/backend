@@ -6,7 +6,7 @@ from apps.Chat.api.v1.serializers import DropdownNatureSerializer
 from apps.Chat.models import Nature
 
 
-class NatureDropDownView(viewsets.GenericViewSet, mixins.ListModelMixin):
+class NatureView(viewsets.GenericViewSet, mixins.ListModelMixin):
     queryset = Nature.objects.all()
     serializer_class = DropdownNatureSerializer
     permission_classes = [SubscriptionPermission, CustomPermission]

@@ -28,9 +28,9 @@ class ChatParticipant(CustomModel):
         _("Check if the user is admin of a gruop"),
         default=False,
     )
-    is_typing = models.BooleanField(
-        _("Check if the user is writing"),
-        default=False,
+    not_seen = models.PositiveIntegerField(
+        _("Number of messages not seen"),
+        default=0,
     )
 
     class Meta:

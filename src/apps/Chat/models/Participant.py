@@ -40,7 +40,7 @@ class Participant(CustomModel):
         max_length=150,
     )
     avatar = models.ImageField(
-        upload_to="avatar_images/",
+        upload_to="participant_avatar/",
         blank=True,
         null=True,
     )

@@ -14,7 +14,7 @@ from apps.Chat.api.v1.serializers import (
     TypingSerializer,
 )
 from apps.Chat.models import Chat, Message
-from apps.Common.models import ConversationConsumerType, MessageType
+from apps.Common.models import ConversationConsumerCommand, MessageType
 
 EVENT_SERIALIZERS = {
     "send_message": SendMessageSerializer,
@@ -68,7 +68,7 @@ class ConversationConsumer(WebsocketConsumer):
 
         # TODO: create service for all this endpoints
         # TODO: check if can receive multipartparses for images,files,videos
-        if event_type == ConversationConsumerType.CREATE_MESSAGE:
+        if event_type == ConversationConsumerCommand.CREATE_MESSAGE:
             new_message = Message.objects.create(
                 chat=self.chat,
                 participant=self.user.participant,  # type: ignore
@@ -84,15 +84,10 @@ class ConversationConsumer(WebsocketConsumer):
                 )
             )
 
-        if event_type == ConversationConsumerType.DELETE_MESSAGE:
+        if event_type == ConversationConsumerCommand.DELETE_MESSAGE:
             return
 
-        if event_type == ConversationConsumerType.UPDATE_MESSAGE:
-            return
-        if event_type == ConversationConsumerType.PATH_MESSAGE_STATUS_STATUS:
-            return
-
-        if event_type == ConversationConsumerType.PATCH_CHAT_PARTICIPANT_IS_TYPING:
+        if event_type == ConversationConsumerCommand.UPDATE_MESSAGE:
             return
 
         raise ValidationError("There is no event type that match this request")

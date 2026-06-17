@@ -3,18 +3,19 @@ from drf_spectacular.utils import OpenApiResponse, extend_schema
 from apps.Chat.api.v1.serializers import (
     DropdownNatureSerializer,
     MessageSerializer,
-    SimpleChatSerializer,
+    ChatSerializer,
     StartChatSerializerInput,
     StartChatSerializerResponseOutput,
+    ParticipantSerializer,
 )
 
 list_chats_doc = extend_schema(
     tags=["Chat"],
-    summary="List all the chats of the participant",
+    summary="List Chats",
     description="List all chat chats of a participant base on its user id",
     responses={
         200: OpenApiResponse(
-            response=SimpleChatSerializer(many=True),
+            response=ChatSerializer(many=True),
             description="List all the chats succesfully",
         ),
     },
@@ -22,13 +23,37 @@ list_chats_doc = extend_schema(
 
 start_chat_doc = extend_schema(
     tags=["Chat"],
-    summary="Create or retrieve a chat and assign particiants",
+    summary="Create Chat with Participants",
     description="Create or retrieve a chat and assign participants whether its agent or user",
     request=StartChatSerializerInput,
     responses={
         200: OpenApiResponse(
             response=StartChatSerializerResponseOutput,
             description="Chat created or retrieve succesfully",
+        ),
+    },
+)
+
+list_messages_from_chat = extend_schema(
+    tags=["Chat"],
+    summary="List Chat Messages",
+    description="List all the messages from a chat",
+    responses={
+        200: OpenApiResponse(
+            response=MessageSerializer,
+            description="List of messages retrive succesfully",
+        ),
+    },
+)
+
+list_participants_from_chat = extend_schema(
+    tags=["Chat"],
+    summary="List Chat Participants",
+    description="List all the participants from a chat",
+    responses={
+        200: OpenApiResponse(
+            response=ParticipantSerializer,
+            description="List of participants retrive succesfully",
         ),
     },
 )
@@ -49,18 +74,39 @@ list_natures_doc = extend_schema(
     },
 )
 
-list_messages_doc = extend_schema(
+create_message = extend_schema(
     tags=["Message"],
-    summary="List messages",
-    description=(
-        "Retrieves a list of 50 messages"
-        "Requires chat id and cursor as parameter"
-        "Cursos pagination"
-    ),
+    summary="Create Message",
+    description=("Create a message, create its statuses and send websocket events."),
     responses={
         200: OpenApiResponse(
-            response=MessageSerializer(many=True),
-            description="List of messages retrieved successfully",
+            response=MessageSerializer(),
+            description="Message created succesfully",
+        )
+    },
+)
+
+update_message = extend_schema(
+    tags=["Message"],
+    summary="Update Message",
+    description=("Update a message, create its statuses and send websocket events."),
+    responses={
+        200: OpenApiResponse(
+            response=MessageSerializer(),
+            description="Message updated succesfully",
+        )
+    },
+)
+
+
+partial_update_message = extend_schema(
+    tags=["Message"],
+    summary="Partial Update Message",
+    description=("Update a message, create its statuses and send websocket events."),
+    responses={
+        200: OpenApiResponse(
+            response=MessageSerializer(),
+            description="Message updated succesfully",
         )
     },
 )

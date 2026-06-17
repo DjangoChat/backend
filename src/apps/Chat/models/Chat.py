@@ -116,17 +116,26 @@ class ChatManager(ActivatorModelManager):
 # MAYBE: add chat_type (agent_chat, user_chat, group_users, mixed_group)
 # and filter that base on type. For the moment, keep single source of truth
 class Chat(CustomModel):
-    last_message = models.TextField(
-        _("Last message send"),
+    name = models.CharField(
+        _("Name of the group in case the chat have more than two participants"),
+        null=True,
+    )
+    description = models.CharField(
+        _("Description of the gruop in case there is a group"),
+        null=True,
+    )
+    photo = models.ImageField(
+        upload_to="group_avatar/",
+        blank=True,
         null=True,
     )
     created_at = models.DateTimeField(
         _("The time the chat was created"),
         auto_now_add=True,
     )
-    updated_at = models.DateTimeField(
-        _("The time the chat was updated"),
-        auto_now=True,
+    last_message_at = models.DateTimeField(
+        null=True,
+        blank=True,
     )
 
     objects: ChatManager = ChatManager()
@@ -136,4 +145,4 @@ class Chat(CustomModel):
         verbose_name = _("Chat")
         verbose_name_plural = _("Chats")
         app_label = "Chat"
-        ordering = ["-updated_at"]
+        ordering = ["-last_message_at"]

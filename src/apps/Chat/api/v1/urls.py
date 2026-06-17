@@ -1,26 +1,14 @@
 from django.urls import include, path
+from rest_framework.routers import DefaultRouter
 
-from apps.Chat.api.v1.views import ChatView, MessageView, NatureDropDownView
+from apps.Chat.api.v1.views import ChatView, MessageView, NatureView
+
+router = DefaultRouter()
+router.register(r"chats", ChatView, basename="chat")
+router.register(r"messages", MessageView, basename="message")
+router.register(r"natures", NatureView, basename="nature")
+
 
 urlpatterns = [
-    path(
-        "natures/",
-        NatureDropDownView.as_view({"get": "list"}),
-    ),
-    path(
-        "chats/",
-        include(
-            [
-                path("", ChatView.as_view({"get": "list"})),
-                path(
-                    "start/",
-                    ChatView.as_view({"post": "start_chat"}),
-                ),
-                path(
-                    "<uuid:chat_id>/messages/",
-                    MessageView.as_view({"get": "list"}),
-                ),
-            ]
-        ),
-    ),
+    path("", include(router.urls)),
 ]
