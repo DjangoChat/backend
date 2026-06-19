@@ -56,7 +56,6 @@ class ChatListSerializer(serializers.ModelSerializer):
         fields = (
             "name",
             "photo",
-            "created_at",
             "last_message",
         )
 

@@ -3,7 +3,7 @@ from rest_framework import serializers
 from apps.Chat.models import Message
 
 
-class MessageSerializer(serializers.ModelSerializer):
+class ListMessageSerializer(serializers.ModelSerializer):
     seen = serializers.SerializerMethodField()
 
     class Meta:
@@ -32,3 +32,19 @@ class MessageSerializer(serializers.ModelSerializer):
             return obj.has_been_seen_by_all()
 
         return None
+
+
+class MessageSerializer(serializers.ModelSerializer):
+    participant = serializers.PrimaryKeyRelatedField(read_only=True)
+
+    class Meta:
+        model = Message
+        fields = [
+            "id",
+            "participant",
+            "message_type",
+            "content",
+            "image",
+            "attach",
+            "video",
+        ]

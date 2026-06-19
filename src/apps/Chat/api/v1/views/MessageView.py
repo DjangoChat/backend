@@ -15,6 +15,10 @@ class MessageView(
     serializer_class = MessageSerializer
     permission_classes = [SubscriptionPermission, CustomPermission]
 
+    def perform_create(self, serializer):
+        participant = self.request.user.participant  # type: ignore
+        serializer.save(participant=participant)
+
     @create_message
     def create(self, request, *args, **kwargs):
         return super().create(request, *args, **kwargs)

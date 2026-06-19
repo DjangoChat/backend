@@ -168,25 +168,23 @@ class QuotaCode(models.TextChoices):
 
 
 # Client -> Server (Websocket) - which are call commands
-class ConversationConsumerCommand(models.TextChoices):
+class ConsumerCommand(models.TextChoices):
     # STORED DB
-    CREATE_MESSAGE = "create_message", _("The user has send a message")
-    UPDATE_MESSAGE = "update_message", _("The user has modified a message")
-    DELETE_MESSAGE = "delete_message", _("The user has deleted a message")
-    READ_MESSAGE = "read_message", _("A message has being read")
+    CREATE_MESSAGE = "create_message"
+    UPDATE_MESSAGE = "update_message"
+    DELETE_MESSAGE = "delete_message"
+    READ_MESSAGE = "read_message"
 
-    UPDATE_CHAT = "update_chat", _(
-        "For update metadata of the chat such as: name, image, description"
-    )
+    UPDATE_CHAT = "update_chat"
 
-    LEFT_PARTICIPANT = "left_participant", _("A participant has left the group")
-    JOIN_PARTICIPANT = "join_participant", _("A new participant has joined")
+    LEFT_PARTICIPANT = "left_participant"
+    JOIN_PARTICIPANT = "join_participant"
 
     # WEB-SOCKET ONLY
-    START_TYPING = "start_typing", _("A participant start typing")
-    STOP_TYPING = "stop_typing", _("A participant stop typing")
-    START_RECORDING = "start_recording", _("A participant start recording")
-    STOP_RECORDING = "stop_recording", _("A participant stop recording")
+    START_TYPING = "start_typing"
+    STOP_TYPING = "stop_typing"
+    START_RECORDING = "start_recording"
+    STOP_RECORDING = "stop_recording"
 
 
 # Server -> Client (Websocket) - which are call events
@@ -203,4 +201,7 @@ class ConversationConsumerEvent(models.TextChoices):
     PARTICIPANT_JOIN = "parcitipant_joined"
 
     # WEB-SOCKET ONLY
-    PARTICIPANT_TYPING = "participant_typing"
+    TYPING_STARTED = "typing_started"
+    TYPING_STOPED = "typing_stope"
+    RECORDING_STARTED = "recording_started"
+    RECORDING_STOPED = "recording_stoped"

@@ -1,33 +1,30 @@
 import json
 
 from asgiref.sync import async_to_sync
-from channels.generic.websocket import WebsocketConsumer
+from channels.generic.websocket import AsyncWebsocketConsumer
 
 
-class NotificationConsumer(WebsocketConsumer):
+class NotificationConsumer(AsyncWebsocketConsumer):
 
-    def connect(self):
+    async def connect(self):
         self.user = self.scope["user"]  # type: ignore
-
-        # if not self.user.is_authenticated:  # type: ignore
-        #     self.close()
-        #     return
-
-        self.notification_group = f"notification_user_{self.user.id}"  # type: ignore
+        self.notification_socket_name = f"notification__{self.user.id}"  # type: ignore
 
         async_to_sync(self.channel_layer.group_add)(
-            self.notification_group, self.channel_name
+            self.notification_socket_name,
+            self.channel_name,
         )
 
-        self.accept()
+        await self.accept()
 
-    def disconnect(self, close_code):
-        async_to_sync(self.channel_layer.group_discard)(
-            self.notification_group, self.channel_name
+    async def disconnect(self, close_code):
+        await self.channel_layer.group_discard(
+            self.notification_socket_name,
+            self.channel_name,
         )
 
-    def receive(self, text_data):
+    async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json["message"]
 
-        self.send(text_data=json.dumps({"message": message}))
+        await self.send(text_data=json.dumps({"message": message}))

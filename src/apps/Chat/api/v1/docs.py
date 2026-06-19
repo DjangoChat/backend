@@ -2,6 +2,7 @@ from drf_spectacular.utils import OpenApiResponse, extend_schema
 
 from apps.Chat.api.v1.serializers import (
     DropdownNatureSerializer,
+    ListMessageSerializer,
     MessageSerializer,
     ChatSerializer,
     StartChatSerializerInput,
@@ -40,7 +41,7 @@ list_messages_from_chat = extend_schema(
     description="List all the messages from a chat",
     responses={
         200: OpenApiResponse(
-            response=MessageSerializer,
+            response=ListMessageSerializer,
             description="List of messages retrive succesfully",
         ),
     },
@@ -80,7 +81,7 @@ create_message = extend_schema(
     description=("Create a message, create its statuses and send websocket events."),
     responses={
         200: OpenApiResponse(
-            response=MessageSerializer(),
+            response=MessageSerializer,
             description="Message created succesfully",
         )
     },
@@ -92,7 +93,7 @@ update_message = extend_schema(
     description=("Update a message, create its statuses and send websocket events."),
     responses={
         200: OpenApiResponse(
-            response=MessageSerializer(),
+            response=MessageSerializer,
             description="Message updated succesfully",
         )
     },
@@ -105,7 +106,7 @@ partial_update_message = extend_schema(
     description=("Update a message, create its statuses and send websocket events."),
     responses={
         200: OpenApiResponse(
-            response=MessageSerializer(),
+            response=MessageSerializer,
             description="Message updated succesfully",
         )
     },

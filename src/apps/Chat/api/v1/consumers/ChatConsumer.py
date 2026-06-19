@@ -1,20 +1,20 @@
 import json
 
 from asgiref.sync import async_to_sync
-from channels.generic.websocket import WebsocketConsumer
+from channels.generic.websocket import AsyncWebsocketConsumer
 from rest_framework.exceptions import NotFound, PermissionDenied, ValidationError
 
 from apps.Chat.api.v1.serializers import (
     BaseEventSerializer,
     DeleteMessageSerializer,
-    MessageSerializer,
+    ListMessageSerializer,
     ReactMessageSerializer,
     SeenSerializer,
     SendMessageSerializer,
     TypingSerializer,
 )
 from apps.Chat.models import Chat, Message
-from apps.Common.models import ConversationConsumerCommand, MessageType
+from apps.Common.models import ConsumerCommand, MessageType
 
 EVENT_SERIALIZERS = {
     "send_message": SendMessageSerializer,
@@ -25,31 +25,30 @@ EVENT_SERIALIZERS = {
 }
 
 
-class ConversationConsumer(WebsocketConsumer):
-    def connect(self):
+class ChatConsumer(AsyncWebsocketConsumer):
+    async def connect(self):
         self.user = self.scope["user"]  # type: ignore
         chat_id = self.scope["url_route"]["kwargs"]["conversation_id"]  # type: ignore
-
         chat = self.get_chat(chat_id)
 
         if chat is None:
             raise NotFound
 
         self.chat = chat
-        self.group_name = f"conversation_chat_id{self.chat.id}"  # type: ignore
+        self.chat_room_socket__name = f"chat_room__{self.chat.id}"  # type: ignore
 
         if not self.check_user_has_perm():
             raise PermissionDenied
 
         async_to_sync(self.channel_layer.group_add)(
-            self.group_name,
+            self.chat_room_socket__name,
             self.channel_name,
         )
-        self.accept()
+        await self.accept()
 
-    def disconnect(self, close_code):
-        async_to_sync(self.channel_layer.group_discard)(
-            self.group_name,
+    async def disconnect(self, close_code):
+        await self.channel_layer.group_discard(
+            self.chat_room_socket__name,
             self.channel_name,
         )
 
@@ -68,26 +67,13 @@ class ConversationConsumer(WebsocketConsumer):
 
         # TODO: create service for all this endpoints
         # TODO: check if can receive multipartparses for images,files,videos
-        if event_type == ConversationConsumerCommand.CREATE_MESSAGE:
-            new_message = Message.objects.create(
-                chat=self.chat,
-                participant=self.user.participant,  # type: ignore
-                message_type=MessageType.TEXT,
-                content=validated_data["content"],
-            )
-            self.send(
-                text_data=json.dumps(
-                    {
-                        "type": "add_message",
-                        "messages": MessageSerializer(new_message),
-                    }
-                )
-            )
-
-        if event_type == ConversationConsumerCommand.DELETE_MESSAGE:
+        if event_type == ConsumerCommand.CREATE_MESSAGE:
             return
 
-        if event_type == ConversationConsumerCommand.UPDATE_MESSAGE:
+        if event_type == ConsumerCommand.DELETE_MESSAGE:
+            return
+
+        if event_type == ConsumerCommand.UPDATE_MESSAGE:
             return
 
         raise ValidationError("There is no event type that match this request")

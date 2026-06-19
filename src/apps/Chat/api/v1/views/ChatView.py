@@ -14,10 +14,10 @@ from apps.Chat.api.v1.serializers import (
     ChatListSerializer,
     StartChatSerializerInput,
     StartChatSerializerResponseOutput,
-    MessageSerializer,
+    ListMessageSerializer,
     ParticipantSerializer,
 )
-from apps.Chat.models import Chat, Message, ChatParticipant
+from apps.Chat.models import Chat, Message
 from apps.Chat.service import CreateChatService
 from apps.Common.filters import ChatFilter
 from apps.Common.pagination import ChatPagination, MessagePagination
@@ -68,7 +68,7 @@ class ChatView(viewsets.GenericViewSet, mixins.ListModelMixin):
         detail=True,
         methods=["get"],
         permission_classes=[SubscriptionPermission],
-        serializer_class=MessageSerializer,
+        serializer_class=ListMessageSerializer,
         pagination_class=MessagePagination,
     )
     def messages(self, request, pk=None):
@@ -84,10 +84,10 @@ class ChatView(viewsets.GenericViewSet, mixins.ListModelMixin):
         queryset = Message.objects.filter(chat=chat)
         page = self.paginate_queryset(queryset)
         if page is not None:
-            serializer = MessageSerializer(page, many=True)
+            serializer = ListMessageSerializer(page, many=True)
             return self.get_paginated_response(serializer.data)
 
-        serializer = MessageSerializer(queryset, many=True)
+        serializer = ListMessageSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @list_participants_from_chat
