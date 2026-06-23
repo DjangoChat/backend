@@ -2,9 +2,9 @@ from django.utils.timezone import now
 
 from rest_framework import serializers
 
-from apps.Authentication.models import UserProfile
 from apps.Billing.models import Subscription
 from apps.Common.models import StatusSuscription
+from apps.Chat.models import Participant
 
 
 class LoginSerializer(serializers.Serializer):
@@ -30,7 +30,7 @@ class LoginResponseSerializer(serializers.Serializer):
         }
 
 
-class UserDataSerializer(serializers.Serializer):
+class ParticipantDataSerializer(serializers.Serializer):
     first_name = serializers.CharField()
     last_name = serializers.CharField()
     nickname = serializers.CharField()
@@ -50,25 +50,25 @@ class AccessDataSerializer(serializers.Serializer):
 
 
 class MeSerializerOutput(serializers.Serializer):
-    user = UserDataSerializer(allow_null=True)
-    subscription = SubscriptionDataSerializer(allow_null=True)
-    has_access = AccessDataSerializer()
+    participant = serializers.SerializerMethodField(allow_null=True)
+    subscription = serializers.SerializerMethodField(allow_null=True)
+    has_access = serializers.SerializerMethodField()
 
-    def get_user(self, user):
+    def get_participant(self, user):
         try:
-            profile = user.userprofile
-        except UserProfile.DoesNotExist:
+            participant = user.participant
+        except Participant.DoesNotExist:
             return None
 
         groups = list(user.groups.values_list("name", flat=True))
 
-        return UserDataSerializer(
+        return ParticipantDataSerializer(
             {
-                "first_name": profile.first_name,
-                "last_name": profile.last_name,
-                "nickname": profile.nickname,
+                "first_name": participant.first_name,
+                "last_name": participant.last_name,
+                "nickname": participant.nickname,
                 "group": groups[0] if groups else None,
-                "avatar": profile.avatar.url if profile.avatar else None,
+                "avatar": participant.avatar.url if participant.avatar else None,
             }
         ).data
 

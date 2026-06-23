@@ -58,10 +58,10 @@ class AuthenticationView(viewsets.ViewSet):
 
         throttle.reset(request)
         refresh_token, access_token = CreateTokenService().execute(user)
-        data = MeSerializerOutput(user)
+        me_serializer = MeSerializerOutput(user)
 
         response = Response(
-            data=data,
+            data=me_serializer.data,
             status=status.HTTP_200_OK,
         )
         response.set_cookie(
@@ -122,7 +122,7 @@ class AuthenticationView(viewsets.ViewSet):
         serializer.is_valid(raise_exception=True)
         RegisterService().execute(
             email=serializer.validated_data["email"],  # type: ignore
-            password=serializer.validated_data["password"],  # type: ignore
+            password=serializer.validated_data["password1"],  # type: ignore
             phone=serializer.validated_data["phone"],  # type: ignore
         )
         return Response(status=status.HTTP_201_CREATED)
@@ -134,4 +134,4 @@ class AuthenticationView(viewsets.ViewSet):
     )
     def me(self, request):
         data = MeSerializerOutput(request.user)
-        return Response(data, status=status.HTTP_200_OK)
+        return Response(data.data, status=status.HTTP_200_OK)

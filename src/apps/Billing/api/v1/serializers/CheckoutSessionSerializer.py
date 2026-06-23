@@ -9,7 +9,7 @@ stripe.api_key = settings.STRIPE_API_KEY
 class CheckoutSessionSerializerInput(serializers.Serializer):
     success_url = serializers.URLField()
     cancel_url = serializers.URLField()
-    stripe_price_id = serializers.CharField()
+    stripe_price_id = serializers.UUIDField()
 
 
 class CheckoutSessionSerializerOutput(serializers.Serializer):

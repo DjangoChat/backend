@@ -1,3 +1,4 @@
+from typing import cast
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -20,14 +21,32 @@ class OnboardingView(viewsets.ViewSet):
     def create_profile_participant(self, request):
         info = OnboardingMemberSerializerInput(data=request.data)
         info.is_valid(raise_exception=True)
-        user_data, participant_data = MetadataUserService().execute(
+
+        data = cast(dict, info.validated_data)
+
+        profile_data = {
+            "gender": data["gender"],
+            "custom_gender": data.get("custom_gender"),
+            "birth_date": data["birth_date"],
+        }
+
+        participant_data = {
+            "first_name": data["first_name"],
+            "last_name": data["last_name"],
+            "nickname": data["nickname"],
+            "avatar": data.get("avatar"),
+        }
+
+        profile, participant = MetadataUserService().execute(
             user=request.user,
-            validated_data=info,
+            profile_data=profile_data,
+            participant_data=participant_data,
         )
+
         response = OnboardingMemberSerializerOutput(
-            data={
-                "id_profile": user_data.id,
-                "id_participant": participant_data.id,
+            {
+                "id_profile": profile.id,
+                "id_participant": participant.id,
             }
         )
-        return Response(response, status=status.HTTP_200_OK)
+        return Response(response.data, status=status.HTTP_200_OK)
