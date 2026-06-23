@@ -2,7 +2,7 @@ from drf_spectacular.utils import OpenApiResponse, extend_schema
 
 from apps.Chat.api.v1.serializers import (
     DropdownNatureSerializer,
-    ListMessageSerializer,
+    MessageDetailedSerializer,
     MessageSerializer,
     ChatSerializer,
     StartChatSerializerInput,
@@ -41,7 +41,7 @@ list_messages_from_chat = extend_schema(
     description="List all the messages from a chat",
     responses={
         200: OpenApiResponse(
-            response=ListMessageSerializer,
+            response=MessageDetailedSerializer,
             description="List of messages retrive succesfully",
         ),
     },

@@ -7,7 +7,7 @@ from rest_framework.exceptions import NotFound, PermissionDenied, ValidationErro
 from apps.Chat.api.v1.serializers import (
     BaseEventSerializer,
     DeleteMessageSerializer,
-    ListMessageSerializer,
+    MessageDetailedSerializer,
     ReactMessageSerializer,
     SeenSerializer,
     SendMessageSerializer,

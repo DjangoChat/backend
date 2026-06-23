@@ -4,6 +4,7 @@ from apps.Authorization.permissions import CustomPermission, SubscriptionPermiss
 from apps.Chat.api.v1.serializers import MessageSerializer
 from apps.Chat.api.v1.docs import create_message, update_message, partial_update_message
 from apps.Chat.models import Message
+from apps.Chat.service import CreateMessageService
 
 
 class MessageView(
@@ -16,8 +17,11 @@ class MessageView(
     permission_classes = [SubscriptionPermission, CustomPermission]
 
     def perform_create(self, serializer):
-        participant = self.request.user.participant  # type: ignore
-        serializer.save(participant=participant)
+        user = self.request.user
+        CreateMessageService().execute(
+            serializer,
+            user,
+        )
 
     @create_message
     def create(self, request, *args, **kwargs):

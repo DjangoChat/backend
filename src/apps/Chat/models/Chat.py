@@ -146,3 +146,6 @@ class Chat(CustomModel):
         verbose_name_plural = _("Chats")
         app_label = "Chat"
         ordering = ["-last_message_at"]
+
+    def check_participant_can_write(self, participant) -> bool:
+        return self.chatparticipants_set.filter(participant=participant).exists()  # type: ignore

@@ -47,7 +47,7 @@ class ChatParticipantSerializer(serializers.ModelSerializer):
         ]
 
 
-class ChatListSerializer(serializers.ModelSerializer):
+class ChatDetailedSerializer(serializers.ModelSerializer):
     last_message = serializers.SerializerMethodField()
     metadata = serializers.SerializerMethodField()
 

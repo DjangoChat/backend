@@ -3,7 +3,7 @@ from rest_framework import serializers
 from apps.Chat.models import Message
 
 
-class ListMessageSerializer(serializers.ModelSerializer):
+class MessageDetailedSerializer(serializers.ModelSerializer):
     seen = serializers.SerializerMethodField()
 
     class Meta:
@@ -41,6 +41,7 @@ class MessageSerializer(serializers.ModelSerializer):
         model = Message
         fields = [
             "id",
+            "chat",
             "participant",
             "message_type",
             "content",

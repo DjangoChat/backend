@@ -19,4 +19,8 @@ class OllamaChatService(BaseOllamaService):
                 }
                 for i, j in last_messages
             ],
-        )["message"]["content"]
+        )[  # type: ignore
+            "message"
+        ][  # type: ignore
+            "content"
+        ]  # type: ignore
