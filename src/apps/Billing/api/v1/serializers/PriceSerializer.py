@@ -25,7 +25,6 @@ class PriceSerializer(serializers.ModelSerializer):
             "period",
             "currency",
             "amount",
-            "stripe_price_id",
         ]
         read_only_fields = [
             "id",
@@ -33,5 +32,4 @@ class PriceSerializer(serializers.ModelSerializer):
             "period",
             "currency",
             "amount",
-            "stripe_price_id",
         ]

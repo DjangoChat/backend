@@ -9,8 +9,8 @@ from apps.Billing.models import Price
 class PriceView(viewsets.GenericViewSet, mixins.ListModelMixin):
     queryset = Price.objects.all()
     serializer_class = PriceSerializer
-    pagination_class = None
     permission_classes = [AllowAny]
+    filterset_fields = ["period__name"]
 
     @list_price_docs
     def list(self, request, *args, **kwargs):
