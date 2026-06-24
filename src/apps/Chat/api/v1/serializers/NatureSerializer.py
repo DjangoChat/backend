@@ -3,7 +3,7 @@ from rest_framework import serializers
 from apps.Chat.models import Nature
 
 
-class DropdownNatureSerializer(serializers.ModelSerializer):
+class NatureSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Nature

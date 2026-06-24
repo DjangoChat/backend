@@ -1,7 +1,7 @@
 from drf_spectacular.utils import OpenApiResponse, extend_schema
 
 from apps.Chat.api.v1.serializers import (
-    DropdownNatureSerializer,
+    NatureSerializer,
     MessageDetailedSerializer,
     MessageSerializer,
     ChatSerializer,
@@ -69,7 +69,7 @@ list_natures_doc = extend_schema(
     ),
     responses={
         200: OpenApiResponse(
-            response=DropdownNatureSerializer(many=True),
+            response=NatureSerializer(many=True),
             description="List of nature options retrieved successfully",
         )
     },
