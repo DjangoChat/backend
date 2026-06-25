@@ -23,5 +23,7 @@ class ParticipantSerializer(serializers.ModelSerializer):
 
     def get_details(self, obj):
         if obj.agent:
-            return AgentSerializer(obj.agent).data
+            return AgentSerializer(
+                obj.agent, context={"request": self.context["request"]}
+            ).data
         return None

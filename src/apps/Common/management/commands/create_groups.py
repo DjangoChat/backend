@@ -4,7 +4,7 @@ from django.contrib.auth.models import Group, Permission
 from django.core.management.base import BaseCommand
 
 from apps.Authentication.models import UserProfile
-from apps.Chat.models import Agent, Nature
+from apps.Chat.models import Agent, Nature, Participant
 from apps.Common.models import CustomGroups
 
 READ_PERMISSIONS = [
@@ -21,6 +21,7 @@ GROUPS_PERMISSIONS = {
         UserProfile: FULL_PERMISSIONS,
         Agent: READ_PERMISSIONS,
         Nature: READ_PERMISSIONS,
+        Participant: READ_PERMISSIONS,
     },
     CustomGroups.MAINTAINER: {
         UserProfile: FULL_PERMISSIONS,
