@@ -6,168 +6,366 @@ from django.core.management.base import BaseCommand
 from apps.Chat.models import Agent, Nature, Participant
 from apps.Common.models import AgentName, AgentType, NatureType, ParticipantType
 
+AGENT_BLUEPRINTS = {
+    # ======================================================
+    # BASIC (8 agents)
+    # ======================================================
+    AgentName.ALEX: {
+        "type": AgentType.BASIC,
+        "natures": [
+            NatureType.CURIOUS,
+            NatureType.COMMUNICATIVE,
+            NatureType.CALM,
+        ],
+    },
+    AgentName.JORDAN: {
+        "type": AgentType.BASIC,
+        "natures": [
+            NatureType.LOGICAL,
+            NatureType.PRAGMATIC,
+            NatureType.DETAIL_ORIENTED,
+        ],
+    },
+    AgentName.CASEY: {
+        "type": AgentType.BASIC,
+        "natures": [
+            NatureType.CREATIVE,
+            NatureType.CURIOUS,
+            NatureType.ADAPTIVE,
+        ],
+    },
+    AgentName.MORGAN: {
+        "type": AgentType.BASIC,
+        "natures": [
+            NatureType.EMPATHETIC,
+            NatureType.SUPPORTIVE,
+            NatureType.CALM,
+        ],
+    },
+    AgentName.DAKOTA: {
+        "type": AgentType.BASIC,
+        "natures": [
+            NatureType.ENERGETIC,
+            NatureType.PROACTIVE,
+            NatureType.ASSERTIVE,
+        ],
+    },
+    AgentName.PARKER: {
+        "type": AgentType.BASIC,
+        "natures": [
+            NatureType.ANALYTICAL,
+            NatureType.LOGICAL,
+            NatureType.DETAIL_ORIENTED,
+        ],
+    },
+    AgentName.TAYLOR: {
+        "type": AgentType.BASIC,
+        "natures": [
+            NatureType.ADAPTIVE,
+            NatureType.COMMUNICATIVE,
+            NatureType.CURIOUS,
+        ],
+    },
+    AgentName.BLAKE: {
+        "type": AgentType.BASIC,
+        "natures": [
+            NatureType.ASSERTIVE,
+            NatureType.DECISIVE,
+            NatureType.PROACTIVE,
+        ],
+    },
+    # ======================================================
+    # MEDIUM (9 agents)
+    # ======================================================
+    AgentName.RORY: {
+        "type": AgentType.MEDIUM,
+        "natures": [
+            NatureType.CURIOUS,
+            NatureType.INTUITIVE,
+            NatureType.REFLECTIVE,
+            NatureType.ANALYTICAL,
+            NatureType.ADAPTIVE,
+        ],
+    },
+    AgentName.REAGAN: {
+        "type": AgentType.MEDIUM,
+        "natures": [
+            NatureType.PRINCIPLED,
+            NatureType.ASSERTIVE,
+            NatureType.RELIABLE,
+            NatureType.PRAGMATIC,
+            NatureType.DECISIVE,
+        ],
+    },
+    AgentName.BROOKLYN: {
+        "type": AgentType.MEDIUM,
+        "natures": [
+            NatureType.COMMUNICATIVE,
+            NatureType.SUPPORTIVE,
+            NatureType.ADAPTIVE,
+            NatureType.CURIOUS,
+            NatureType.REFLECTIVE,
+        ],
+    },
+    AgentName.ARIEL: {
+        "type": AgentType.MEDIUM,
+        "natures": [
+            NatureType.CREATIVE,
+            NatureType.INNOVATIVE,
+            NatureType.INTUITIVE,
+            NatureType.REFLECTIVE,
+            NatureType.CURIOUS,
+        ],
+    },
+    AgentName.SAGE: {
+        "type": AgentType.MEDIUM,
+        "natures": [
+            NatureType.ANALYTICAL,
+            NatureType.LOGICAL,
+            NatureType.REFLECTIVE,
+            NatureType.PRAGMATIC,
+            NatureType.DETAIL_ORIENTED,
+        ],
+    },
+    AgentName.PHOENIX: {
+        "type": AgentType.MEDIUM,
+        "natures": [
+            NatureType.ENERGETIC,
+            NatureType.PROACTIVE,
+            NatureType.INNOVATIVE,
+            NatureType.VISIONARY,
+            NatureType.ADAPTIVE,
+        ],
+    },
+    AgentName.SKYE: {
+        "type": AgentType.MEDIUM,
+        "natures": [
+            NatureType.CALM,
+            NatureType.INTUITIVE,
+            NatureType.REFLECTIVE,
+            NatureType.CURIOUS,
+            NatureType.COMMUNICATIVE,
+        ],
+    },
+    AgentName.RIVER: {
+        "type": AgentType.MEDIUM,
+        "natures": [
+            NatureType.ADAPTIVE,
+            NatureType.COMMUNICATIVE,
+            NatureType.CURIOUS,
+            NatureType.PRAGMATIC,
+            NatureType.SUPPORTIVE,
+        ],
+    },
+    AgentName.CAMERON: {
+        "type": AgentType.MEDIUM,
+        "natures": [
+            NatureType.ANALYTICAL,
+            NatureType.LOGICAL,
+            NatureType.DETAIL_ORIENTED,
+            NatureType.PRAGMATIC,
+            NatureType.REFLECTIVE,
+        ],
+    },
+    # ======================================================
+    # ADVANCE (8 agents)
+    # ======================================================
+    AgentName.AVERY: {
+        "type": AgentType.ADVANCE,
+        "natures": [
+            NatureType.INNOVATIVE,
+            NatureType.VISIONARY,
+            NatureType.PROACTIVE,
+            NatureType.ANALYTICAL,
+            NatureType.REFLECTIVE,
+            NatureType.ADAPTIVE,
+            NatureType.COMMUNICATIVE,
+            NatureType.PRAGMATIC,
+            NatureType.DETAIL_ORIENTED,
+            NatureType.CURIOUS,
+        ],
+    },
+    AgentName.EDEN: {
+        "type": AgentType.ADVANCE,
+        "natures": [
+            NatureType.EMPATHETIC,
+            NatureType.SUPPORTIVE,
+            NatureType.CALM,
+            NatureType.REFLECTIVE,
+            NatureType.ADAPTIVE,
+            NatureType.COMMUNICATIVE,
+            NatureType.PRINCIPLED,
+            NatureType.RELIABLE,
+            NatureType.PATIENT,
+            NatureType.INTUITIVE,
+        ],
+    },
+    AgentName.HAYDEN: {
+        "type": AgentType.ADVANCE,
+        "natures": [
+            NatureType.LOGICAL,
+            NatureType.ANALYTICAL,
+            NatureType.CRITICAL_THINKING,
+            NatureType.PRAGMATIC,
+            NatureType.RELIABLE,
+            NatureType.PROACTIVE,
+            NatureType.REFLECTIVE,
+            NatureType.INDEPENDENT,
+            NatureType.DECISIVE,
+            NatureType.DETAIL_ORIENTED,
+        ],
+    },
+    AgentName.ROBIN: {
+        "type": AgentType.ADVANCE,
+        "natures": [
+            NatureType.CREATIVE,
+            NatureType.INNOVATIVE,
+            NatureType.VISIONARY,
+            NatureType.CURIOUS,
+            NatureType.INTUITIVE,
+            NatureType.ADAPTIVE,
+            NatureType.COMMUNICATIVE,
+            NatureType.PROACTIVE,
+            NatureType.REFLECTIVE,
+            NatureType.ANALYTICAL,
+        ],
+    },
+    AgentName.PEYTON: {
+        "type": AgentType.ADVANCE,
+        "natures": [
+            NatureType.ASSERTIVE,
+            NatureType.DECISIVE,
+            NatureType.PRAGMATIC,
+            NatureType.PROACTIVE,
+            NatureType.RELIABLE,
+            NatureType.PRINCIPLED,
+            NatureType.LOGICAL,
+            NatureType.INDEPENDENT,
+            NatureType.ANALYTICAL,
+            NatureType.REFLECTIVE,
+        ],
+    },
+    AgentName.QUINN: {
+        "type": AgentType.ADVANCE,
+        "natures": [
+            NatureType.CURIOUS,
+            NatureType.INTUITIVE,
+            NatureType.REFLECTIVE,
+            NatureType.ADAPTIVE,
+            NatureType.VISIONARY,
+            NatureType.INNOVATIVE,
+            NatureType.COMMUNICATIVE,
+            NatureType.PROACTIVE,
+            NatureType.ANALYTICAL,
+            NatureType.PRAGMATIC,
+        ],
+    },
+    AgentName.TATUM: {
+        "type": AgentType.ADVANCE,
+        "natures": [
+            NatureType.CALM,
+            NatureType.PATIENT,
+            NatureType.SUPPORTIVE,
+            NatureType.EMPATHETIC,
+            NatureType.REFLECTIVE,
+            NatureType.ADAPTIVE,
+            NatureType.COMMUNICATIVE,
+            NatureType.PRINCIPLED,
+            NatureType.RELIABLE,
+            NatureType.INTUITIVE,
+        ],
+    },
+    AgentName.REECE: {
+        "type": AgentType.ADVANCE,
+        "natures": [
+            NatureType.ENERGETIC,
+            NatureType.PROACTIVE,
+            NatureType.ASSERTIVE,
+            NatureType.DECISIVE,
+            NatureType.INNOVATIVE,
+            NatureType.VISIONARY,
+            NatureType.ADAPTIVE,
+            NatureType.ANALYTICAL,
+            NatureType.PRAGMATIC,
+            NatureType.REFLECTIVE,
+        ],
+    },
+}
+
 
 class Command(BaseCommand):
+    help = "Creates agents from deterministic blueprint registry"
 
-    help = "Command for creating all participant agents"
-
-    BASE_PROMPT = """You are a user engaging in a chat application with another user. 
-                    CONTEXT OF THE CONVERSATION:
-                    This is a real conversation where you are trying to learn about the other user and build genuine connection.
-
-                    YOUR TWO PRIMARY PURPOSES (Essential - must be balanced):
-                    1. INFORMATION GATHERING: Your primary objective is to get as much information as possible about the other user to build a complete picture of them. This includes:
-                    - Hobbies and interests
-                    - Preferences and tastes
-                    - Goals and aspirations
-                    - Life experiences and background
-                    - Personality traits and values
-                    - Passions and what motivates them
-                    
-                    Ask thoughtful, natural questions that flow organically within the conversation. Make it feel like a genuine dialogue, not an interrogation.
-
-                    2. ENGAGEMENT: Keep yourself genuinely engaged in the conversation:
-                    - Show authentic interest in the user's responses
-                    - Build real rapport and connection
-                    - Maintain conversational momentum and flow
-                    - Share reactions and follow-up thoughts naturally
-                    - Make the interaction feel warm, authentic and human-like
-                    - Keep the conversation natural, not forced or robotic
-
-                    REMEMBER: These two purposes must work together seamlessly. Gather information while maintaining genuine engagement and a natural conversational flow. The information gathering should happen naturally through engaged dialogue, not through interrogation.
-                    """
-
-    def get_nature_list(self) -> list[NatureType]:
-        """Return all available nature types."""
-        return list(NatureType)
-
-    def generate_description(self, agent_name: AgentName, natures: list[Nature]) -> str:
-        """Generate a brief description of how users can expect the agent to behave."""
-        nature_labels = [nature.name for nature in natures]
-        nature_list = ", ".join(nature_labels)
-
-        # Create a concise description based on agent name and natures
-        description = (
-            f"{agent_name.label} is a conversational AI agent characterized by being "
-            f"{nature_list}. This agent engages in genuine dialogue to understand you better "
-            f"while maintaining an authentic and natural conversational style."
-        )
-        return description
+    BASE_PROMPT = """You are a conversational AI engaging in natural dialogue.
+Your goal is to build rapport and understand the user through conversation.
+"""
 
     def build_prompt(self, natures: list[Nature]) -> str:
-        """Build the complete prompt by combining base prompt with natures and descriptions."""
         prompt = self.BASE_PROMPT
-        prompt += "\n\n" + "=" * 80 + "\n"
-        prompt += "YOUR BEHAVIORAL TRAITS AND COMMUNICATION STYLE:\n"
-        prompt += "=" * 80 + "\n"
-        prompt += "The following traits define HOW you will approach the two core purposes above:\n"
-        prompt += "Use these traits to naturally shape your conversation style, tone, and approach.\n\n"
+        prompt += "\n\n=== TRAITS ===\n"
 
-        for nature in natures:
-            description = nature.description
-            prompt += f"• {nature.name}: {description}\n\n"
+        for n in natures:
+            prompt += f"- {n.name}: {n.description}\n"
 
-        prompt += "=" * 80 + "\n"
-        prompt += "INTEGRATION GUIDE:\n"
-        prompt += "These traits should be naturally woven into how you gather information and engage in conversation. They define your personality and approach style, but should never be explicitly mentioned. Adapt these traits naturally as the conversation evolves and as you learn more about the user."
-
+        prompt += "\nTraits influence behavior but are never explicitly mentioned."
         return prompt
 
-    def handle(self, *args: Any, **options: Any) -> str | None:
+    def generate_description(self, name: AgentName, natures: list[Nature]) -> str:
+        return (
+            f"{name.label} is a conversational agent with traits: "
+            f"{', '.join([n.name for n in natures])}."
+        )
 
-        # Distribution: 5 basic (3 natures), 10 medium (5 natures), 10 advanced (10 natures)
-        distribution = {
-            AgentType.BASIC: 5,
-            AgentType.MEDIUM: 10,
-            AgentType.ADVANCE: 10,
-        }
+    def handle(self, *args: Any, **options: Any):
 
-        natures_per_type = {
-            AgentType.BASIC: 3,
-            AgentType.MEDIUM: 5,
-            AgentType.ADVANCE: 10,
-        }
+        created = 0
+        existing = 0
 
-        # Get all agent names and nature types
-        agent_names = list(AgentName)
-        nature_types = self.get_nature_list()
+        for agent_name, config in AGENT_BLUEPRINTS.items():
 
-        created_count = 0
-        existing_count = 0
-        agent_index = 0
+            agent_type = config["type"]
+            nature_types = config["natures"]
 
-        for agent_type, count in distribution.items():
-            for _ in range(count):
-                if agent_index >= len(agent_names):
-                    break
+            # -----------------------------------------------------
+            # fetch Nature objects from DB
+            # -----------------------------------------------------
+            selected_natures = list(
+                Nature.objects.filter(name__in=[n.value for n in nature_types])
+            )
 
-                try:
-                    agent_name = agent_names[agent_index]
-                    num_natures = natures_per_type[agent_type]
+            # -----------------------------------------------------
+            # build prompt + description
+            # -----------------------------------------------------
+            prompt = self.build_prompt(selected_natures)
+            description = self.generate_description(agent_name, selected_natures)
 
-                    # Randomly select natures for this agent
-                    selected_nature_types = random.sample(nature_types, num_natures)
+            # -----------------------------------------------------
+            # create agent (idempotent via type + prompt + description)
+            # -----------------------------------------------------
+            agent, created_agent = Agent.objects.get_or_create(
+                agent_type=agent_type,
+                promp_type=prompt,
+                description=description,
+            )
 
-                    # Get or create Nature objects
-                    selected_natures = []
-                    for nature_type in selected_nature_types:
-                        try:
-                            nature = Nature.objects.get(name=nature_type.value)
-                            selected_natures.append(nature)
-                        except Nature.DoesNotExist:
-                            continue
+            if created_agent:
+                Participant.objects.get_or_create(
+                    agent=agent,
+                    nickname=agent_name,
+                    first_name=agent_name,
+                    last_name="Skynet",
+                    participant_type=ParticipantType.AGENT,
+                )
 
-                    # Skip agent creation if natures are missing
-                    if len(selected_natures) < num_natures:
-                        agent_index += 1
-                        continue
-
-                    # Build the prompt
-                    prompt = self.build_prompt(selected_natures)
-
-                    # Generate description based on agent name and natures
-                    description = self.generate_description(
-                        agent_name, selected_natures
-                    )
-
-                    # Create or get the participant
-                    participant, created_participant = (
-                        Participant.objects.get_or_create(
-                            nickname=agent_name,
-                            defaults={
-                                "first_name": agent_name,
-                                "last_name": "Skynet",
-                                "participant_type": ParticipantType.AGENT,
-                            },
-                        )
-                    )
-
-                    if created_participant:
-                        agent, created_agent = Agent.objects.get_or_create(
-                            name=agent_name,
-                            defaults={
-                                "promp_type": prompt,
-                                "agent_type": agent_type,
-                                "description": description,
-                            },
-                        )
-
-                        if created_agent:
-                            agent.natures.set(selected_natures)
-                            participant.agent = agent
-                        created_count += 1
-                    else:
-                        existing_count += 1
-                except Exception:
-                    agent_index += 1
-                    continue
-
-                agent_index += 1
+                agent.natures.set(selected_natures)
+                created += 1
+            else:
+                existing += 1
 
         self.stdout.write(
             self.style.SUCCESS(
-                f"\n✓ Agents creation completed!"
-                f"\n  Created: {created_count}"
-                f"\n  Already existed: {existing_count}"
+                f"\n✓ Agent creation completed"
+                f"\nCreated: {created}"
+                f"\nExisting: {existing}"
             )
         )

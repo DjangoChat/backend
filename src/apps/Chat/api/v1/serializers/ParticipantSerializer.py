@@ -1,9 +1,11 @@
 from rest_framework import serializers
 
 from apps.Chat.models import Participant
+from .AgentSerializer import AgentSerializer
 
 
 class ParticipantSerializer(serializers.ModelSerializer):
+    details = serializers.SerializerMethodField()
 
     class Meta:
         model = Participant
@@ -15,5 +17,11 @@ class ParticipantSerializer(serializers.ModelSerializer):
             "last_name",
             "nickname",
             "avatar",
-            "status",
+            "participant_status",
+            "details",
         ]
+
+    def get_details(self, obj):
+        if obj.agent:
+            return AgentSerializer(obj.agent).data
+        return None

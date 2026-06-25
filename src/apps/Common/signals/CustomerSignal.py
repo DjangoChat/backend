@@ -7,7 +7,7 @@ from apps.Billing.service import CreateCustomerService
 
 @receiver(post_save, sender=Participant)
 def create_stripe_customer(sender, instance, created, **kwargs):
-    if created:
+    if created and instance.user is not None:
         custom_user = instance.user
 
         stripe_custom_user = CreateCustomerService().execute(

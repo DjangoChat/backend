@@ -141,7 +141,7 @@ class AgentName(models.TextChoices):
 class AgentType(models.TextChoices):
     BASIC = "basic", _("Basic")
     MEDIUM = "medium", _("Medium")
-    ADVANCE = "advance", _("advance")
+    ADVANCE = "advance", _("Advance")
 
 
 class FeatureCode(models.TextChoices):
@@ -188,7 +188,7 @@ class ConsumerCommand(models.TextChoices):
 
 
 # Server -> Client (Websocket) - which are call events
-class ConversationConsumerEvent(models.TextChoices):
+class ConsumerEvent(models.TextChoices):
     # STORED DB
     MESSAGE_CREATED = "message_created"
     MESSAGE_UPDATED = "message_updated"

@@ -111,3 +111,15 @@ partial_update_message = extend_schema(
         )
     },
 )
+
+list_participant_doc = extend_schema(
+    tags=["Participant"],
+    summary="List Participants",
+    description=("List all participant that the user have access to"),
+    responses={
+        200: OpenApiResponse(
+            response=ParticipantSerializer(many=True),
+            description="List participant succesfull",
+        )
+    },
+)

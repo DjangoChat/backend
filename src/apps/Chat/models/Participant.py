@@ -44,7 +44,7 @@ class Participant(CustomModel):
         blank=True,
         null=True,
     )
-    status = models.CharField(
+    participant_status = models.CharField(
         _("Status of the participant"),
         choices=ParticipantStatus,
         default=ParticipantStatus.EN_LINEA,

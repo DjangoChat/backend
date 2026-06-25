@@ -8,6 +8,7 @@ class AgentAdmin(admin.ModelAdmin):
     list_display = [
         "id",
         "agent_type",
+        "description",
         "get_natures",
         "promp_type",
     ]

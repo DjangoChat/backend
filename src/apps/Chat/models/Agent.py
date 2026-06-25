@@ -8,10 +8,13 @@ from .Nature import Nature
 
 class Agent(CustomModel):
     promp_type = models.TextField(
-        _("Description of the agent conduct"),
+        _("Prompt that will be attach to the conversation"),
     )
     natures = models.ManyToManyField(
         Nature,
+    )
+    description = models.TextField(
+        _("Description of the agent"),
     )
     agent_type = models.CharField(
         _("Type of agent"),
@@ -20,7 +23,7 @@ class Agent(CustomModel):
     )
 
     class Meta:
-        db_table = "AUTHENTICATION_AGENT"
+        db_table = "CHAT_AGENT"
         verbose_name = _("Agent")
         verbose_name_plural = _("Agents")
         app_label = "Chat"

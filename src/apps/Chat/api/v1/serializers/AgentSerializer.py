@@ -1,8 +1,7 @@
 from rest_framework import serializers
 
 from apps.Chat.models import Agent, Nature
-from apps.Common.models import AgentType, FeatureCode
-
+from apps.Common.models import FeatureCode, AgentType
 from .NatureSerializer import ChipNatureSerializer
 
 PERMISSION = {
@@ -20,9 +19,6 @@ class AgentSerializer(serializers.ModelSerializer):
         model = Agent
         fields = [
             "id",
-            "name",
-            "description",
-            "avatar",
             "natures",
             "agent_type",
             "has_permission",
