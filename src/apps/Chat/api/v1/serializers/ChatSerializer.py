@@ -53,14 +53,15 @@ class ChatDetailedSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Chat
-        fields = (
+        fields = [
             "name",
             "photo",
             "last_message",
-        )
+            "metadata",
+        ]
 
     def get_last_message(self, obj):
-        message = obj.messages.select_related("participant").first()
+        message = obj.message_set.select_related("participant").first()
 
         return BasicMessageSerializer(message).data if message else None
 
@@ -70,7 +71,7 @@ class ChatDetailedSerializer(serializers.ModelSerializer):
         if request is None:
             return None
 
-        chat_participant = obj.chatparticipants.filter(
+        chat_participant = obj.chatparticipant_set.filter(
             participant=request.user.participant
         ).first()
 

@@ -16,17 +16,15 @@ PERMISSION = {
 class CreateChatService:
 
     @transaction.atomic
-    def execute(self, current_participant, other_participant_id):
+    def execute(self, current_user, other_participant_id):
         other_participant = get_object_or_404(Participant, id=other_participant_id)
-        exits_chat = self._check_exist_chat(current_participant, other_participant)
+        exits_chat = self._check_exist_chat(current_user, other_participant)
 
         if exits_chat:
             return exits_chat, False
 
-        self._check_have_permission(current_participant, other_participant)
-        chat = self._create_chat_assing_participants(
-            current_participant, other_participant
-        )
+        self._check_have_permission(current_user, other_participant)
+        chat = self._create_chat_assing_participants(current_user, other_participant)
         return chat, True
 
     def _check_exist_chat(self, current_participant, other_participant):
@@ -38,13 +36,13 @@ class CreateChatService:
             .first()
         )
 
-    def _create_chat_assing_participants(self, current_participant, other_participant):
+    def _create_chat_assing_participants(self, current_user, other_participant):
         chat = Chat.objects.create()
         ChatParticipant.objects.bulk_create(
             [
                 ChatParticipant(
                     chat=chat,
-                    participant=current_participant,
+                    participant=current_user.participant,
                 ),
                 ChatParticipant(
                     chat=chat,
@@ -58,7 +56,7 @@ class CreateChatService:
         if (
             other_participant.agent
             and not current_participant.get_last_valid_subscription().has_feature(
-                other_participant.agent.agent_type
+                PERMISSION[other_participant.agent.agent_type]
             )
         ):
             raise PermissionDenied

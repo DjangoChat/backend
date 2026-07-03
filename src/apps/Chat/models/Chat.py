@@ -35,7 +35,7 @@ class ChatQuerySet(ActivatorQuerySet):
         )
 
     def all_user_chats(self, current_user):
-        return self.active().filter(participants__participant__user=current_user)
+        return self.active().filter(chatparticipant__participant__user=current_user)
 
     def chats_with_agent(self, current_user):
         """

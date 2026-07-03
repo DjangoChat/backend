@@ -52,14 +52,14 @@ class ChatView(viewsets.GenericViewSet, mixins.ListModelMixin):
         serializer = StartChatSerializerInput(data=request.data)
         serializer.is_valid(raise_exception=True)
         chat, created = CreateChatService().execute(
-            current_participant=request.user,
+            current_user=request.user,
             other_participant_id=serializer.validated_data["participant_id"],  # type: ignore
         )
         response = StartChatSerializerResponseOutput(
-            data={"chat_id": chat.id, "created": created}
+            {"chat_id": chat.id, "created": created}
         )
         return Response(
-            response,
+            response.data,
             status=status.HTTP_200_OK,
         )
 
