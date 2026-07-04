@@ -5,6 +5,7 @@ from apps.Chat.api.v1.docs import create_message, partial_update_message, update
 from apps.Chat.api.v1.serializers import MessageSerializer
 from apps.Chat.models import Message
 from apps.Chat.service import CreateMessageService
+from apps.Common.pagination import MessagePagination
 
 
 class MessageView(
@@ -15,6 +16,7 @@ class MessageView(
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
     permission_classes = [SubscriptionPermission, CustomPermission]
+    pagination_class = MessagePagination
 
     def perform_create(self, serializer):
         user = self.request.user
