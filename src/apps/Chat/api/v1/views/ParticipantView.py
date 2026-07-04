@@ -1,9 +1,9 @@
 from rest_framework import mixins, viewsets
 
 from apps.Authorization.permissions import CustomPermission, SubscriptionPermission
-from apps.Chat.models import Participant
-from apps.Chat.api.v1.serializers import ParticipantSerializer
 from apps.Chat.api.v1.docs import list_participant_doc
+from apps.Chat.api.v1.serializers import ParticipantSerializer
+from apps.Chat.models import Participant
 
 
 class ParticipantView(viewsets.GenericViewSet, mixins.ListModelMixin):

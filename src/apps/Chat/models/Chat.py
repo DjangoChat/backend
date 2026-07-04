@@ -148,4 +148,4 @@ class Chat(CustomModel):
         ordering = ["-last_message_at"]
 
     def check_participant_can_write(self, participant) -> bool:
-        return self.chatparticipants_set.filter(participant=participant).exists()  # type: ignore
+        return self.chatparticipant_set.filter(participant=participant).exists()  # type: ignore

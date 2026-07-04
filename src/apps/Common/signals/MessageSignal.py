@@ -45,5 +45,5 @@ def create_messages_statuses(sender, instance, created, **kwargs):
 @receiver(post_save, sender=Message)
 def update_chat_last_message(sender, instance, created, **kwargs):
     if created:
-        instance.chat.last_message = instance.content
-        instance.chat.save(update_fields=["last_message"])
+        instance.chat.last_message_at = instance.sent_at
+        instance.chat.save(update_fields=["last_message_at"])

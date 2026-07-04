@@ -5,19 +5,19 @@ from rest_framework.response import Response
 from apps.Authorization.permissions import CustomPermission, SubscriptionPermission
 from apps.Chat.api.v1.docs import (
     list_chats_doc,
-    start_chat_doc,
     list_messages_from_chat,
     list_participants_from_chat,
+    start_chat_doc,
 )
 from apps.Chat.api.v1.serializers import (
-    ChatSerializer,
     ChatDetailedSerializer,
-    StartChatSerializerInput,
-    StartChatSerializerResponseOutput,
+    ChatSerializer,
     MessageDetailedSerializer,
     ParticipantSerializer,
+    StartChatSerializerInput,
+    StartChatSerializerResponseOutput,
 )
-from apps.Chat.models import Chat, Message
+from apps.Chat.models import Chat, ChatParticipant, Message, Participant
 from apps.Chat.service import CreateChatService
 from apps.Common.filters import ChatFilter
 from apps.Common.pagination import ChatPagination, MessagePagination
@@ -107,5 +107,9 @@ class ChatView(viewsets.GenericViewSet, mixins.ListModelMixin):
             raise PermissionDenied()
 
         queryset = Participant.objects.filter(chatparticipant__chat=chat)
-        serializer = ParticipantSerializer(queryset, many=True)
+        serializer = ParticipantSerializer(
+            queryset,
+            many=True,
+            context={"request": request},
+        )
         return Response(serializer.data, status=status.HTTP_200_OK)

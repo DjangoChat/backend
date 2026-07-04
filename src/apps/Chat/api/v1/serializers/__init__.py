@@ -1,24 +1,24 @@
 from apps.Chat.api.v1.serializers.AgentSerializer import AgentSerializer
 from apps.Chat.api.v1.serializers.ChatSerializer import (
-    ChatSerializer,
     ChatDetailedSerializer,
+    ChatSerializer,
     StartChatSerializerInput,
     StartChatSerializerResponseOutput,
 )
 from apps.Chat.api.v1.serializers.ConversationConsumer import (
     BaseEventSerializer,
-    SendMessageSerializer,
-    TypingSerializer,
-    SeenSerializer,
     DeleteMessageSerializer,
     ReactMessageSerializer,
+    SeenSerializer,
+    SendMessageSerializer,
+    TypingSerializer,
 )
 from apps.Chat.api.v1.serializers.MessageSerializer import (
-    MessageSerializer,
     MessageDetailedSerializer,
+    MessageSerializer,
 )
 from apps.Chat.api.v1.serializers.NatureSerializer import (
-    NatureSerializer,
     ChipNatureSerializer,
+    NatureSerializer,
 )
 from apps.Chat.api.v1.serializers.ParticipantSerializer import ParticipantSerializer

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.Chat.models import Chat, Message, Participant, ChatParticipant
+from apps.Chat.models import Chat, ChatParticipant, Message, Participant
 
 
 class StartChatSerializerInput(serializers.Serializer):
@@ -54,6 +54,7 @@ class ChatDetailedSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chat
         fields = [
+            "id",
             "name",
             "photo",
             "last_message",

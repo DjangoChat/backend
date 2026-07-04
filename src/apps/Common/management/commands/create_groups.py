@@ -4,7 +4,7 @@ from django.contrib.auth.models import Group, Permission
 from django.core.management.base import BaseCommand
 
 from apps.Authentication.models import UserProfile
-from apps.Chat.models import Agent, Nature, Participant, Chat, Message
+from apps.Chat.models import Agent, Chat, Message, Nature, Participant
 from apps.Common.models import CustomGroups
 
 READ_PERMISSIONS = [

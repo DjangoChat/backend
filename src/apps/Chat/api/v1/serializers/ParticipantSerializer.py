@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from apps.Chat.models import Participant
+
 from .AgentSerializer import AgentSerializer
 
 
@@ -24,6 +25,7 @@ class ParticipantSerializer(serializers.ModelSerializer):
     def get_details(self, obj):
         if obj.agent:
             return AgentSerializer(
-                obj.agent, context={"request": self.context["request"]}
+                obj.agent,
+                context={"request": self.context["request"]},
             ).data
         return None

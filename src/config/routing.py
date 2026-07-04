@@ -2,10 +2,7 @@ from typing import Any, cast
 
 from django.urls import path
 
-from apps.Chat.api.v1.consumers import (
-    ChatConsumer,
-    NotificationConsumer,
-)
+from apps.Chat.api.v1.consumers import ChatConsumer, NotificationConsumer
 
 websocket_urlpatterns = [
     path(

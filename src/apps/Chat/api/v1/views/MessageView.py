@@ -1,8 +1,8 @@
 from rest_framework import mixins, viewsets
 
 from apps.Authorization.permissions import CustomPermission, SubscriptionPermission
+from apps.Chat.api.v1.docs import create_message, partial_update_message, update_message
 from apps.Chat.api.v1.serializers import MessageSerializer
-from apps.Chat.api.v1.docs import create_message, update_message, partial_update_message
 from apps.Chat.models import Message
 from apps.Chat.service import CreateMessageService
 

@@ -3,8 +3,8 @@ from django.utils.timezone import now
 from rest_framework import serializers
 
 from apps.Billing.models import Subscription
-from apps.Common.models import StatusSuscription
 from apps.Chat.models import Participant
+from apps.Common.models import StatusSuscription
 
 
 class LoginSerializer(serializers.Serializer):

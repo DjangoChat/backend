@@ -1,7 +1,7 @@
 import os
 import sys
-from pathlib import Path
 from datetime import timedelta
+from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
@@ -51,6 +51,7 @@ THIRD_PARTY_APPS = [
     "corsheaders",
     "rest_framework_simplejwt",
     "rest_framework_simplejwt.token_blacklist",
+    "drf_spectacular_websocket",
     "drf_spectacular",
     "drf_standardized_errors",
     "django_filters",
@@ -190,6 +191,12 @@ SPECTACULAR_SETTINGS = {
     "TITLE": "Chat Application",
     "DESCRIPTION": "Practice-oriented chat app with WebSocket support and JWT auth.",
     "VERSION": "1.0.0",
+    # Websocket
+    "SWAGGER_UI_SETTINGS": {
+        "connectSocket": True,  # Automatically establish a WS connection when opening swagger
+        "socketMaxMessages": 8,  # Max number of messages displayed in the log window in swagger
+        "socketMessagesInitialOpened": False,  # Automatically open the log window when opening swagger
+    },
     # Public serving configuration
     "SERVE_PUBLIC": True,
     "SERVE_INCLUDE_SCHEMA": False,
