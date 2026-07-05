@@ -80,8 +80,8 @@ CELERY_RESULT_EXTENDED = True
 # CELERY
 # ====================================
 
-RABBITMQ_USER = os.environ.get("RABBITMQ_USER", "guest")
-RABBITMQ_PASSWORD = os.environ.get("RABBITMQ_PASSWORD", "guest")
+RABBITMQ_USER = os.environ.get("RABBITMQ_DEFAULT_USER", "guest")
+RABBITMQ_PASSWORD = os.environ.get("RABBITMQ_DEFAULT_PASS", "guest")
 RABBITMQ_HOST = os.environ.get("RABBITMQ_HOST", "rabbitmq")
 RABBITMQ_PORT = os.environ.get("RABBITMQ_PORT", "5672")
 
