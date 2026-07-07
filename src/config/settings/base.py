@@ -55,6 +55,7 @@ THIRD_PARTY_APPS = [
     "drf_standardized_errors",
     "django_filters",
     "django_celery_results",
+    "django_celery_beat",
 ]
 
 PERSONAL_APPS = [

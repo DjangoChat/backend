@@ -25,25 +25,3 @@ def create_agent_response(sender, instance, created, **kwargs):
             message_type=MessageType.TEXT,
             content=response,
         )
-
-
-@receiver(post_save, sender=Message)
-def create_messages_statuses(sender, instance, created, **kwargs):
-    if created:
-        chat_participants = ChatParticipant.objects.filter(
-            chat=instance.chat,
-        ).exclude(
-            participant=instance.participant,
-        )
-        for chat_participant in chat_participants:
-            MessageStatus.objects.create(
-                participant=chat_participant.participant,
-                message=instance,
-            )
-
-
-@receiver(post_save, sender=Message)
-def update_chat_last_message(sender, instance, created, **kwargs):
-    if created:
-        instance.chat.last_message_at = instance.sent_at
-        instance.chat.save(update_fields=["last_message_at"])
