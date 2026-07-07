@@ -75,6 +75,7 @@ CHANNEL_LAYERS = {
 CELERY_RESULT_BACKEND = "django-db"
 CELERY_CACHE_BACKEND = "default"
 CELERY_RESULT_EXTENDED = True
+CELERY_RESULT_SERIALIZER = "json"
 
 # ====================================
 # CELERY
