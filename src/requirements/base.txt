@@ -29,3 +29,6 @@ stripe==14.4.1
 channels[daphne]
 channels[types]
 channels-redis==4.3.0
+
+# OBSERVABILITY
+django-prometheus==2.5.0

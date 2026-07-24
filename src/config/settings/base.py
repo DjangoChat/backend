@@ -56,6 +56,7 @@ THIRD_PARTY_APPS = [
     "django_filters",
     "django_celery_results",
     "django_celery_beat",
+    "django_prometheus",
 ]
 
 PERSONAL_APPS = [
@@ -73,6 +74,7 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + PERSONAL_APPS
 # ====================================
 
 DJANGO_MIDDLEWARE = [
+    "django_prometheus.middleware.PrometheusBeforeMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -81,6 +83,7 @@ DJANGO_MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django_prometheus.middleware.PrometheusAfterMiddleware",
 ]
 
 THIRD_PARTY_MIDDLEWARE = []
@@ -331,3 +334,10 @@ SIMPLE_JWT = {
     "REVOKE_TOKEN_CLAIM": "hash_password",
     "CHECK_USER_IS_ACTIVE": True,
 }
+
+
+# ====================================
+# PROMETHEUS
+# ====================================
+
+PROMETHEUS_METRIC_NAMESPACE = "NEUROCONNECT"

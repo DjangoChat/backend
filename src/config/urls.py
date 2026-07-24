@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path
-from .views import health_check
+from .views import HealthCheckView
 
 from drf_spectacular.views import (
     SpectacularAPIView,
@@ -14,7 +14,8 @@ urlpatterns = [
     path("api/v1/", include("Authentication.api.v1.urls")),
     path("api/v1/", include("Billing.api.v1.urls")),
     path("api/v1/", include("Chat.api.v1.urls")),
-    path("healthz/", health_check, name="health_check"),
+    path("api/health/", HealthCheckView.as_view(), name="health_check"),
+    path("", include("django_prometheus.urls")),
 ]
 
 if settings.DEBUG:
