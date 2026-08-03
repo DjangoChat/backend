@@ -1,11 +1,8 @@
-import logging
-
 import requests
 from rest_framework.exceptions import ValidationError
 
 
 class OllamaRepository:
-    logger = logging.getLogger(__name__)
 
     def __init__(self, model: str, endpoint: str):
         self.model = model
@@ -20,7 +17,6 @@ class OllamaRepository:
                     "messages": messages,
                 },
             )
-            self.logger.info(response)
         except:
             raise ValidationError("Something went wront with the api call")
         return response
@@ -34,7 +30,6 @@ class OllamaRepository:
                     "prompt": prompt,
                 },
             )
-            self.logger.info(response)
         except:
             raise ValidationError("Something went wront with the api call")
         return response

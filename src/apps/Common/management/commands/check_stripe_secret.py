@@ -1,7 +1,10 @@
 import os
 import time
+import structlog
 
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
+
+logger = structlog.get_logger(__name__)
 
 
 class Command(BaseCommand):
@@ -19,7 +22,7 @@ class Command(BaseCommand):
         timeout = options["timeout"]
         secret_file = "/stripe-secrets/webhook_secret"
 
-        self.stdout.write("Waiting for Stripe webhook secret...")
+        logger.info("Running command check_stripe_secret")
         start_time = time.time()
 
         while time.time() - start_time < timeout:
@@ -30,40 +33,24 @@ class Command(BaseCommand):
                         secret = f.read().strip()
 
                     if secret and secret.startswith("whsec_"):
-                        self.stdout.write(
-                            self.style.SUCCESS(
-                                f"✓ Stripe webhook secret loaded successfully: {secret[:20]}..."
-                            )
+                        logger.info(
+                            "Stipe webhook secret loaded sucessfully",
+                            secret=secret,
                         )
-                        # Set it as environment variable for this process
+
                         os.environ["STRIPE_WEBHOOK_SECRET"] = secret
                         return
                     else:
-                        self.stdout.write("Secret file exists but content is invalid")
+                        logger.info("Secret already exist")
                 except IOError as e:
-                    self.stdout.write(f"Error reading secret file: {e}")
-
-            elapsed = time.time() - start_time
-            remaining = timeout - elapsed
-            self.stdout.write(
-                f"Secret not ready yet... ({elapsed:.0f}s/{timeout}s, {remaining:.0f}s remaining)"
-            )
+                    logger.error(
+                        "check_stripe_secret_failed",
+                        reason=e,
+                    )
             time.sleep(1)
 
         # Timeout reached
-        self.stdout.write(
-            self.style.WARNING(
-                f"⚠ Stripe webhook secret not found after {timeout} seconds"
-            )
+        logger.error(
+            "check_stripe_secret_failed",
+            reason="Time out reached",
         )
-
-        # Check if there's a fallback secret in environment
-        if os.environ.get("STRIPE_WEBHOOK_SECRET"):
-            self.stdout.write(
-                self.style.WARNING("Using fallback secret from environment")
-            )
-        else:
-            raise CommandError(
-                "STRIPE_WEBHOOK_SECRET is not set and no secret file was generated. "
-                "Make sure stripe-cli container is running."
-            )

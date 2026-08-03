@@ -1,10 +1,13 @@
 from typing import Any
+import structlog
 
 from django.core.management.base import BaseCommand
 
 from apps.Billing.models import Plan
 from apps.Billing.service import CreateProductService
 from apps.Common.models import PlanOption
+
+logger = structlog.get_logger(__name__)
 
 
 class Command(BaseCommand):
@@ -20,7 +23,7 @@ class Command(BaseCommand):
 
     def handle(self, *args: Any, **options: Any) -> str | None:
 
-        self.stdout.write("CREATING PLAN COMMAND RUNNING")
+        logger.info("Running command create_plan")
 
         for option in PlanOption:
             new_plane, created = Plan.objects.get_or_create(

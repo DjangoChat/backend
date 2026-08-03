@@ -1,19 +1,21 @@
-import logging
+import structlog
+import stripe
+
 from datetime import datetime
 from datetime import timezone as dt_timezone
 
 from django.conf import settings
 
-import stripe
 from rest_framework import status
 
 from apps.Authentication.models import CustomUser
 from apps.Billing.models import Price, Subscription
 from apps.Common.models import StatusSuscription
 
+logger = structlog.get_logger(__name__)
+
 
 class StripeWebHookService:
-    logger = logging.getLogger(__name__)
 
     def execute(
         self,
@@ -25,10 +27,16 @@ class StripeWebHookService:
                 payload, sig_header, settings.STRIPE_WEBHOOK_SECRET
             )
         except ValueError as e:
-            self.logger.error("Error parsing payload: {}".format(str(e)))
+            logger.error(
+                "stripe_parsing_payload_failed",
+                reason=e,
+            )
             return status.HTTP_400_BAD_REQUEST
         except stripe.error.SignatureVerificationError as e:  # type: ignore
-            self.logger.error("Error verifying webhook signature: {}".format(str(e)))
+            logger.error(
+                "stripe_verify_webhook_signature_failed",
+                reason=e,
+            )
             return status.HTTP_400_BAD_REQUEST
 
         if event.type == "customer.subscription.created":
@@ -65,9 +73,9 @@ class StripeWebHookService:
         elif event.type == "customer.subscription.updated":
             pass
         elif event.type == "customer.subscription.deleted":
-            # canceled suscription
+            # TODO: canceled suscription
             pass
         else:
-            print("Unhandled event type {}".format(event.type))
+            logger.info("stripe_webhook_unhandled_event_type")
 
         return status.HTTP_200_OK

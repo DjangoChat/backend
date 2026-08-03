@@ -31,4 +31,6 @@ channels[types]
 channels-redis==4.3.0
 
 # OBSERVABILITY
+django-structlog==10.1.0
+rich==15.0.0
 django-prometheus==2.5.0

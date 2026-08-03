@@ -1,8 +1,11 @@
 from typing import Any
+import structlog
 
 from django.core.management.base import BaseCommand
 
 from apps.Billing.models import Currency
+
+logger = structlog.get_logger(__name__)
 
 
 class Command(BaseCommand):
@@ -11,7 +14,7 @@ class Command(BaseCommand):
 
     def handle(self, *args: Any, **options: Any) -> str | None:
 
-        self.stdout.write("CREATING CURRENCY COMMAND RUNNING")
+        logger.info("Running command create_currency")
 
         Currency.objects.get_or_create(
             code="pen",

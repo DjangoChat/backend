@@ -1,9 +1,12 @@
 from typing import Any
+import structlog
 
 from django.core.management.base import BaseCommand
 
 from apps.Billing.models import Feature, Plan
 from apps.Common.models import FeatureCode, PlanOption
+
+logger = structlog.get_logger(__name__)
 
 PLANS = {
     PlanOption.MEMBER: [
@@ -40,8 +43,7 @@ class Command(BaseCommand):
     help = "Create all features and assign them to plans"
 
     def handle(self, *args: Any, **options: Any) -> None:
-        """Create all features and assign them to plans"""
-        self.stdout.write("Creating features...")
+        logger.info("Running command create_feature")
 
         # Create features
         for feature_code, feature_data in FEATURES.items():
@@ -58,24 +60,11 @@ class Command(BaseCommand):
             try:
                 plan = Plan.objects.get(name=plan_name)
             except Plan.DoesNotExist:
-                self.stdout.write(
-                    self.style.ERROR(f"  Plan '{plan_name}' not found. Skipping...")
+                logger.error(
+                    "create_feature_failed",
+                    reason=f"Plan {plan_name} does not exists",
                 )
                 continue
 
             features = Feature.objects.filter(code__in=feature_codes)
-            if features.count() != len(feature_codes):
-                self.stdout.write(
-                    self.style.WARNING(
-                        f"  Warning: Not all features found for plan {plan_name}"
-                    )
-                )
-
             plan.features.set(features)
-            self.stdout.write(
-                self.style.SUCCESS(
-                    f"  ✓ {plan_name}: {features.count()} features assigned"
-                )
-            )
-
-        self.stdout.write(self.style.SUCCESS("\n✓ Command completed successfully!"))

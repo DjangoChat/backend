@@ -1,9 +1,12 @@
 from typing import Any
+import structlog
 
 from django.core.management.base import BaseCommand
 
 from apps.Billing.models import Period
 from apps.Common.models import Frequency
+
+logger = structlog.get_logger(__name__)
 
 
 class Command(BaseCommand):
@@ -12,7 +15,7 @@ class Command(BaseCommand):
 
     def handle(self, *args: Any, **options: Any) -> str | None:
 
-        self.stdout.write("CREATING PERIOD COMMAND RUNNING")
+        logger.info("Running command create_period")
 
         Period.objects.get_or_create(
             name=Frequency.MONTHLY,

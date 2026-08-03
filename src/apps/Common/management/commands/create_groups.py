@@ -1,4 +1,5 @@
 from typing import Any
+import structlog
 
 from django.contrib.auth.models import Group, Permission
 from django.core.management.base import BaseCommand
@@ -6,6 +7,8 @@ from django.core.management.base import BaseCommand
 from apps.Authentication.models import UserProfile
 from apps.Chat.models import Agent, Chat, Message, Nature, Participant
 from apps.Common.models import CustomGroups
+
+logger = structlog.get_logger(__name__)
 
 READ_PERMISSIONS = [
     "view",
@@ -43,7 +46,7 @@ class Command(BaseCommand):
 
     def handle(self, *args: Any, **options: Any) -> str | None:
 
-        self.stdout.write("CREATING GROUPS COMMAND RUNNING")
+        logger.info("Running command create_groups")
 
         for group_name in GROUPS_PERMISSIONS:
             group, created = Group.objects.get_or_create(name=group_name)
@@ -56,12 +59,8 @@ class Command(BaseCommand):
                     try:
                         perm_obj = Permission.objects.get(codename=codename)
                         group.permissions.add(perm_obj)
-                        self.stdout.write(
-                            codename
-                            + " added to the group "
-                            + group_name
-                            + " succesfully"
-                        )
-
                     except:
-                        self.stdout.write(codename + " not found")
+                        logger.error(
+                            "create_groups_failed",
+                            reason=f"{codename}, not found",
+                        )

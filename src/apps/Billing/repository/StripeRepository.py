@@ -1,4 +1,4 @@
-import logging
+import structlog
 
 from django.conf import settings
 
@@ -6,10 +6,10 @@ import stripe
 from stripe._error import APIConnectionError, APIError
 
 stripe.api_key = settings.STRIPE_API_KEY
+logger = structlog.get_logger(__name__)
 
 
 class StripeRepository:
-    logger = logging.getLogger(__name__)
 
     def create_customer(self, name, email, phone):
         try:
@@ -18,11 +18,12 @@ class StripeRepository:
                 email=email,
                 phone=phone,
             )
-        except APIConnectionError as e:
-            self.logger.error(f"Stripe connection error creating customer: {str(e)}")
-            raise
-        except APIError as e:
-            self.logger.error(f"Stripe API error creating customer: {str(e)}")
+        except (APIConnectionError, APIError) as e:
+            logger.error(
+                "stripe_create_cutomer_failed",
+                email=email,
+                reason=e,
+            )
             raise
 
     def create_stripe_product(self, name):
@@ -30,11 +31,12 @@ class StripeRepository:
             return stripe.Product.create(
                 name=name,
             )
-        except APIConnectionError as e:
-            self.logger.error(f"Stripe connection error creating product: {str(e)}")
-            raise
-        except APIError as e:
-            self.logger.error(f"Stripe API error creating product: {str(e)}")
+        except (APIConnectionError, APIError) as e:
+            logger.error(
+                "stripe_create_product_failed",
+                name=name,
+                reason=e,
+            )
             raise
 
     def create_stripe_price(self, currency, unit_amount, months, product_id):
@@ -45,11 +47,12 @@ class StripeRepository:
                 recurring={"interval": "month", "interval_count": months},
                 product=product_id,
             )
-        except APIConnectionError as e:
-            self.logger.error(f"Stripe connection error creating price: {str(e)}")
-            raise
-        except APIError as e:
-            self.logger.error(f"Stripe API error creating price: {str(e)}")
+        except (APIConnectionError, APIError) as e:
+            logger.error(
+                "stripe_create_price_failed",
+                product_id=product_id,
+                reason=e,
+            )
             raise
 
     def create_stripe_checkout_session(
@@ -68,11 +71,11 @@ class StripeRepository:
                 mode="subscription",
                 customer=customuser_stripe_id,
             )
-        except APIConnectionError as e:
-            self.logger.error(
-                f"Stripe connection error creating checkout session: {str(e)}"
+        except (APIConnectionError, APIError) as e:
+            logger.error(
+                "stripe_create_checkout_session_failed",
+                stripe_price_id=stripe_price_id,
+                customuser_stripe_id=customuser_stripe_id,
+                reason=e,
             )
-            raise
-        except APIError as e:
-            self.logger.error(f"Stripe API error creating checkout session: {str(e)}")
             raise
