@@ -422,3 +422,9 @@ SIMPLE_JWT = {
     "REVOKE_TOKEN_CLAIM": "hash_password",
     "CHECK_USER_IS_ACTIVE": True,
 }
+
+# ====================================
+# STRUCLOG - LOGGER
+# ====================================
+
+DJANGO_STRUCTLOG_CELERY_ENABLED = True
