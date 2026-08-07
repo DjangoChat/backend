@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path
-from .views import HealthCheckView
+from .views import health_check, readiness_check, liveness_check
 
 from drf_spectacular.views import (
     SpectacularAPIView,
@@ -14,7 +14,9 @@ urlpatterns = [
     path("api/v1/", include("Authentication.api.v1.urls")),
     path("api/v1/", include("Billing.api.v1.urls")),
     path("api/v1/", include("Chat.api.v1.urls")),
-    path("api/health/", HealthCheckView.as_view(), name="health_check"),
+    path("health/", health_check, name="health_check"),
+    path("ready/", readiness_check, name="readiness_check"),
+    path("live/", liveness_check, name="liveness_check"),
     path("", include("django_prometheus.urls")),
 ]
 
