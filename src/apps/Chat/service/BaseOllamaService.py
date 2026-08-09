@@ -8,5 +8,4 @@ class BaseOllamaService:
     def __init__(self):
         self.ollama_repo = OllamaRepository(
             settings.OLLAMA_MODEL,
-            settings.OLLAMA_URL,
         )

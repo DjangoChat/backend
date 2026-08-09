@@ -1,3 +1,4 @@
+from langchain_core.messages import HumanMessage, SystemMessage, AIMessage
 from apps.Chat.models import Message
 from apps.Common.models import ParticipantType
 
@@ -9,18 +10,18 @@ class OllamaChatService(BaseOllamaService):
         last_messages = Message.objects.filter(chat=chat).values_list(
             "content",
             "participant__participant_type",
-        )[:50]
-        return self.ollama_repo.chat(
-            messages=[{"role": "system", "content": prompt_type}]
+        )[:20]
+
+        messages = [
+            SystemMessage(content=prompt_type)
             + [
-                {
-                    "role": ("assistant" if j == ParticipantType.AGENT else "user"),
-                    "content": i,
-                }
-                for i, j in last_messages
-            ],
-        )[  # type: ignore
-            "message"
-        ][  # type: ignore
-            "content"
-        ]  # type: ignore
+                (
+                    HumanMessage(content)
+                    if type_user == "user"
+                    else AIMessage(content=content)
+                )
+                for content, type_user in last_messages
+            ]
+        ]
+
+        return self.ollama_repo.chat(messages=messages)
