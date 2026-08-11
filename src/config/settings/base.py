@@ -70,6 +70,7 @@ PERSONAL_APPS = [
     "Chat.apps.ChatConfig",
     "Common.apps.CommonConfig",
     "Billing.apps.BillingConfig",
+    "MachineLearning.apps.MachineLearninConfig",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + PERSONAL_APPS
