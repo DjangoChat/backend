@@ -3,10 +3,19 @@ from celery import shared_task
 from apps.Chat.models import Message
 from transformers import pipeline
 
-clasifier = pipeline(
-    "sentiment-analysis",  # type: ignore
-    model="cardiffnlp/twitter-roberta-base-sentiment-latest",
-)
+# Lazy-load classifier to avoid downloading model on startup
+_classifier = None
+
+
+def get_classifier():
+    """Lazy load the sentiment classifier on first use."""
+    global _classifier
+    if _classifier is None:
+        _classifier = pipeline(
+            "sentiment-analysis",  # type: ignore
+            model="cardiffnlp/twitter-roberta-base-sentiment-latest",
+        )
+    return _classifier
 
 
 @shared_task(bind=True, max_retries=3)
@@ -17,7 +26,8 @@ def create_message_sentiment_analysis(
     try:
         message = Message.objects.get(id=message_id)
         analysis = message.messageanalysis  # type: ignore
-        analysis.sentiment = clasifier(message.content)
+        classifier = get_classifier()
+        analysis.sentiment = classifier(message.content)[0].score
         analysis.save(update_fields=["sentiment"])
 
         return {

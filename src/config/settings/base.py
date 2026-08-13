@@ -70,7 +70,7 @@ PERSONAL_APPS = [
     "Chat.apps.ChatConfig",
     "Common.apps.CommonConfig",
     "Billing.apps.BillingConfig",
-    "MachineLearning.apps.MachineLearninConfig",
+    "MachineLearning.apps.MachineLearningConfig",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + PERSONAL_APPS
@@ -429,3 +429,9 @@ SIMPLE_JWT = {
 # ====================================
 
 DJANGO_STRUCTLOG_CELERY_ENABLED = True
+
+# ====================================
+# HUGGING FACE - MODELS/DATASETS
+# ====================================
+
+HF_TOKEN = os.environ.get("HF_TOKEN", "")

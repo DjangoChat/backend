@@ -170,7 +170,10 @@ class OllamaRepository:
             # response_format=
         )
 
-    def chat(self, messages=[]):
-        response = self.model.invoke(messages)
+    def chat(self, messages, user_id):
+        response = self.agent.invoke(
+            messages=messages,
+            context=UserContext(user_id=user_id),
+        )
         logger.info(response.content)
         return response.content

@@ -1,1 +1,1 @@
-from apps.MachineLearning.models.MessageMLAnalysis import MessageAnalysis
+from apps.MachineLearning.models.MessageAnalysis import MessageAnalysis

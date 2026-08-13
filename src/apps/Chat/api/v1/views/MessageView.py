@@ -19,10 +19,17 @@ class MessageView(
     pagination_class = MessagePagination
 
     def perform_create(self, serializer):
-        user = self.request.user
+        participant = self.request.user.participant  # type: ignore
+        data = serializer.validated_data
+
         CreateMessageService().execute(
-            serializer,
-            user,
+            chat=data["chat"],
+            participant=participant,
+            message_type=data["message_type"],
+            content=data["content"],
+            image=data.get("image"),
+            attach=data.get("attach"),
+            video=data.get("video"),
         )
 
     @create_message

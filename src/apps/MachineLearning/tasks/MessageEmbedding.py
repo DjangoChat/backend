@@ -3,7 +3,16 @@ from celery import shared_task
 from sentence_transformers import SentenceTransformer
 from apps.Chat.models import Message
 
-model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+# Lazy-load model to avoid downloading on startup
+_model = None
+
+
+def get_model():
+    """Lazy load the embedding model on first use."""
+    global _model
+    if _model is None:
+        _model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+    return _model
 
 
 @shared_task(bind=True, max_retries=3)
@@ -13,6 +22,7 @@ def create_message_embedding(
 ):
     try:
         message = Message.objects.get(id=message_id)
+        model = get_model()
         embedding = model.encode(message.content)
 
         analysis = message.messageanalysis  # type: ignore

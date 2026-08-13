@@ -47,16 +47,19 @@ def health_check(request):
         health["status"] = "unhealthy"
         health["checks"]["cache"] = {"status": "unhealthy", "error": str(e)}
 
-    # Celery check
+    # Celery check (optional, with timeout)
     try:
         from config.celery import app
 
-        inspect = app.control.inspect()
+        inspect = app.control.inspect(timeout=2)
         stats = inspect.stats()
         if stats:
             health["checks"]["celery"] = {"status": "healthy", "workers": len(stats)}
         else:
-            raise Exception("No workers responding")
+            health["checks"]["celery"] = {
+                "status": "degraded",
+                "error": "No workers responding",
+            }
     except Exception as e:
         logger.warning("health_check_celery_failed", error=str(e))
         health["checks"]["celery"] = {"status": "degraded", "error": str(e)}
