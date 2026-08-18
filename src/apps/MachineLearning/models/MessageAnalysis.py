@@ -2,12 +2,13 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from pgvector.django import VectorField
 
+from apps.Chat.models import Message
 from apps.Common.models import CustomModel
 
 
 class MessageAnalysis(CustomModel):
     message = models.OneToOneField(
-        "Message",
+        Message,
         on_delete=models.CASCADE,
     )
     sentiment = models.FloatField(
