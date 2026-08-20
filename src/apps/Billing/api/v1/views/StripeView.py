@@ -33,7 +33,7 @@ class StripeView(viewsets.ViewSet):
         checkout_session = CreateSessionService().execute(
             success_url=validated_data["success_url"],
             cancel_url=validated_data["cancel_url"],
-            stripe_price_id=validated_data["stripe_price_id"],
+            price_id=validated_data["price_id"],
             customuser_stripe_id=request.user.strip_customer_id,
         )
         response = CheckoutSessionSerializerOutput(

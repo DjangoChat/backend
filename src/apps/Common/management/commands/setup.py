@@ -20,8 +20,15 @@ class Command(BaseCommand):
             "create_participant_agent",
         ]
 
-        for command in commands:
-            self.stdout.write(f"Running {command}...")
-            call_command(command)
+        for i, command in enumerate(commands, 1):
+            self.stdout.write(f"\n[{i}/{len(commands)}] Running {command}...")
+            try:
+                call_command(command)
+                self.stdout.write(self.style.SUCCESS(f"✓ {command} completed"))
+            except Exception as e:
+                self.stdout.write(self.style.ERROR(f"✗ {command} failed: {str(e)}"))
+                raise
 
-        self.stdout.write(self.style.SUCCESS("Application setup completed."))
+        self.stdout.write(
+            self.style.SUCCESS("\nApplication setup completed successfully!")
+        )

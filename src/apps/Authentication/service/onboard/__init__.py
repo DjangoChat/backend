@@ -1,1 +1,1 @@
-from .MetadataUserService import MetadataUserService
+from apps.Authentication.service.onboard.MetadataUserService import MetadataUserService
