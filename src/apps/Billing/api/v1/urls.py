@@ -6,7 +6,7 @@ from .views import PriceView, StripeView
 
 router = DefaultRouter()
 router.register(r"prices", PriceView, basename="price")
-router.register(r"stripes", StripeView, basename="stripe")
+router.register(r"stripe", StripeView, basename="stripe")
 
 urlpatterns = [
     path("", include(router.urls)),

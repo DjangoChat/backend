@@ -88,6 +88,14 @@ CELERY_BROKER_URL = (
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 
+# Route ML-heavy tasks to a dedicated queue so they never block
+# lightweight tasks (e.g. agent responses).
+CELERY_TASK_QUEUES_DEFAULT = "default"
+CELERY_TASK_ROUTES = {
+    "apps.MachineLearning.tasks.*": {"queue": "ml"},
+}
+CELERY_TASK_DEFAULT_QUEUE = "default"
+
 # ====================================
 # STATIC CONTENT
 # ====================================

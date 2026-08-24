@@ -1,14 +1,20 @@
 from celery import shared_task
 
-from umap import UMAP
-from hdbscan import HDBSCAN
-from sklearn.feature_extraction.text import CountVectorizer
-
-from bertopic import BERTopic
-from bertopic.representation import KeyBERTInspired
-from bertopic.vectorizers import ClassTfidfTransformer
+from keybert import KeyBERT
 
 from apps.Chat.models import Message
+from apps.MachineLearning.tasks.MessageEmbedding import get_model
+
+# Lazy-load KeyBERT, reusing the SentenceTransformer already in memory
+_kw_model = None
+
+
+def get_kw_model():
+    """Lazy-load KeyBERT, sharing the embedding model already loaded."""
+    global _kw_model
+    if _kw_model is None:
+        _kw_model = KeyBERT(model=get_model())
+    return _kw_model
 
 
 @shared_task(bind=True, max_retries=3)
@@ -19,48 +25,25 @@ def create_message_topic_analysis(
     try:
         message = Message.objects.get(id=message_id)
         analysis = message.messageanalysis  # type: ignore
-        documents = [message.content]
-        embeddings = [analysis.embedding]
 
-        umap_model = UMAP(
-            n_neighbors=15,
-            n_components=5,
-            min_dist=0.0,
-            metric="cosine",
-            random_state=42,
-        )
-
-        hdbscan_model = HDBSCAN(
-            min_cluster_size=10,
-            metric="euclidean",
-            cluster_selection_method="eom",
-            prediction_data=True,
-        )
-
-        vectorizer_model = CountVectorizer(
+        kw_model = get_kw_model()
+        keywords = kw_model.extract_keywords(
+            message.content,
+            keyphrase_ngram_range=(1, 2),
             stop_words="english",
-            ngram_range=(1, 2),
+            top_n=5,
         )
 
-        ctfidf_model = ClassTfidfTransformer()
-
-        representation_model = KeyBERTInspired()
-
-        topic_model = BERTopic(
-            umap_model=umap_model,
-            hdbscan_model=hdbscan_model,
-            vectorizer_model=vectorizer_model,
-            ctfidf_model=ctfidf_model,
-            representation_model=representation_model,
-        )
-
-        topics, probabilities = topic_model.fit_transform(
-            documents=documents,
-            embeddings=embeddings,  # type: ignore
-        )
-
-        analysis.topics = topics
+        # Store as list of {"keyword": str, "score": float}
+        analysis.topics = [
+            {"keyword": kw, "score": round(score, 4)} for kw, score in keywords
+        ]
         analysis.save(update_fields=["topics"])
+
+        return {"message_id": message_id, "status": "success"}
+
+    except Message.DoesNotExist:
+        raise
 
     except Exception as e:
         self.retry(countdown=2, exc=e)
