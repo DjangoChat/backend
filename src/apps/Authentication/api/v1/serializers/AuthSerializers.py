@@ -31,6 +31,7 @@ class LoginResponseSerializer(serializers.Serializer):
 
 
 class ParticipantDataSerializer(serializers.Serializer):
+    required = serializers.BooleanField(default=True)
     first_name = serializers.CharField()
     last_name = serializers.CharField()
     nickname = serializers.CharField()
@@ -39,31 +40,43 @@ class ParticipantDataSerializer(serializers.Serializer):
 
 
 class SubscriptionDataSerializer(serializers.Serializer):
+    required = serializers.BooleanField(default=True)
     plan = serializers.CharField()
     status = serializers.CharField()
-    current_period_end = serializers.DateTimeField()
+    current_period_end = serializers.DateTimeField(allow_null=True)
 
 
 class AccessDataSerializer(serializers.Serializer):
+    required = serializers.BooleanField(default=True)
     has_access = serializers.BooleanField()
-    last_day = serializers.DateTimeField()
+    last_day = serializers.DateTimeField(allow_null=True)
 
 
 class MeSerializerOutput(serializers.Serializer):
-    participant = serializers.SerializerMethodField(allow_null=True)
-    subscription = serializers.SerializerMethodField(allow_null=True)
+    user = serializers.SerializerMethodField()
+    subscription = serializers.SerializerMethodField()
     has_access = serializers.SerializerMethodField()
 
-    def get_participant(self, user):
+    def get_user(self, user):
         try:
             participant = user.participant
         except Participant.DoesNotExist:
-            return None
+            return ParticipantDataSerializer(
+                {
+                    "required": True,
+                    "first_name": "",
+                    "last_name": "",
+                    "nickname": "",
+                    "group": None,
+                    "avatar": None,
+                }
+            ).data
 
         groups = list(user.groups.values_list("name", flat=True))
 
         return ParticipantDataSerializer(
             {
+                "required": False,
                 "first_name": participant.first_name,
                 "last_name": participant.last_name,
                 "nickname": participant.nickname,
@@ -76,10 +89,18 @@ class MeSerializerOutput(serializers.Serializer):
         subscription = Subscription.objects.filter(user=user).first()
 
         if not subscription:
-            return None
+            return SubscriptionDataSerializer(
+                {
+                    "required": True,
+                    "plan": "",
+                    "status": "",
+                    "current_period_end": None,
+                }
+            ).data
 
         return SubscriptionDataSerializer(
             {
+                "required": False,
                 "plan": subscription.plan_name,
                 "status": subscription.status,
                 "current_period_end": subscription.current_period_end,
@@ -91,6 +112,7 @@ class MeSerializerOutput(serializers.Serializer):
 
         if not subscription:
             return {
+                "required": True,
                 "has_access": False,
                 "last_day": None,
             }
@@ -102,12 +124,14 @@ class MeSerializerOutput(serializers.Serializer):
         ):
             return AccessDataSerializer(
                 {
+                    "required": False,
                     "has_access": True,
                     "last_day": subscription.current_period_end,
                 }
             ).data
 
         return {
+            "required": False,
             "has_access": False,
             "last_day": None,
         }
