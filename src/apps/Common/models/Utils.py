@@ -205,3 +205,8 @@ class ConsumerEvent(models.TextChoices):
     TYPING_STOPED = "typing_stope"
     RECORDING_STARTED = "recording_started"
     RECORDING_STOPED = "recording_stoped"
+
+
+class ParticipantRepresentation(models.TextChoices):
+    DETAILED = "detailed"
+    BRIEF = "brief"

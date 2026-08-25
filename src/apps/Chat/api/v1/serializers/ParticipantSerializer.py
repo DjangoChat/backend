@@ -12,13 +12,6 @@ class ParticipantSerializer(serializers.ModelSerializer):
         model = Participant
         fields = [
             "id",
-            "user",
-            "agent",
-            "first_name",
-            "last_name",
-            "nickname",
-            "avatar",
-            "participant_status",
             "details",
         ]
 

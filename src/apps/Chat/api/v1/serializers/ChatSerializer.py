@@ -21,7 +21,7 @@ class BasicParticipantSerializer(serializers.ModelSerializer):
             "last_name",
             "nickname",
             "avatar",
-            "status",
+            "participant_status",
         )
 
 
