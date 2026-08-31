@@ -20,6 +20,6 @@ class ParticipantFilter(FilterSet):
     class Meta:
         model = Participant
         fields = [
-            "filterset_fields",
+            "participant_type",
             "representation",
         ]

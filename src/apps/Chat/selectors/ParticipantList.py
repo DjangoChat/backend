@@ -1,7 +1,7 @@
-from apps.Authentication.models import CustomUser
-from apps.Chat.models import Participant
-
 from django.db.models import QuerySet
+
+from apps.Authentication.models import CustomUser
+from apps.Chat.models import Contact, Participant
 from apps.Common.models import ParticipantType
 
 
@@ -16,7 +16,7 @@ def participant_list_for_user(user: CustomUser) -> QuerySet[Participant]:
     )
 
     if user_participant:
-        user_contacts = Participant.objects.filter(contact__owner=user_participant)
+        user_contacts = Participant.objects.filter(contact_of__owner=user_participant)
         queryset = queryset | user_contacts
 
     return queryset.distinct()

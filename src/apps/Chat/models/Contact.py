@@ -9,10 +9,12 @@ class Contact(CustomModel):
     owner = models.ForeignKey(
         Participant,
         on_delete=models.CASCADE,
+        related_name="owned_contacts",
     )
     contact = models.ForeignKey(
         Participant,
         on_delete=models.CASCADE,
+        related_name="contact_of",
     )
 
     class Meta:
