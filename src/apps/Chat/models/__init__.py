@@ -5,3 +5,4 @@ from apps.Chat.models.Message import Message
 from apps.Chat.models.MessageStatus import MessageStatus
 from apps.Chat.models.Nature import Nature
 from apps.Chat.models.Participant import Participant
+from apps.Chat.models.Contact import Contact

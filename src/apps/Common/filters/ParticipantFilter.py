@@ -12,9 +12,6 @@ class ParticipantFilter(FilterSet):
     )
 
     def filter_representation(self, queryset, name, value):
-        # Filter participants by their representation type
-        # Note: The actual serializer switching happens in ParticipantView.get_serializer_class()
-        # This filter can be used to filter the queryset if needed
         return queryset
 
     class Meta:
@@ -22,4 +19,6 @@ class ParticipantFilter(FilterSet):
         fields = [
             "participant_type",
             "representation",
+            "agent__agent_type",
+            "agent__natures__name",
         ]

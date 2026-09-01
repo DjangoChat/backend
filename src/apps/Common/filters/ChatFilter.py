@@ -12,7 +12,9 @@ class ChatFilter(django_filters.FilterSet):
 
     class Meta:
         model = Chat
-        fields = []
+        fields = [
+            "chat_type",
+        ]
 
     def filter_chat_type(self, queryset, name, value):
         current_user = self.request.user  # type: ignore

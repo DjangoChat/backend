@@ -1,8 +1,8 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from apps.Common.models import CustomModel
 from apps.Chat.models import Participant
+from apps.Common.models import CustomModel
 
 
 class Contact(CustomModel):

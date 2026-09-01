@@ -1,7 +1,7 @@
 from django.db.models import QuerySet
 
 from apps.Authentication.models import CustomUser
-from apps.Chat.models import Contact, Participant
+from apps.Chat.models import Participant
 from apps.Common.models import ParticipantType
 
 
