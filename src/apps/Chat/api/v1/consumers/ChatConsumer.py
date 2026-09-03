@@ -1,6 +1,5 @@
 import json
 
-from asgiref.sync import async_to_sync
 from channels.generic.websocket import AsyncWebsocketConsumer
 from rest_framework.exceptions import NotFound, PermissionDenied, ValidationError
 
@@ -40,7 +39,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         if not self.check_user_has_perm():
             raise PermissionDenied
 
-        async_to_sync(self.channel_layer.group_add)(
+        await self.channel_layer.group_add(
             self.chat_room_socket__name,
             self.channel_name,
         )
@@ -52,7 +51,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             self.channel_name,
         )
 
-    def receive(self, text_data):
+    async def receive(self, text_data):
         data = json.loads(text_data)
         base_serializer = BaseEventSerializer(data=data)
         base_serializer.is_valid(raise_exception=True)

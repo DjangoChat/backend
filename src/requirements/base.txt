@@ -30,6 +30,7 @@ stripe==14.4.1
 channels[daphne]
 channels[types]
 channels-redis==4.3.0
+redis>=7.4.0,<8.0.0
 
 # OBSERVABILITY
 django-structlog[celery]

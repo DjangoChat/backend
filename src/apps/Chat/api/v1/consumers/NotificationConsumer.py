@@ -1,6 +1,5 @@
 import json
 
-from asgiref.sync import async_to_sync
 from channels.generic.websocket import AsyncWebsocketConsumer
 
 
@@ -10,7 +9,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
         self.user = self.scope["user"]  # type: ignore
         self.notification_socket_name = f"notification__{self.user.id}"  # type: ignore
 
-        async_to_sync(self.channel_layer.group_add)(
+        await self.channel_layer.group_add(
             self.notification_socket_name,
             self.channel_name,
         )

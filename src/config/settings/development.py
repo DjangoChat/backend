@@ -58,7 +58,20 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [REDIS_URL],
+            # Explicitly disable the read timeout on the channel layer's
+            # Redis connection. redis-py >=8.0.0 defaults socket_timeout to
+            # 5s, which aborts RedisChannelLayer's blocking BZPOPMIN read
+            # every ~5s of idle silence and kills the WebSocket consumer.
+            # See https://github.com/django/channels_redis/issues/422
+            "hosts": [
+                {
+                    "address": REDIS_URL,
+                    "socket_timeout": None,
+                    "socket_keepalive": True,
+                    "health_check_interval": 15,
+                    "retry_on_timeout": True,
+                }
+            ],
         },
     },
 }
