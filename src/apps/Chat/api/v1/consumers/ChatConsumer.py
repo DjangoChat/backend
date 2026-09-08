@@ -1,5 +1,6 @@
 import json
 
+from asgiref.sync import sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 from rest_framework.exceptions import NotFound, PermissionDenied, ValidationError
 
@@ -27,8 +28,8 @@ EVENT_SERIALIZERS = {
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.user = self.scope["user"]  # type: ignore
-        chat_id = self.scope["url_route"]["kwargs"]["conversation_id"]  # type: ignore
-        chat = self.get_chat(chat_id)
+        chat_id = self.scope["url_route"]["kwargs"]["chat_id"]  # type: ignore
+        chat = await self.get_chat(chat_id)
 
         if chat is None:
             raise NotFound
@@ -36,7 +37,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.chat = chat
         self.chat_room_socket__name = f"chat_room__{self.chat.id}"  # type: ignore
 
-        if not self.check_user_has_perm():
+        if not await self.check_user_has_perm():
             raise PermissionDenied
 
         await self.channel_layer.group_add(
@@ -77,9 +78,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         raise ValidationError("There is no event type that match this request")
 
+    @sync_to_async
     def get_chat(self, chat_id):
         return Chat.objects.filter(id=chat_id).first()
 
+    @sync_to_async
     def check_user_has_perm(self):
         return Chat.objects.filter(
             id=self.chat.id,

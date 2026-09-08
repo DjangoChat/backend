@@ -50,6 +50,7 @@ class ChatParticipantSerializer(serializers.ModelSerializer):
 class ChatDetailedSerializer(serializers.ModelSerializer):
     last_message = serializers.SerializerMethodField()
     metadata = serializers.SerializerMethodField()
+    participants = serializers.SerializerMethodField()
 
     class Meta:
         model = Chat
@@ -59,6 +60,7 @@ class ChatDetailedSerializer(serializers.ModelSerializer):
             "photo",
             "last_message",
             "metadata",
+            "participants",
         ]
 
     def get_last_message(self, obj):
@@ -80,6 +82,19 @@ class ChatDetailedSerializer(serializers.ModelSerializer):
             ChatParticipantSerializer(chat_participant).data
             if chat_participant
             else None
+        )
+
+    def get_participants(self, obj):
+        request = self.context.get("request")
+
+        if request is None:
+            return None
+
+        participant = request.user.participant
+        return (
+            Participant.objects.filter(chatparticipant__chat=obj)
+            .exclude(id=participant.id)
+            .values_list("id", flat=True)
         )
 
 
