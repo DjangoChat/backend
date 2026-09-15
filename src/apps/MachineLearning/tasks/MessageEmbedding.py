@@ -1,6 +1,6 @@
 from celery import shared_task
-
 from sentence_transformers import SentenceTransformer
+
 from apps.Chat.models import Message
 
 # Lazy-load model to avoid downloading on startup

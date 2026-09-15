@@ -1,7 +1,7 @@
 from celery import shared_task
+from transformers import pipeline
 
 from apps.Chat.models import Message
-from transformers import pipeline
 
 # Lazy-load classifier to avoid downloading model on startup
 _classifier = None

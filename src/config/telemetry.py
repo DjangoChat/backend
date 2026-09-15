@@ -2,22 +2,21 @@ import logging
 import os
 
 from opentelemetry import trace
+from opentelemetry._logs import set_logger_provider
+from opentelemetry.exporter.otlp.proto.http._log_exporter import OTLPLogExporter
 from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
 from opentelemetry.instrumentation.django import DjangoInstrumentor
+from opentelemetry.instrumentation.logging import LoggingInstrumentor
+from opentelemetry.instrumentation.psycopg2 import Psycopg2Instrumentor
+from opentelemetry.instrumentation.redis import RedisInstrumentor
+from opentelemetry.instrumentation.requests import RequestsInstrumentor
+from opentelemetry.instrumentation.urllib import URLLibInstrumentor
+from opentelemetry.instrumentation.urllib3 import URLLib3Instrumentor
+from opentelemetry.sdk._logs import LoggerProvider, LoggingHandler
+from opentelemetry.sdk._logs.export import BatchLogRecordProcessor
 from opentelemetry.sdk.resources import Resource
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
-
-from opentelemetry.sdk._logs import LoggerProvider, LoggingHandler
-from opentelemetry._logs import set_logger_provider
-from opentelemetry.exporter.otlp.proto.http._log_exporter import OTLPLogExporter
-from opentelemetry.sdk._logs.export import BatchLogRecordProcessor
-from opentelemetry.instrumentation.logging import LoggingInstrumentor
-from opentelemetry.instrumentation.urllib import URLLibInstrumentor
-from opentelemetry.instrumentation.urllib3 import URLLib3Instrumentor
-from opentelemetry.instrumentation.redis import RedisInstrumentor
-from opentelemetry.instrumentation.requests import RequestsInstrumentor
-from opentelemetry.instrumentation.psycopg2 import Psycopg2Instrumentor
 
 _ALREADY = False
 

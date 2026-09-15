@@ -1,7 +1,8 @@
 from typing import Any
-import structlog
 
 from django.core.management.base import BaseCommand
+
+import structlog
 
 from apps.Billing.models import Feature, Plan
 from apps.Common.models import FeatureCode, PlanOption

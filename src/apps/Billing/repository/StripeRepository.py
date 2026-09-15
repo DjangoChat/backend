@@ -1,8 +1,7 @@
-import structlog
-
 from django.conf import settings
 
 import stripe
+import structlog
 from stripe._error import APIConnectionError, APIError
 
 stripe.api_key = settings.STRIPE_API_KEY

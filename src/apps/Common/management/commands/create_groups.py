@@ -1,8 +1,9 @@
 from typing import Any
-import structlog
 
 from django.contrib.auth.models import Group, Permission
 from django.core.management.base import BaseCommand
+
+import structlog
 
 from apps.Authentication.models import UserProfile
 from apps.Chat.models import Agent, Chat, Message, Nature, Participant

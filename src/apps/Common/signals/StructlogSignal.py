@@ -1,8 +1,9 @@
 from django.contrib.sites.shortcuts import get_current_site
 from django.dispatch import receiver
+
+import structlog
 from django_structlog import signals
 from django_structlog.celery import signals as celery_signals
-import structlog
 
 
 @receiver(signals.update_failure_response)

@@ -1,7 +1,7 @@
 from django.db import transaction
 from django.db.models import F
 
-from apps.Chat.models import ChatParticipant, Message, MessageStatus
+from apps.Chat.models import Chat, ChatParticipant, Message, MessageStatus, Participant
 from apps.Common.models import ParticipantType
 
 
@@ -10,8 +10,8 @@ class CreateMessageService:
     @transaction.atomic
     def execute(
         self,
-        chat,
-        participant,
+        chat: Chat,
+        participant: Participant,
         message_type,
         content,
         image=None,
@@ -60,6 +60,9 @@ class CreateMessageService:
         return self.message
 
     def _check_participant_has_permission(self):
+        if self.participant.agent:
+            return
+
         if not self.chat.check_participant_can_write(self.participant):
             from rest_framework.exceptions import PermissionDenied
 

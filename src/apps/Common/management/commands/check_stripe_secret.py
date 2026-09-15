@@ -1,8 +1,9 @@
 import os
 import time
-import structlog
 
 from django.core.management.base import BaseCommand
+
+import structlog
 
 logger = structlog.get_logger(__name__)
 

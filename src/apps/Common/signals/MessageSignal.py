@@ -12,21 +12,14 @@ from apps.Chat.api.v1.serializers import (
     MessageDetailedSerializer,
 )
 from apps.Chat.models import ChatParticipant, Message
+from apps.Common.models import ParticipantType
 from apps.MachineLearning.models import MessageAnalysis
 from apps.MachineLearning.tasks import (
-    create_message_topic_analysis,
-    create_message_sentiment_analysis,
-    create_message_emotion_analysis,
     create_message_embedding,
+    create_message_emotion_analysis,
+    create_message_sentiment_analysis,
+    create_message_topic_analysis,
 )
-from apps.Common.models import ParticipantType
-from apps.Chat.api.v1.serializers import (
-    ChatDetailedSerializer,
-    MessageDetailedSerializer,
-)
-
-from asgiref.sync import async_to_sync
-from channels.layers import get_channel_layer
 
 
 # TODO: Re-enable when notification consumer logic is ready

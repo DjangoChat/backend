@@ -164,11 +164,13 @@ class OllamaRepository:
                 # Layer 3: Model-based safety check (after agent)
             ],
             context_schema=UserContext,
-            system_prompt=SystemMessage("""
+            system_prompt=SystemMessage(
+                """
                 You are a conversational AI engaging in natural dialogue.
                 Your goal is to build rapport and understand the user through conversation.
                 You are talking on an chat application which means your response should be consiced and enaging.
-                """),
+                """
+            ),
             # response_format=
         )
 

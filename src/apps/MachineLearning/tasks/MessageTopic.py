@@ -1,5 +1,4 @@
 from celery import shared_task
-
 from keybert import KeyBERT
 
 from apps.Chat.models import Message

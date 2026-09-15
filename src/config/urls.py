@@ -1,13 +1,14 @@
 from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path
-from .views import health_check, readiness_check, liveness_check
 
 from drf_spectacular.views import (
     SpectacularAPIView,
     SpectacularRedocView,
     SpectacularSwaggerView,
 )
+
+from .views import health_check, liveness_check, readiness_check
 
 urlpatterns = [
     path("admin/", admin.site.urls),

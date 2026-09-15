@@ -1,11 +1,10 @@
-import structlog
-import stripe
-
 from datetime import datetime
 from datetime import timezone as dt_timezone
 
 from django.conf import settings
 
+import stripe
+import structlog
 from rest_framework import status
 
 from apps.Authentication.models import CustomUser
