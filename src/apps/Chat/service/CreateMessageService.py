@@ -1,9 +1,8 @@
 from django.db import transaction
 from django.db.models import F
 
-from apps.Chat.models import ChatParticipant, MessageStatus, Message
+from apps.Chat.models import ChatParticipant, Message, MessageStatus
 from apps.Common.models import ParticipantType
-from apps.Chat.tasks import create_agent_response
 
 
 class CreateMessageService:
@@ -37,14 +36,26 @@ class CreateMessageService:
         self._update_chat_last_message()
         self._create_message_statuses()
 
-        if participant.agent:
-            transaction.on_commit(
-                lambda: create_agent_response(
+        # Trigger agent response only if:
+        # 1. Chat has an agent participant AND
+        # 2. The sender is a user (not the agent itself)
+        agent_in_chat = ChatParticipant.objects.filter(
+            chat=self.chat,
+            participant__participant_type=ParticipantType.AGENT,
+        ).exists()
+
+        if agent_in_chat and self.participant.participant_type == ParticipantType.USER:
+
+            def trigger_agent():
+                from apps.Chat.tasks import create_agent_response
+
+                create_agent_response(
                     id_chat=self.chat.id,
                     id_message=self.message.id,
                     id_participant=self.participant.id,
                 )
-            )
+
+            transaction.on_commit(trigger_agent)
 
         return self.message
 
@@ -60,8 +71,8 @@ class CreateMessageService:
 
     def _create_message_statuses(self):
         list_participants = (
-            ChatParticipant.objects.filter(self.chat)
-            .exclude(self.participant)
+            ChatParticipant.objects.filter(chat=self.chat)
+            .exclude(id=self.participant.id)
             .exclude(participant__participant_type=ParticipantType.AGENT)
         )
 

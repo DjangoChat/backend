@@ -35,14 +35,12 @@ class MessageDetailedSerializer(serializers.ModelSerializer):
 
 
 class MessageSerializer(serializers.ModelSerializer):
-    participant = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
         model = Message
         fields = [
             "id",
             "chat",
-            "participant",
             "message_type",
             "content",
             "image",

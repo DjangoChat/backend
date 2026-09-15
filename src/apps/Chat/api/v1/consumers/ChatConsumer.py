@@ -78,6 +78,22 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         raise ValidationError("There is no event type that match this request")
 
+    async def chat_message(self, event):
+        """
+        Handler for messages sent via the channel layer (from signals).
+        Broadcasts the message to all connected clients in the chat room.
+        """
+        message_data = event.get("data")
+
+        await self.send(
+            text_data=json.dumps(
+                {
+                    "type": "message_created",
+                    "data": message_data,
+                }
+            )
+        )
+
     @sync_to_async
     def get_chat(self, chat_id):
         return Chat.objects.filter(id=chat_id).first()

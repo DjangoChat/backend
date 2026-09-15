@@ -1,11 +1,10 @@
 import os
 import sys
-import structlog
-
 from datetime import timedelta
 from pathlib import Path
-from rich.logging import RichHandler
 
+import structlog
+from rich.logging import RichHandler
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
@@ -435,3 +434,9 @@ DJANGO_STRUCTLOG_CELERY_ENABLED = True
 # ====================================
 
 HF_TOKEN = os.environ.get("HF_TOKEN", "")
+
+# ====================================
+# OLLAMA - MODELS
+# ====================================
+
+OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "")

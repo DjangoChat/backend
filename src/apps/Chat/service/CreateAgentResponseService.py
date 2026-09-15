@@ -1,20 +1,23 @@
-from apps.Chat.service import OllamaChatService, CreateMessageService
-from apps.Chat.models import ChatParticipant, Message
+from apps.Chat.models import ChatParticipant
+from apps.Chat.service.CreateMessageService import CreateMessageService
+from apps.Chat.service.OllamaChatService import OllamaChatService
 from apps.Common.models import MessageType, ParticipantType
 
 
 class CreateAgentResponseService:
 
     def execute(self, chat, message, participant):
-        response = OllamaChatService().execute(
-            chat=chat,
-            prompt_type=participant.agent.promp_type,
-        )
-
         agent_participant = (
             ChatParticipant.objects.filter(chat=chat)
             .filter(participant__participant_type=ParticipantType.AGENT)
             .first()
+        )
+
+        assert agent_participant is not None
+        response = OllamaChatService().execute(
+            chat=chat,
+            prompt_type=agent_participant.participant.agent.promp_type,
+            user_id=participant.user.id,
         )
 
         return CreateMessageService().execute(

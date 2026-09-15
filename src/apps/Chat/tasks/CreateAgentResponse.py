@@ -1,7 +1,7 @@
 from celery import shared_task
 
 from apps.Chat.models import Chat, Message, Participant
-from apps.Chat.service import CreateAgentResponseService
+from apps.Chat.service.CreateAgentResponseService import CreateAgentResponseService
 
 
 @shared_task(bind=True, max_retries=3)
