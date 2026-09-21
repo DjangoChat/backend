@@ -56,3 +56,4 @@ langchain-ollama==1.1.0
 sentence-transformers==5.7.0
 keybert==0.8.5
 transformers[torch]
+langfuse==4.15.4

@@ -32,11 +32,8 @@ class LoginResponseSerializer(serializers.Serializer):
 
 class ParticipantDataSerializer(serializers.Serializer):
     required = serializers.BooleanField(default=True)
-    first_name = serializers.CharField()
-    last_name = serializers.CharField()
-    nickname = serializers.CharField()
+    id = serializers.UUIDField(default=True)
     group = serializers.CharField(allow_null=True)
-    avatar = serializers.ImageField(allow_null=True)
 
 
 class SubscriptionDataSerializer(serializers.Serializer):
@@ -64,11 +61,8 @@ class MeSerializerOutput(serializers.Serializer):
             return ParticipantDataSerializer(
                 {
                     "required": True,
-                    "first_name": "",
-                    "last_name": "",
-                    "nickname": "",
+                    "id": None,
                     "group": None,
-                    "avatar": None,
                 }
             ).data
 
@@ -77,11 +71,8 @@ class MeSerializerOutput(serializers.Serializer):
         return ParticipantDataSerializer(
             {
                 "required": False,
-                "first_name": participant.first_name,
-                "last_name": participant.last_name,
-                "nickname": participant.nickname,
+                "id": participant.id,
                 "group": groups[0] if groups else None,
-                "avatar": participant.avatar.url if participant.avatar else None,
             }
         ).data
 

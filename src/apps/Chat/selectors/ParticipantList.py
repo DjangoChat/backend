@@ -17,6 +17,10 @@ def participant_list_for_user(user: CustomUser) -> QuerySet[Participant]:
 
     if user_participant:
         user_contacts = Participant.objects.filter(contact_of__owner=user_participant)
-        queryset = queryset | user_contacts
+        queryset = (
+            queryset
+            | user_contacts
+            | Participant.objects.filter(pk=user_participant.pk)
+        )
 
     return queryset.distinct()

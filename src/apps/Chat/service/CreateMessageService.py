@@ -49,11 +49,11 @@ class CreateMessageService:
             def trigger_agent():
                 from apps.Chat.tasks import create_agent_response
 
-                create_agent_response(
+                create_agent_response.delay(
                     id_chat=self.chat.id,
                     id_message=self.message.id,
                     id_participant=self.participant.id,
-                )
+                )  # type: ignore
 
             transaction.on_commit(trigger_agent)
 

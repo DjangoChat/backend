@@ -16,11 +16,34 @@ from langchain.agents.middleware import (
 from langchain.messages import AIMessage, SystemMessage
 from langchain.tools import ToolRuntime, tool
 from langchain_ollama import ChatOllama
+from langfuse import Langfuse
+from langfuse.langchain import CallbackHandler
 from langgraph.runtime import Runtime
 
 from apps.Authentication.models import CustomUser
 
 logger = structlog.get_logger(__name__)
+
+_langfuse_handler: CallbackHandler | None = None
+
+
+def get_langfuse_handler() -> CallbackHandler:
+    """Return a lazily-created Langfuse callback handler.
+
+    Initialized on first use (inside the Celery task) instead of at module import
+    so the Django and Celery processes never block or fail while importing this
+    module. The client is built from Django settings and falls back to the
+    environment when no keys are configured.
+    """
+    global _langfuse_handler
+    if _langfuse_handler is None:
+        Langfuse(
+            public_key=settings.LANGFUSE_PUBLIC_KEY or None,
+            secret_key=settings.LANGFUSE_SECRET_KEY or None,
+            base_url=settings.LANGFUSE_BASE_URL or None,
+        )
+        _langfuse_handler = CallbackHandler()
+    return _langfuse_handler
 
 
 @dataclass
@@ -135,7 +158,7 @@ class OllamaRepository:
             model=model,
             base_url=ollama_url,
             validate_model_on_init=True,
-            num_predict=256,
+            num_predict=1024,
             temperature=0.8,
         )
         self.agent = create_agent(
@@ -171,7 +194,6 @@ class OllamaRepository:
                 You are talking on an chat application which means your response should be consiced and enaging.
                 """
             ),
-            # response_format=
         )
 
     def chat(self, messages, user_id):
@@ -180,6 +202,30 @@ class OllamaRepository:
                 "messages": messages,
             },
             context=UserContext(user_id=user_id),
+            config={"callbacks": [get_langfuse_handler()]},
         )
-        logger.info(response["messages"])
-        return response["messages"][-1].content
+        last_message = response["messages"][-1]
+        content = last_message.content  # type: ignore
+
+        response_metadata = last_message.response_metadata or {}
+        usage_metadata = last_message.usage_metadata or {}
+
+        if response_metadata.get("done_reason") == "length":
+            logger.warning(
+                "agent_response_truncated",
+                done_reason=response_metadata.get("done_reason"),
+                output_tokens=usage_metadata.get("output_tokens"),
+                num_predict=self.model.num_predict,
+                content_empty=not content or not content.strip(),
+            )
+        elif not content or not content.strip():
+            logger.warning(
+                "agent_response_empty",
+                done_reason=response_metadata.get("done_reason"),
+                output_tokens=usage_metadata.get("output_tokens"),
+            )
+
+        if not content or not content.strip():
+            content = "I'm sorry, I couldn't generate a response. Please try again."
+
+        return content
