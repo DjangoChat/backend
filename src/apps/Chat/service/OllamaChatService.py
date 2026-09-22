@@ -8,10 +8,12 @@ from .BaseOllamaService import BaseOllamaService
 
 class OllamaChatService(BaseOllamaService):
     def execute(self, chat, prompt_type, user_id):
-        last_messages = Message.objects.filter(chat=chat).values_list(
-            "content",
-            "participant__participant_type",
-        )[:20]
+        last_messages = list(
+            Message.objects.filter(chat=chat).order_by("-sent_at").values_list(
+                "content",
+                "participant__participant_type",
+            )[:10]
+        )[::-1]
 
         messages = [
             SystemMessage(content=prompt_type),
