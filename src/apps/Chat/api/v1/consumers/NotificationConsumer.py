@@ -27,3 +27,17 @@ class NotificationConsumer(AsyncWebsocketConsumer):
         message = text_data_json["message"]
 
         await self.send(text_data=json.dumps({"message": message}))
+
+    async def chat_message(self, event):
+        """
+        Handler for messages sent via the channel layer (from signals).
+        Broadcasts the event to the connected client.
+        """
+        await self.send(
+            text_data=json.dumps(
+                {
+                    "type": "chat_updated",
+                    "data": event.get("data"),
+                }
+            )
+        )
