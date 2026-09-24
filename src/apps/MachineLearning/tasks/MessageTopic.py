@@ -1,10 +1,11 @@
+import structlog
 from celery import shared_task
 from keybert import KeyBERT
 
 from apps.Chat.models import Message
 from apps.MachineLearning.tasks.MessageEmbedding import get_model
 
-# Lazy-load KeyBERT, reusing the SentenceTransformer already in memory
+logger = structlog.get_logger(__name__)
 _kw_model = None
 
 
@@ -32,14 +33,20 @@ def create_message_topic_analysis(
             stop_words="english",
             top_n=5,
         )
-
-        # Store as list of {"keyword": str, "score": float}
         analysis.topics = [
             {"keyword": kw, "score": round(score, 4)} for kw, score in keywords
         ]
         analysis.save(update_fields=["topics"])
 
-        return {"message_id": message_id, "status": "success"}
+        data = {
+            "message_id": message_id,
+            "action": "create_message_topic_analysis",
+            "topics": analysis.topics,
+            "status": "success",
+        }
+
+        logger.info("message_analysis", **data)
+        return data
 
     except Message.DoesNotExist:
         raise

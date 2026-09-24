@@ -1,9 +1,10 @@
+import structlog
 from celery import shared_task
 from transformers import pipeline
 
 from apps.Chat.models import Message
 
-# Lazy-load classifier to avoid downloading model on startup
+logger = structlog.get_logger(__name__)
 _classifier = None
 
 
@@ -31,10 +32,15 @@ def create_message_emotion_analysis(
         analysis.emotions = classifier(message.content)
         analysis.save(update_fields=["emotions"])
 
-        return {
+        data = {
             "message_id": message_id,
+            "action": "create_message_emotion_analysis",
+            "emotions": analysis.emotions,
             "status": "success",
         }
+
+        logger.info("message_analysis", **data)
+        return data
 
     except Message.DoesNotExist:
         raise

@@ -1,9 +1,10 @@
+import structlog
 from celery import shared_task
 from sentence_transformers import SentenceTransformer
 
 from apps.Chat.models import Message
 
-# Lazy-load model to avoid downloading on startup
+logger = structlog.get_logger(__name__)
 _model = None
 
 
@@ -29,10 +30,15 @@ def create_message_embedding(
         analysis.embedding = embedding.tolist()
         analysis.save(update_fields=["embedding"])
 
-        return {
+        data = {
             "message_id": message_id,
+            "action": "create_message_embedding",
+            "embedding": analysis.embedding,
             "status": "success",
         }
+
+        logger.info("message_analysis", **data)
+        return data
 
     except Message.DoesNotExist:
         raise
